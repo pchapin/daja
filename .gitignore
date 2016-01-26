@@ -1,3 +1,13 @@
 # IntelliJ artifacts
 .idea/workspace.xml
 build
+
+# ANTLR artifacts
+Daja.tokens
+DajaBaseListener.java
+DajaBaseVisitor.java
+DajaLexer.java
+DajaLexer.tokens
+DajaListener.java
+DajaParser.java
+DajaVisitor.java
