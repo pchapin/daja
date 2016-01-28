@@ -1,3 +1,7 @@
-// This is a simple test file.
+// This is a simple test file for Daja level 0.
 
-    1 x231 "Quoted string"
+void main( )
+{
+    x = 1 + 2 * 3;
+    y = (x + 4) * x;
+}

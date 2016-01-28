@@ -14,10 +14,42 @@ grammar Daja;
 /* ======= */
 
 module
-    : expression;
+    : VOID IDENTIFIER LPARENS RPARENS block;
+
+block
+    : LBRACE statement* RBRACE;
+
+// Statement grammar...
+// --------------------
+
+statement
+    : expression_statement;
+
+expression_statement
+    : expression SEMI;
+
+// Expression grammar...
+// ---------------------
 
 expression
-    : NUMERIC_LITERAL;
+    : assignment_expression;
+
+assignment_expression
+    : add_expression
+    | add_expression EQUALS assignment_expression;
+
+add_expression
+    : multiply_expression
+    | add_expression (PLUS | MINUS) multiply_expression;
+
+multiply_expression
+    : primary_expression
+    | multiply_expression (MULTIPLY | DIVIDE) primary_expression;
+
+primary_expression
+    : IDENTIFIER
+    | NUMERIC_LITERAL
+    | LPARENS expression RPARENS;
 
 /* =========== */
 /* Lexer rules */
@@ -137,11 +169,17 @@ WITH         : 'with';
 // What about the keywords involving the '_' symbol?
 // Should they be handled here too or treated as special identifiers in the symbol table?
 
-// Various operator symbols.
+// Various punctuation and operator symbols.
 DIVIDE   : '/';
+EQUALS   : '=';
+LBRACE   : '{';
+LPARENS  : '(';
 MINUS    : '-';
 MULTIPLY : '*';
 PLUS     : '+';
+RBRACE   : '}';
+RPARENS  : ')';
+SEMI     : ';';
 
 IDENTIFIER
     :   [a-zA-Z_][a-zA-Z0-9_]*;
