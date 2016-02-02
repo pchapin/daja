@@ -2,6 +2,7 @@ package edu.vtc.daja;
 
 import edu.vtc.daja.lev0.DajaLexer;
 import edu.vtc.daja.lev0.DajaParser;
+import edu.vtc.daja.lev0.Interpreter;
 import edu.vtc.daja.lev0.SemanticAnalyzer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -56,6 +57,24 @@ public class Main {
         if (reporter.getErrorCount() > 0) {
             System.out.printf(
                     "%d errors found; compilation aborted!", reporter.getErrorCount());
+        }
+        else {
+            switch (mode) {
+                case CHECK:
+                    // Do nothing. Semantic analysis is all that is required.
+                    break;
+
+                case INTERPRET:
+                    Interpreter myInterpreter = new Interpreter(symbolTable, reporter);
+                    ParseTreeWalker interpreterWalker = new ParseTreeWalker();
+                    interpreterWalker.walk(myInterpreter, tree);
+                    myInterpreter.displayResults();
+                    break;
+
+                default:
+                    System.out.println("Mode not implemented!");
+                    break;
+            }
         }
     }
 
