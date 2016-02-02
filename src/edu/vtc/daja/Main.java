@@ -2,8 +2,12 @@ package edu.vtc.daja;
 
 import edu.vtc.daja.lev0.DajaLexer;
 import edu.vtc.daja.lev0.DajaParser;
+import edu.vtc.daja.lev0.SemanticAnalyzer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The main class of the Daja compiler.
@@ -27,6 +31,8 @@ public class Main {
         JVM
     }
 
+    private static BasicConsoleReporter reporter = new BasicConsoleReporter();
+
     /**
      * Process input files in the Daja level 0 language. This method runs the compiler pipeline
      * assuming a level 0 compilation has been requested.
@@ -36,19 +42,29 @@ public class Main {
      */
     private static void processLevel0(ANTLRFileStream input, Mode mode) {
         // Parse the input file as Daja0.
-        DajaLexer lexer  = new DajaLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        DajaParser parser = new DajaParser(tokens);
+        DajaLexer lexer           = new DajaLexer(input);
+        CommonTokenStream tokens  = new CommonTokenStream(lexer);
+        DajaParser parser         = new DajaParser(tokens);
         DajaParser.ModuleContext tree = parser.module();
 
-        // Now do a semantic analysis of the parse tree followed by code generation...
+        // Walk the tree created during the parse and analyze it for semantic errors.
+        Set<String> symbolTable        = new TreeSet<String>();
+        SemanticAnalyzer myAnalyzer    = new SemanticAnalyzer(symbolTable, reporter);
+        ParseTreeWalker analyzerWalker = new ParseTreeWalker();
+        analyzerWalker.walk(myAnalyzer, tree);
+
+        if (reporter.getErrorCount() > 0) {
+            System.out.printf(
+                    "%d errors found; compilation aborted!", reporter.getErrorCount());
+        }
     }
+
 
     /**
      * The main program of the Daja educational compiler. This program accepts a file to compile
      * on the command line, along with some options about language level and desired target, and
-     * produces error messages or a compiled output file. Daja programs can also be interpreted in
-     * some cases.
+     * produces error messages or a compiled output file. Daja programs can also be interpreted
+     * in some cases.
      *
      * @param args The command line arguments.
      * @throws java.io.IOException If an I/O error occurs during File I/O.
