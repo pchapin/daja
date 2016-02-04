@@ -1,9 +1,6 @@
 package edu.vtc.daja;
 
-import edu.vtc.daja.lev0.DajaLexer;
-import edu.vtc.daja.lev0.DajaParser;
-import edu.vtc.daja.lev0.Interpreter;
-import edu.vtc.daja.lev0.SemanticAnalyzer;
+import edu.vtc.daja.lev0.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
@@ -71,8 +68,21 @@ public class Main {
                     myInterpreter.displayResults();
                     break;
 
-                default:
-                    System.out.println("Mode not implemented!");
+                case C:
+                    CGenerator myCGenerator = new CGenerator(symbolTable, reporter);
+                    myCGenerator.visit(tree);
+                    break;
+
+                case LLVM:
+                    System.out.println("LLVM code generation is not implemented!");
+                    LLVMGenerator myLLVMGenerator = new LLVMGenerator(symbolTable, reporter);
+                    myLLVMGenerator.visit(tree);
+                    break;
+
+                case JVM:
+                    System.out.println("JVM code generation is not implemented!");
+                    JVMGenerator myJVMGenerator = new JVMGenerator(symbolTable, reporter);
+                    myJVMGenerator.visit(tree);
                     break;
             }
         }
