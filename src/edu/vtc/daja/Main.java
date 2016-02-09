@@ -80,7 +80,6 @@ public class Main {
                     break;
 
                 case JVM:
-                    System.out.println("JVM code generation is not implemented!");
                     JVMGenerator myJVMGenerator = new JVMGenerator(symbolTable, reporter);
                     myJVMGenerator.visit(tree);
                     break;
