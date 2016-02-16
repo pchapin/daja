@@ -1,4 +1,4 @@
-package edu.vtc.daja.lev0;
+package edu.vtc.daja;
 
 import java.util.Iterator;
 

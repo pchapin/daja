@@ -1,4 +1,4 @@
-package edu.vtc.daja.lev0;
+package edu.vtc.daja;
 
 import edu.vtc.daja.Literals;
 import edu.vtc.daja.Reporter;

@@ -1,11 +1,11 @@
-package edu.vtc.daja.lev0;
+package edu.vtc.daja;
 
 import java.util.Set;
 import edu.vtc.daja.Reporter;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * Class to do semantic analysis of Daja level 0 programs.
+ * Class to do semantic analysis of Daja programs.
  */
 public class SemanticAnalyzer extends DajaBaseListener {
 
