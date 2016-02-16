@@ -17,7 +17,16 @@ module
     : VOID IDENTIFIER LPARENS RPARENS block;
 
 block
-    : LBRACE statement* RBRACE;
+    : LBRACE (declaration|statement)* RBRACE;
+
+// Declaration grammar...
+// ----------------------
+
+declaration
+    : INT init_declarator (COMMA init_declarator)* SEMI;
+
+init_declarator
+    : IDENTIFIER (EQUALS expression)?;
 
 // Statement grammar...
 // --------------------
@@ -170,6 +179,7 @@ WITH         : 'with';
 // Should they be handled here too or treated as special identifiers in the symbol table?
 
 // Various punctuation and operator symbols.
+COMMA    : ',';
 DIVIDE   : '/';
 EQUALS   : '=';
 LBRACE   : '{';

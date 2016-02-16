@@ -47,12 +47,15 @@ public class Literals {
      */
     public static int convertIntegerLiteral(String text) throws InvalidLiteralException
     {
+        // TODO: Make the error strings for invalid literals more specific.
+        // TODO: Right now literals such as 0xL are allowed. They should be illegal.
         StateType state = StateType.START;
         BaseType  base = BaseType.DECIMAL;
         int  value = 0;
         char ch;
 
         for (int i = 0; i < text.length(); ++i) {
+            // TODO: This allows 'l' to be used instead of 'L'. Instead 'l' should be an error.
             ch = Character.toUpperCase(text.charAt(i));
             switch (state) {
                 case START:
