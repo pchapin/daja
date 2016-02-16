@@ -2,9 +2,11 @@ package edu.vtc.daja;
 
 import edu.vtc.daja.Literals;
 import edu.vtc.daja.Reporter;
+import org.antlr.v4.runtime.misc.FlexibleHashMap;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.io.*;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -84,6 +86,10 @@ public class JVMGenerator extends DajaBaseVisitor<Void> {
             output.println("    ;");
             output.println("    ; Local Variable Table");
             output.println("    ; ====================");
+            for (Map.Entry<String, Integer> pair : localVariables.entrySet()) {
+                output.println("    ;  " + pair.getKey() + ": " + pair.getValue());
+            }
+            output.println("    ;");
 
             visitChildren(ctx);
 
@@ -109,6 +115,7 @@ public class JVMGenerator extends DajaBaseVisitor<Void> {
                 switch (node.getSymbol().getType()) {
                     case DajaLexer.IDENTIFIER:
                         output.println("    " + getLoadStoreInstruction("iload", node.getText()));
+                        break;
 
                     case DajaLexer.NUMERIC_LITERAL:
                         int literalValue = Literals.convertIntegerLiteral(node.getText());
@@ -122,6 +129,7 @@ public class JVMGenerator extends DajaBaseVisitor<Void> {
                             instruction = "ldc";
                         output.println(
                                 "    " + instruction + " " + Literals.convertIntegerLiteral(node.getText()));
+                        break;
                 }
             }
         }
