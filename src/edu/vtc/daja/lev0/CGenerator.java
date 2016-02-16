@@ -92,20 +92,32 @@ public class CGenerator extends DajaBaseVisitor<Void> {
     @Override
     public Void visitTerminal(TerminalNode node)
     {
-        if (expressionLevel > 0) {
-            switch (node.getSymbol().getType()) {
-                case DajaLexer.DIVIDE:
-                case DajaLexer.IDENTIFIER:
-                case DajaLexer.MINUS:
-                case DajaLexer.MULTIPLY:
-                case DajaLexer.PLUS:
-                    out.print(node.getText());
-                    break;
+        try {
+            if (expressionLevel > 0) {
+                switch (node.getSymbol().getType()) {
+                    case DajaLexer.DIVIDE:
+                    case DajaLexer.IDENTIFIER:
+                    case DajaLexer.MINUS:
+                    case DajaLexer.MULTIPLY:
+                    case DajaLexer.PLUS:
+                        out.print(node.getText());
+                        break;
 
-                case DajaLexer.NUMERIC_LITERAL:
-                    out.print(Literals.convertIntegerLiteral(node.getText()));
-                    break;
+                    case DajaLexer.NUMERIC_LITERAL:
+                        out.print(Literals.convertIntegerLiteral(node.getText()));
+                        break;
+                }
             }
+        }
+        // This exception should normally never arise if illegal literals are ruled out during
+        // semantic analysis. However, literal analysis is currently not being done there.
+        //
+        // TODO: Check literal format during semantic analysis.
+        catch (Literals.InvalidLiteralException ex) {
+            reporter.reportError(
+                    node.getSymbol().getLine(),
+                    node.getSymbol().getCharPositionInLine() + 1,
+                    ex.getMessage());
         }
         return null;
     }

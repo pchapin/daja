@@ -104,24 +104,36 @@ public class JVMGenerator extends DajaBaseVisitor<Void> {
     @Override
     public Void visitTerminal(TerminalNode node)
     {
-        if (expressionLevel > 0) {
-            switch (node.getSymbol().getType()) {
-                case DajaLexer.IDENTIFIER:
-                    output.println("    " + getLoadStoreInstruction("iload", node.getText()));
+        try {
+            if (expressionLevel > 0) {
+                switch (node.getSymbol().getType()) {
+                    case DajaLexer.IDENTIFIER:
+                        output.println("    " + getLoadStoreInstruction("iload", node.getText()));
 
-                case DajaLexer.NUMERIC_LITERAL:
-                    int literalValue = Literals.convertIntegerLiteral(node.getText());
-                    String instruction;
-                    if (literalValue >= -128 && literalValue <= 127)
-                        instruction = "bipush";
-                    else if (literalValue >= -32768 && literalValue <= 32767)
-                        instruction = "sipush";
-                    else
-                        // TODO: The operand of ldc is really an index into the constant pool!
-                        instruction = "ldc";
-                    output.println(
-                            "    " + instruction + " " + Literals.convertIntegerLiteral(node.getText()));
+                    case DajaLexer.NUMERIC_LITERAL:
+                        int literalValue = Literals.convertIntegerLiteral(node.getText());
+                        String instruction;
+                        if (literalValue >= -128 && literalValue <= 127)
+                            instruction = "bipush";
+                        else if (literalValue >= -32768 && literalValue <= 32767)
+                            instruction = "sipush";
+                        else
+                            // TODO: The operand of ldc is really an index into the constant pool!
+                            instruction = "ldc";
+                        output.println(
+                                "    " + instruction + " " + Literals.convertIntegerLiteral(node.getText()));
+                }
             }
+        }
+        // This exception should normally never arise if illegal literals are ruled out during
+        // semantic analysis. However, literal analysis is currently not being done there.
+        //
+        // TODO: Check literal format during semantic analysis.
+        catch (Literals.InvalidLiteralException ex) {
+            reporter.reportError(
+                    node.getSymbol().getLine(),
+                    node.getSymbol().getCharPositionInLine() + 1,
+                    ex.getMessage());
         }
         return null;
     }
