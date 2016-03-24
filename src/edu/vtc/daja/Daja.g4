@@ -23,10 +23,15 @@ block
 // ----------------------
 
 declaration
-    : INT init_declarator (COMMA init_declarator)* SEMI;
+    : basic_type init_declarator (COMMA init_declarator)* SEMI;
+
+basic_type
+    : INT
+    | DOUBLE;
 
 init_declarator
-    : IDENTIFIER (EQUALS expression)?;
+    : IDENTIFIER (EQUALS expression)?
+    | IDENTIFIER LBRACKET expression RBRACKET;
 
 // Statement grammar...
 // --------------------
@@ -183,11 +188,13 @@ COMMA    : ',';
 DIVIDE   : '/';
 EQUALS   : '=';
 LBRACE   : '{';
+LBRACKET : '[';
 LPARENS  : '(';
 MINUS    : '-';
 MULTIPLY : '*';
 PLUS     : '+';
 RBRACE   : '}';
+RBRACKET : ']';
 RPARENS  : ')';
 SEMI     : ';';
 
