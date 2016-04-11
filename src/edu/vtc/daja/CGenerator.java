@@ -10,14 +10,14 @@ import java.util.Set;
 
 public class CGenerator extends DajaBaseVisitor<Void> {
 
-    private Set<String> symbolTable;
+    private BasicSymbolTable symbolTable;
     private Reporter reporter;
     private PrintStream out = System.out;
     private int indentationLevel = 0;  // The number of indentations where output lines start.
     private int expressionLevel = 0;   // The number of open expression rules that are active.
 
 
-    public CGenerator(Set<String> symbolTable, Reporter reporter)
+    public CGenerator(BasicSymbolTable symbolTable, Reporter reporter)
     {
         this.symbolTable = symbolTable;
         this.reporter = reporter;
@@ -43,7 +43,7 @@ public class CGenerator extends DajaBaseVisitor<Void> {
         visitChildren(ctx);
 
         out.println("");
-        for (String symbolName : symbolTable) {
+        for (String symbolName : symbolTable.getObjectNames()) {
             doIndentation();
             out.println("printf(\"" + symbolName + " => %d\\n\", " + symbolName + ");");
         }

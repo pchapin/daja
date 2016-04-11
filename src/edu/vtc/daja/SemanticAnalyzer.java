@@ -9,11 +9,11 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  */
 public class SemanticAnalyzer extends DajaBaseListener {
 
-    private Set<String> symbolTable;
+    private BasicSymbolTable symbolTable;
     private Reporter reporter;
     private int expressionLevel = 0;
 
-    public SemanticAnalyzer(Set<String> symbolTable, Reporter reporter)
+    public SemanticAnalyzer(BasicSymbolTable symbolTable, Reporter reporter)
     {
         this.symbolTable = symbolTable;
         this.reporter = reporter;
@@ -38,7 +38,7 @@ public class SemanticAnalyzer extends DajaBaseListener {
         // symbol to be used in its own declaration. Do we want that? Probably. If not, we could
         // add the symbol in exitInit_declarator instead.
         //
-        symbolTable.add(ctx.IDENTIFIER().getText());
+        // symbolTable.add(ctx.IDENTIFIER().getText());
     }
 
 
@@ -65,12 +65,12 @@ public class SemanticAnalyzer extends DajaBaseListener {
         if (expressionLevel > 0) {
             switch (node.getSymbol().getType()) {
                 case DajaLexer.IDENTIFIER:
-                    if (!symbolTable.contains(node.getText())) {
-                        reporter.reportError(
-                                node.getSymbol().getLine(),
-                                node.getSymbol().getCharPositionInLine() + 1,
-                                "Undefined identifier: " + node.getText());
-                    }
+                    //if (!symbolTable.contains(node.getText())) {
+                    //    reporter.reportError(
+                    //            node.getSymbol().getLine(),
+                    //            node.getSymbol().getCharPositionInLine() + 1,
+                    //            "Undefined identifier: " + node.getText());
+                    //}
                     break;
             }
         }

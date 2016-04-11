@@ -57,8 +57,12 @@ add_expression
     | add_expression (PLUS | MINUS) multiply_expression;
 
 multiply_expression
+    : postfix_expression
+    | multiply_expression (MULTIPLY | DIVIDE) postfix_expression;
+
+postfix_expression
     : primary_expression
-    | multiply_expression (MULTIPLY | DIVIDE) primary_expression;
+    | postfix_expression LBRACE expression RBRACE;
 
 primary_expression
     : IDENTIFIER

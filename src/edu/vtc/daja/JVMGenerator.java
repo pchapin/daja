@@ -13,7 +13,7 @@ import java.util.TreeMap;
 
 public class JVMGenerator extends DajaBaseVisitor<Void> {
 
-    private Set<String> symbolTable;
+    private BasicSymbolTable symbolTable;
     private Map<String, Integer> localVariables = new TreeMap<String, Integer>();
     private int localVariableCounter = 0;
     private Reporter reporter;
@@ -21,12 +21,12 @@ public class JVMGenerator extends DajaBaseVisitor<Void> {
     private int expressionLevel = 0;  // Number of open 'expression' rules that are active.
 
 
-    public JVMGenerator(Set<String> symbolTable, Reporter reporter)
+    public JVMGenerator(BasicSymbolTable symbolTable, Reporter reporter)
     {
         this.symbolTable = symbolTable;
         this.reporter = reporter;
 
-        for (String symbol : symbolTable) {
+        for (String symbol : symbolTable.getObjectNames()) {
             localVariableCounter++;
             localVariables.put(symbol, localVariableCounter);
         }
@@ -152,16 +152,16 @@ public class JVMGenerator extends DajaBaseVisitor<Void> {
     {
         if (ctx.MULTIPLY() != null) {
             visit(ctx.multiply_expression());
-            visit(ctx.primary_expression());
+            visit(ctx.postfix_expression());
             output.println("    imul");
         }
         else if (ctx.DIVIDE() != null) {
             visit(ctx.multiply_expression());
-            visit(ctx.primary_expression());
+            visit(ctx.postfix_expression());
             output.println("    idiv");
         }
         else {
-            visit(ctx.primary_expression());
+            visit(ctx.postfix_expression());
         }
         return null;
     }

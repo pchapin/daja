@@ -44,7 +44,7 @@ public class Main {
         DajaParser.ModuleContext tree = parser.module();
 
         // Walk the tree created during the parse and analyze it for semantic errors.
-        Set<String> symbolTable        = new TreeSet<String>();
+        BasicSymbolTable symbolTable   = new BasicSymbolTable();
         SemanticAnalyzer myAnalyzer    = new SemanticAnalyzer(symbolTable, reporter);
         ParseTreeWalker analyzerWalker = new ParseTreeWalker();
         analyzerWalker.walk(myAnalyzer, tree);

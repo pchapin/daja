@@ -11,7 +11,7 @@ public class Interpreter extends DajaBaseListener {
     private TreeMap<String, Integer> symbolValues;
     private Reporter reporter;
 
-    public Interpreter(Set<String> symbolTable, Reporter reporter)
+    public Interpreter(BasicSymbolTable symbolTable, Reporter reporter)
     {
         this.reporter = reporter;
         // Fill the symbolValues map with initialized values for everything in the symbol table.
