@@ -63,7 +63,7 @@ public class Main {
                     Interpreter myInterpreter = new Interpreter(symbolTable, reporter);
                     ParseTreeWalker interpreterWalker = new ParseTreeWalker();
                     interpreterWalker.walk(myInterpreter, tree);
-                    myInterpreter.displayResults();
+                    // myInterpreter.displayResults();
                     break;
 
                 case C:
