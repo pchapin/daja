@@ -14,10 +14,7 @@ grammar Daja;
 /* ======= */
 
 module
-    : VOID IDENTIFIER LPARENS RPARENS block;
-
-block
-    : LBRACE (declaration|statement)* RBRACE;
+    : VOID IDENTIFIER LPARENS RPARENS block_statement;
 
 // Declaration grammar...
 // ----------------------
@@ -37,10 +34,23 @@ init_declarator
 // --------------------
 
 statement
-    : expression_statement;
+    : expression_statement
+    | block_statement
+    | if_statement
+    | while_statement;
 
 expression_statement
     : expression SEMI;
+
+block_statement
+    : LBRACE (declaration|statement)* RBRACE;
+
+if_statement
+    : IF LPARENS expression RPARENS block_statement
+    | IF LPARENS expression RPARENS block_statement ELSE block_statement;
+
+while_statement
+    : WHILE LPARENS expression RPARENS block_statement;
 
 // Expression grammar...
 // ---------------------

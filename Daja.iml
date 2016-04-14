@@ -10,5 +10,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="antlr-4.5.1" level="project" />
     <orderEntry type="library" name="scala-2.11" level="application" />
+    <orderEntry type="library" name="com.assembla.scala-incubator:graph-core_2.11:1.10.1" level="project" />
   </component>
 </module>
