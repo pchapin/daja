@@ -4,6 +4,9 @@ object TypeRep {
 
   abstract class Rep
 
+  // Placeholder for situations where there is no type.
+  case object NoTypeRep extends Rep
+
   // Primitive types.
   case object BoolRep extends Rep
   case object IntRep extends Rep

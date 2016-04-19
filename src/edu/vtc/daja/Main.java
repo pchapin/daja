@@ -3,9 +3,6 @@ package edu.vtc.daja;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 /**
  * The main class of the Daja compiler.
  */
@@ -46,8 +43,7 @@ public class Main {
         // Walk the tree created during the parse and analyze it for semantic errors.
         BasicSymbolTable symbolTable   = new BasicSymbolTable();
         SemanticAnalyzer myAnalyzer    = new SemanticAnalyzer(symbolTable, reporter);
-        ParseTreeWalker analyzerWalker = new ParseTreeWalker();
-        analyzerWalker.walk(myAnalyzer, tree);
+        myAnalyzer.visit(tree);
 
         if (reporter.getErrorCount() > 0) {
             System.out.printf(
