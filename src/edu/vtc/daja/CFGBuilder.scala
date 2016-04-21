@@ -74,7 +74,7 @@ class CFGBuilder(
   }
 }
 
-object CGFBuilder {
+object CFGBuilder {
 
   /**
    * Method that optimizes the CFG by 1) removing all possible null blocks, and 2) combining
