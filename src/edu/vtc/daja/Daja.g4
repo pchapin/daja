@@ -23,7 +23,8 @@ declaration
     : basic_type init_declarator (COMMA init_declarator)* SEMI;
 
 basic_type
-    : INT
+    : BOOL
+    | INT
     | DOUBLE;
 
 init_declarator
@@ -59,8 +60,12 @@ expression
     : assignment_expression;
 
 assignment_expression
+    : relational_expression
+    | relational_expression EQUALS assignment_expression;
+
+relational_expression
     : add_expression
-    | add_expression EQUALS assignment_expression;
+    | relational_expression (EQEQ | NOTEQ | LESS | LESSEQ | GREATER | GREATEREQ) add_expression;
 
 add_expression
     : multiply_expression
@@ -77,6 +82,8 @@ postfix_expression
 primary_expression
     : IDENTIFIER
     | NUMERIC_LITERAL
+    | TRUE
+    | FALSE
     | LPARENS expression RPARENS;
 
 /* =========== */
@@ -200,12 +207,18 @@ WITH         : 'with';
 // Various punctuation and operator symbols.
 COMMA    : ',';
 DIVIDE   : '/';
+EQEQ     : '==';
 EQUALS   : '=';
+GREATER  : '>';
+GREATEREQ: '>=';
 LBRACE   : '{';
 LBRACKET : '[';
+LESS     : '<';
+LESSEQ   : '<=';
 LPARENS  : '(';
 MINUS    : '-';
 MULTIPLY : '*';
+NOTEQ    : '!=';
 PLUS     : '+';
 RBRACE   : '}';
 RBRACKET : ']';

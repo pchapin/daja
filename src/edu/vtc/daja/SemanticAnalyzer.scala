@@ -67,6 +67,10 @@ class SemanticAnalyzer(
                 "Undefined identifier: " + node.getText)
               TypeRep.NoTypeRep
           }
+
+        // In an expression, things that are not identifiers don't have a type.
+        case _ =>
+          TypeRep.NoTypeRep
       }
     }
   }

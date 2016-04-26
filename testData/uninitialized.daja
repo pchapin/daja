@@ -1,0 +1,18 @@
+// This file demonstrates an uninitialized variable.
+
+void main( )
+{
+    int a, b;
+    int x, y, z;
+
+    a = 1;
+    b = 2;
+    y = 3;
+
+    if( a < b ) {
+        x = y + 1;
+    }
+    else {
+        x = z + 1;
+    }
+}

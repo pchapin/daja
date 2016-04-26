@@ -55,7 +55,7 @@ class CGenerator(
   override def visitAssignment_expression(ctx: DajaParser.Assignment_expressionContext): Void = {
     out.print("(")
     expressionLevel += 1
-    visitAdd_expression(ctx.add_expression())
+    visitRelational_expression(ctx.relational_expression)
     if (ctx.EQUALS() != null) {
       out.print(" = ")
       visitAssignment_expression(ctx.assignment_expression())
