@@ -1,4 +1,4 @@
-package edu.vtc.daja
+package org.pchapin.daja
 
 class Interpreter(
   private val symbolTable: BasicSymbolTable,

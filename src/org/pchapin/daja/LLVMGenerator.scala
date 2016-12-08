@@ -1,4 +1,4 @@
-package edu.vtc.daja
+package org.pchapin.daja
 
 class LLVMGenerator(
   private val symbolTable: BasicSymbolTable,

@@ -1,4 +1,4 @@
-package edu.vtc.daja
+package org.pchapin.daja
 
 /**
  * An interface describing Daja symbol tables. Symbols are divided into object names and type

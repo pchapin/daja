@@ -1,11 +1,11 @@
 grammar Daja;
 
 @parser::header {
-    package edu.vtc.daja;
+    package org.pchapin.daja;
 }
 
 @lexer::header {
-    package edu.vtc.daja;
+    package org.pchapin.daja;
 }
 
 

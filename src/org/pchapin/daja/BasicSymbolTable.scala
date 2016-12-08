@@ -1,6 +1,6 @@
-package edu.vtc.daja
+package org.pchapin.daja
 
-import edu.vtc.daja.SymbolTable._
+import org.pchapin.daja.SymbolTable._
 
 class BasicSymbolTable extends SymbolTable {
 

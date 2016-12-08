@@ -1,4 +1,4 @@
-package edu.vtc.daja
+package org.pchapin.daja
 
 import scalax.collection.Graph
 import scalax.collection.edge.LDiEdge

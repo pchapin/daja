@@ -1,4 +1,4 @@
-package edu.vtc.daja
+package org.pchapin.daja
 
 import org.antlr.v4.runtime.tree.TerminalNode
 

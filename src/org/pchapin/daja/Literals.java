@@ -1,4 +1,4 @@
-package edu.vtc.daja;
+package org.pchapin.daja;
 
 public class Literals {
 
