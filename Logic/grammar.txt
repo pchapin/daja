@@ -1,0 +1,151 @@
+
+Symbolic Logic Grammar
+(C) Copyright 2016 by Peter Chapin
+Last Revised: 2016-03-09
+==================================
+
+This file contains the expression grammar for my symbolic logic language. In addition to the
+easy to understand form, this file also contains a transformed grammar that accepts the same
+language but that is in a form that is suitable for a recursive decent parser to use. To enhance
+the educational value of this file, several intermediate forms of the grammar are also shown.
+
+In all the grammars that follow the tokens are either all UPPERCASE or 'quoted'. The special
+symbol 'e' (not quoted) represents the empty string. Names that in all lower case are the names
+of non-terminals. The first non-terminal in each grammar is the start symbol.
+
+----------
+
+Here is the simple, easy to understand grammar:
+
+full_expr     -> full_expr '-->' disjunct_expr
+              -> full_expr '<-->' disjunct_expr
+              -> disjunct_expr
+
+disjunct_expr -> disjunct_expr 'or' conjunct_expr
+              -> conjunct_expr
+
+conjunct_expr -> conjunct_expr 'and' simple_expr
+              -> simple_expr
+
+simple_expr   -> IDENTIFIER
+              -> 'true'
+              -> 'false'
+              -> 'not' simple_expr
+              -> '(' full_expr ')'
+
+----------
+
+After removing the left recursion on disjunct_expr and conjunct_expr:
+
+full_expr       -> full_expr '-->' disjunct_expr
+                -> full_expr '<-->' disjunct_expr
+                -> disjunct_expr
+
+disjunct_expr   -> conjunct_expr disjunct_helper
+
+disjunct_helper -> 'or' conjunct_expr disjunct_helper
+                -> e
+
+conjunct_expr   -> simple_expr conjunct_helper
+
+conjunct_helper -> 'and' simple_expr conjunct_helper
+                -> e
+
+simple_expr     -> IDENTIFIER
+                -> 'true'
+                -> 'false'
+                -> 'not' simple_expr
+                -> '(' full_expr ')'
+
+----------
+
+After left factoring full_expr:
+
+full_expr       -> full_expr full_helper1
+                -> disjunct_expr
+
+full_helper1    -> '-->' disjunct_expr
+                -> '<-->' disjunct_expr
+
+disjunct_expr   -> conjunct_expr disjunct_helper
+
+disjunct_helper -> 'or' conjunct_expr disjunct_helper
+                -> e
+
+conjunct_expr   -> simple_expr conjunct_helper
+
+conjunct_helper -> 'and' simple_expr conjunct_helper
+                -> e
+
+simple_expr     -> IDENTIFIER
+                -> 'true'
+                -> 'false'
+                -> 'not' simple_expr
+                -> '(' full_expr ')'
+
+----------
+
+After removing the left recursion on full_expr:
+
+full_expr       -> disjunct_expr full_helper2
+
+full_helper2    -> full_helper1 full_helper2
+                -> e
+
+full_helper1    -> '-->' disjunct_expr
+                -> '<-->' disjunct_expr
+
+disjunct_expr   -> conjunct_expr disjunct_helper
+
+disjunct_helper -> 'or' conjunct_expr disjunct_helper
+                -> e
+
+conjunct_expr   -> simple_expr conjunct_helper
+
+conjunct_helper -> 'and' simple_expr conjunct_helper
+                -> e
+
+simple_expr     -> IDENTIFIER
+                -> 'true'
+                -> 'false'
+                -> 'not' simple_expr
+                -> '(' full_expr ')'
+
+----------
+
+To create a useful program we need to wrap the expression grammar up in some sort of higher
+level structure. This will do for now:
+
+statement_list  -> statement statement_list
+                -> e
+
+statement       -> full_expr ';'
+
+full_expr       -> disjunct_expr full_helper2
+
+full_helper2    -> full_helper1 full_helper2
+                -> e
+
+full_helper1    -> '-->' disjunct_expr
+                -> '<-->' disjunct_expr
+
+disjunct_expr   -> conjunct_expr disjunct_helper
+
+disjunct_helper -> 'or' conjunct_expr disjunct_helper
+                -> e
+
+conjunct_expr   -> simple_expr conjunct_helper
+
+conjunct_helper -> 'and' simple_expr conjunct_helper
+                -> e
+
+simple_expr     -> IDENTIFIER
+                -> 'true'
+                -> 'false'
+                -> 'not' simple_expr
+                -> '(' full_expr ')'
+
+Notice that statement list could be left or right recursive and be equally "correct". I will
+avoid the left recursive form here since I'm planning on building a recursive decent parser
+where left recursion must be eliminated.
+

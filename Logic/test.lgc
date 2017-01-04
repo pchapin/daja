@@ -1,0 +1,2 @@
+
+(A and B) or C <--> (C --> B) and not A;

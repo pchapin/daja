@@ -14,3 +14,6 @@ DajaLexer.tokens
 DajaListener.java
 DajaParser.java
 DajaVisitor.java
+
+Logic/src/org/pchapin/daja/logic/LogicLexer.java
+Logic/src/org/pchapin/daja/logic/LogicLexer.tokens

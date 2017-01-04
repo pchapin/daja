@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Daja.iml" filepath="$PROJECT_DIR$/Daja.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Logic/Logic.iml" filepath="$PROJECT_DIR$/Logic/Logic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sandbox/Sandbox.iml" filepath="$PROJECT_DIR$/Sandbox/Sandbox.iml" />
     </modules>
   </component>
 </project>
