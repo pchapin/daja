@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.docbook.org/xml/4.5/docbookx.dtd" [
+
+<!ELEMENT xi:include (xi:fallback?) >
+<!ATTLIST xi:include
+    xmlns:xi   CDATA      #FIXED     "http://www.w3.org/2001/XInclude"
+    href       CDATA      #REQUIRED
+    parse      (xml|text) "xml"
+    encoding   CDATA      #IMPLIED >
+<!ELEMENT xi:fallback ANY>
+<!ATTLIST xi:fallback
+    xmlsn:xi   CDATA      #FIXED     "http://www.w3.org/2001/XInclude" >
+<!ENTITY % local.chapter.class "| xi:include">
+<!ENTITY % local.section.class "| xi:include">
+]>
+
+<!-- FILE    : Daja.xml
+     SUBJECT : Master document for the Daja documentation set.
+     AUTHOR  : (C) Copyright 2017 by Peter C. Chapin <peter@pchapin.org>
+
+This is the documentation for the Daja D compiler. -->
+
+<book status="draft">
+  <bookinfo>
+    <title>Daja</title>
+    <author>
+      <firstname>Peter</firstname>
+      <surname>Chapin</surname>
+      <othername role="mi">C.</othername>
+      <affiliation>
+        <orgname>Vermont Technical College</orgname>
+        <orgdiv>Computer Information Systems Department</orgdiv>
+      </affiliation>
+    </author>
+    <authorinitials>pcc</authorinitials>
+    <copyright>
+      <year>2017</year>
+      <holder>Peter C. Chapin</holder>
+    </copyright>
+    <legalnotice>
+      <para> Permission is granted to copy, distribute and/or modify this document under the
+        terms of the GNU Free Documentation License, Version 1.1 or any later version published
+        by the Free Software Foundation; with the Invariant Sections being LIST THEIR TITLES,
+        with the Front-Cover Texts being LIST, and with the Back-Cover Texts being LIST. A copy
+        of the license is included in the section entitled "GNU Free Documentation License".
+      </para>
+    </legalnotice>
+    <!-- Do we really want to include this revision history now? -->
+    <revhistory>
+      <revision>
+        <revnumber>1.0</revnumber>
+        <date>2020-12-31</date>
+        <authorinitials>pcc</authorinitials>
+        <revremark>This is a work in progress. Release 1.0 is scheduled for the end of
+          2020.</revremark>
+      </revision>
+    </revhistory>
+  </bookinfo>
+  <preface id="Introduction">
+    <title>Introduction</title>
+
+    <para>Daja is an open source D compiler developed as a personal project by me, Peter C.
+      Chapin. I created Daja primarily to support the compiler design course at Vermont
+      Technical College, and thus it is intended to be an educational compiler. However, it is
+      also my hope that Daja may eventually provide another option for those interested in using
+      an open source D compiler. Although the existing D compilers are all fine products, I
+      believe in the value of diversity when it comes to available programming tools.</para>
+
+    <para>Daja is written primarily in the Scala programming language. I chose Scala because it
+      is a functional language, and thus supports features that I believe will be helpful for
+      compiler construction (such as algebraic data types and pattern matching). Also the use of
+      Scala fits well into the context of my compiler design course. Accordingly, it is my
+      intention to write Daja in as purely a functional style as feasible with the hope that
+      doing so will make the code more understandable, more reliable, and more amenable to
+      parallelization. In addition, Scala gives me access to an enormous collection of Java
+      libraries, tools, and technologies, many of which are very powerful and highly mature. I
+      intend to capitalize on that legacy as much as possible during the development of
+      Daja.</para>
+
+    <para>I understand that Scala is an unusual choice as an implementation language for a D
+      compiler. I understand that I would be more likely to attract help from the D community if
+      I wrote Daja in D. However, as a personal project I have the luxury of selecting tools
+      that interest me even if they might not be strategically optimal. I hope my choice of
+      Scala pays off in the long run. If the compiler is easier to write or if Daja eventually
+      becomes a bridge between the Scala/Java and D communities, my choice might prove to be
+      strategic after all.</para>
+
+    <para>Daja is intended to target the LLVM compiler framework. This allows me to defer the
+      details of low level code generation and optimization to the framework. Thus in theory
+      Daja supports all target architectures supported by LLVM, both now and in the future. This
+      approach also allows me to capitalize on future advances made in LLVM technology. However,
+      unlike high level virtual machines such as the JVM or the CLR, LLVM should not restrict my
+      implementation options. I believe it will be easier to accurately implement a language
+      like D, which is intended to support low level programming, on top of a low level
+      framework.</para>
+
+    <para>However, as a concession to educational practicalities, Daja currently has multiple
+      code generating modes that include the generation of C or JVM assembly language. It also
+      supports an interpretive mode. It is likely that support for some or all of these
+      additional modes will be dropped as Daja matures since developing and maintaining multiple
+      code generators adds considerably to the work involved in building Daja.</para>
+
+    <para>I anticipate that as Daja matures others will become attracted to the project and may
+      join the effort. For this reason, along with the fact that many of my students have
+      contributed to this project, aside from this introduction, the documentation is written as
+      if it is being authored by a group of contributors rather than just a single
+      person.</para>
+
+    <para>This documentation describes both the design and use of the Daja compiler.</para>
+
+    <!-- Include disclaimer. -->
+
+  </preface>
+
+  <xi:include href="Vision.xml"/>
+  <xi:include href="Build.xml"/>
+  <xi:include href="User.xml"/>
+  <xi:include href="Requirements.xml"/>
+  <xi:include href="Design.xml"/>
+
+  <!-- <bibliography> ... </bibliography> -->
+
+</book>
