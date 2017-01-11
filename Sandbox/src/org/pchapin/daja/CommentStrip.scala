@@ -74,7 +74,7 @@ object CommentStrip {
             case '/'  =>            state = StateType.MAYBE_COMMENT
             case '"'  => print(ch); state = StateType.DOUBLE_QUOTE
             case '\'' => print(ch); state = StateType.SINGLE_QUOTE
-            _: Char   => print(ch)
+            case _    => print(ch)
           }
 
         case StateType.MAYBE_COMMENT =>
@@ -83,14 +83,14 @@ object CommentStrip {
             case '*' => print(' ');            state = StateType.BLOCK_COMMENT
             case '"' => print('/'); print(ch); state = StateType.DOUBLE_QUOTE
             case '\''=> print('/'); print(ch); state = StateType.SINGLE_QUOTE
-            _: Char  => print('/'); print(ch); state = StateType.NORMAL
+            case _   => print('/'); print(ch); state = StateType.NORMAL
           }
 
         case StateType.MAYBE_UNCOMMENT =>
           ch match {
             case '/' => state = StateType.NORMAL
             case '*' =>
-            _: Char  => state = StateType.BLOCK_COMMENT
+            case _   => state = StateType.BLOCK_COMMENT
           }
 
         case StateType.SLASH_SLASH_COMMENT =>
@@ -103,20 +103,21 @@ object CommentStrip {
           ch match {
             case '*'  =>            state = StateType.MAYBE_UNCOMMENT
             case '\n' => print(ch)
+            case _    =>
           }
 
         case StateType.DOUBLE_QUOTE =>
           ch match {
             case '\\' => print(ch); state = StateType.ESCAPE_ONE_DOUBLE
             case '"'  => print(ch); state = StateType.NORMAL
-            _: Char   => print(ch)
+            case _    => print(ch)
           }
 
         case StateType.SINGLE_QUOTE =>
           ch match {
             case '\\' => print(ch); state = StateType.ESCAPE_ONE_SINGLE
             case '\'' => print(ch); state = StateType.NORMAL
-            _: Char   => print(ch)
+            case _    => print(ch)
           }
 
         case StateType.ESCAPE_ONE_DOUBLE =>

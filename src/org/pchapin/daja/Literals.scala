@@ -75,7 +75,7 @@ object Literals {
               base = BaseType.HEX
               state = StateType.GET_DIGITS
 
-            _: Char =>
+            case _ =>
               throw new InvalidLiteralException("Invalid number prefix.");
           }
 

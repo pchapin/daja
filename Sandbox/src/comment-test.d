@@ -1,3 +1,5 @@
+import std.stdio;
+
 // Don't be confused by /* in the middle of a // comment.
 /* Don't be confused by a // in the middle of a /* comment. */
 int main( )
@@ -5,14 +7,14 @@ int main( )
   char ch;
   int  x, i, j;
 
-  printf( "Hello! // This is not a comment." );
-  printf( "Hello! \" /* This is not a comment." );
+  writeln( "Hello! // This is not a comment." );
+  writeln( "Hello! \" /* This is not a comment." );
 
   ch = '// This is not a comment.';
   ch = '\' /* This is not a comment.';
   ch = '\''; // This is a comment!
   ch = '"';  /* This is a comment! */
-  printf( "'" /* This is a comment! */ );
+  writeln( "'" /* This is a comment! */ );
   x = i/'z'; // This is a comment!
   i/* There are two tokens here, not a single 'ij' identifier */j
 
