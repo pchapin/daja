@@ -1,8 +1,9 @@
 package org.pchapin.daja
 
 import org.antlr.v4.runtime.tree.TerminalNode
+import org.pchapin.daja.DajaParser.Add_expressionContext
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters._
 
 /**
  * Class to do semantic analysis of Daja programs.
@@ -26,9 +27,13 @@ class SemanticAnalyzer(
 
 
   override def visitDeclaration(ctx: DajaParser.DeclarationContext): TypeRep.Rep = {
-    val initDeclarators = JavaConversions.iterableAsScalaIterable(ctx.init_declarator)
+    val initDeclarators = ctx.init_declarator.asScala
     val basicType = ctx.basic_type.getText
-    val basicTypeRep = if (basicType == "int") TypeRep.IntRep else TypeRep.DoubleRep
+    val basicTypeRep = basicType match {
+      case "int"    => TypeRep.IntRep
+      case "bool"   => TypeRep.BoolRep
+      case "double" => TypeRep.DoubleRep
+    }
     for (initDeclarator <- initDeclarators) {
       val identifierName = initDeclarator.IDENTIFIER.getText
       // TODO: Deal with the possibility that the initDeclarator is for an array.
@@ -46,6 +51,22 @@ class SemanticAnalyzer(
     val expressionType = visit(ctx.assignment_expression)
     expressionLevel -= 1
     expressionType
+  }
+
+
+  override def visitAdd_expression(ctx: Add_expressionContext): TypeRep.Rep = {
+    val addExressionType = visit(ctx.add_expression)
+    if (ctx.multiply_expression == null) {
+      addExressionType
+    }
+    else {
+      val multExpressionType = visit(ctx.multiply_expression)
+      if (addExressionType == multExpressionType)
+        addExressionType
+      else
+        // TODO: Deal with implicit type conversions!
+        TypeRep.NoTypeRep
+    }
   }
 
 

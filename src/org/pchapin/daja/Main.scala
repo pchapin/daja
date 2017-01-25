@@ -25,7 +25,7 @@ object Main {
     val JVM = Value
   }
 
-  private val reporter = new BasicConsoleReporter()
+  private val reporter = new BasicConsoleReporter
 
   /**
     * Process input files in the Daja language. This method runs the compiler pipeline.
@@ -41,7 +41,7 @@ object Main {
     val tree: DajaParser.ModuleContext = parser.module()
 
     // Walk the tree created during the parse and analyze it for semantic errors.
-    val symbolTable = new BasicSymbolTable()
+    val symbolTable = new BasicSymbolTable
     val myAnalyzer  = new SemanticAnalyzer(symbolTable, reporter)
     myAnalyzer.visit(tree)
 
@@ -70,7 +70,7 @@ object Main {
 
         case Mode.INTERPRET =>
           val myInterpreter = new Interpreter(symbolTable, reporter)
-          val interpreterWalker = new ParseTreeWalker()
+          val interpreterWalker = new ParseTreeWalker
           interpreterWalker.walk(myInterpreter, tree)
           // myInterpreter.displayResults()
 
@@ -100,7 +100,7 @@ object Main {
     * @throws java.io.IOException If an I/O error occurs during File I/O.
     */
   def main(args: Array[String]): Unit = {
-    println("Daja D Compiler (C) 2016 by Vermont Technical College")
+    println("Daja D Compiler (C) 2017 by Vermont Technical College")
 
     // Analyze the command line.
     if (args.length != 2) {
