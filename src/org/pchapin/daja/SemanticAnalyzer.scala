@@ -2,7 +2,6 @@ package org.pchapin.daja
 
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.pchapin.daja.DajaParser.{Add_expressionContext, Primary_expressionContext}
-import org.pchapin.daja.TypeRep.Rep
 
 import scala.collection.JavaConverters._
 
@@ -65,12 +64,12 @@ class SemanticAnalyzer(
 
 
   override def visitAdd_expression(ctx: Add_expressionContext): TypeRep.Rep = {
-    val addExpressionType = visit(ctx.add_expression)
-    if (ctx.multiply_expression == null) {
-      addExpressionType
+    val multExpressionType = visit(ctx.multiply_expression)
+    if (ctx.add_expression == null) {
+      multExpressionType
     }
     else {
-      val multExpressionType = visit(ctx.multiply_expression)
+      val addExpressionType = visit(ctx.add_expression)
       if (addExpressionType == multExpressionType)
         addExpressionType
       else
