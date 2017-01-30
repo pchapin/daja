@@ -13,8 +13,9 @@ object TypeRep {
   case object DoubleRep extends Rep
 
   // Constructed types.
-  case class ArrayRep(elementType: Rep, size: Int) extends Rep
+  // Note that an array's size is not part of its type.
+  case class ArrayRep(elementType: Rep) extends Rep
   case class FunctionRep(resultType: Rep, parameters: List[Rep]) extends Rep
-  case class PointerRep(poitedAtType: Rep) extends Rep
+  case class PointerRep(pointedAtType: Rep) extends Rep
 
 }

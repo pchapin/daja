@@ -29,7 +29,7 @@ basic_type
 
 init_declarator
     : IDENTIFIER (EQUALS expression)?
-    | IDENTIFIER LBRACKET expression RBRACKET;
+    | IDENTIFIER LBRACKET expression RBRACKET;  // Arrays cannot be initialized (for now).
 
 // Statement grammar...
 // --------------------

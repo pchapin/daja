@@ -1,7 +1,8 @@
 package org.pchapin.daja
 
 import org.antlr.v4.runtime.tree.TerminalNode
-import org.pchapin.daja.DajaParser.Add_expressionContext
+import org.pchapin.daja.DajaParser.{Add_expressionContext, Primary_expressionContext}
+import org.pchapin.daja.TypeRep.Rep
 
 import scala.collection.JavaConverters._
 
@@ -36,10 +37,19 @@ class SemanticAnalyzer(
     }
     for (initDeclarator <- initDeclarators) {
       val identifierName = initDeclarator.IDENTIFIER.getText
-      // TODO: Deal with the possibility that the initDeclarator is for an array.
-      // TODO: Type check the initialization expression and the array dimension expression.
-      // TODO: Verify that the array dimension is a constant expression.
-      symbolTable.addObjectName(identifierName, basicTypeRep)
+
+      // Are we dealing with an array declaration?
+      if (initDeclarator.LBRACKET != null) {
+        // TODO: Type check the array dimension expression.
+        // TODO: Verify that the array dimension is a constant expression.
+        // TODO: Arrange to add the size of the array to the symbol table.
+        symbolTable.addObjectName(identifierName, TypeRep.ArrayRep(basicTypeRep))
+      }
+      // ... otherwise it is a simple variable declaration.
+      else {
+        // TODO: Type check the initialization expression (if present).
+        symbolTable.addObjectName(identifierName, basicTypeRep)
+      }
     }
     TypeRep.NoTypeRep
   }
@@ -55,17 +65,27 @@ class SemanticAnalyzer(
 
 
   override def visitAdd_expression(ctx: Add_expressionContext): TypeRep.Rep = {
-    val addExressionType = visit(ctx.add_expression)
+    val addExpressionType = visit(ctx.add_expression)
     if (ctx.multiply_expression == null) {
-      addExressionType
+      addExpressionType
     }
     else {
       val multExpressionType = visit(ctx.multiply_expression)
-      if (addExressionType == multExpressionType)
-        addExressionType
+      if (addExpressionType == multExpressionType)
+        addExpressionType
       else
         // TODO: Deal with implicit type conversions!
         TypeRep.NoTypeRep
+    }
+  }
+
+
+  override def visitPrimary_expression(ctx: Primary_expressionContext): TypeRep.Rep = {
+    if (ctx.LPARENS == null) {
+      visitChildren(ctx)
+    }
+    else {
+      visitExpression(ctx.expression)
     }
   }
 
@@ -76,6 +96,16 @@ class SemanticAnalyzer(
     else {
       // We are only concerned about identifiers in expressions.
       node.getSymbol.getType match {
+        // Currently the only numeric literals supported are integer literals.
+        case DajaLexer.NUMERIC_LITERAL =>
+          TypeRep.IntRep
+
+        case DajaLexer.TRUE =>
+          TypeRep.BoolRep
+
+        case DajaLexer.FALSE =>
+          TypeRep.BoolRep
+
         case DajaLexer.IDENTIFIER =>
           try {
             symbolTable.getObjectType(node.getText)
