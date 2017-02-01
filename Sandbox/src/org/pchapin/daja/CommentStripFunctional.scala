@@ -45,9 +45,9 @@ object CommentStripFunctional {
   object StateType extends Enumeration {
     val NORMAL = Value
     val MAYBE_COMMENT = Value
-    val MAYBE_UNCOMMENT = Value
     val SLASH_SLASH_COMMENT = Value
     val BLOCK_COMMENT = Value
+    val MAYBE_UNCOMMENT = Value
     val DOUBLE_QUOTE = Value
     val SINGLE_QUOTE = Value
     val ESCAPE_ONE_DOUBLE = Value
@@ -77,13 +77,6 @@ object CommentStripFunctional {
           case _   => (StateType.NORMAL, ch :: '/' :: currentOutput)
         }
 
-      case StateType.MAYBE_UNCOMMENT =>
-        ch match {
-          case '/' => (StateType.NORMAL, currentOutput)
-          case '*' => (state, currentOutput)
-          case _   => (StateType.BLOCK_COMMENT, currentOutput)
-        }
-
       case StateType.SLASH_SLASH_COMMENT =>
         if (ch == '\n') {
           (StateType.NORMAL, '\n' :: currentOutput)
@@ -97,6 +90,13 @@ object CommentStripFunctional {
           case '*'  => (StateType.MAYBE_UNCOMMENT, currentOutput)
           case '\n' => (state, ch :: currentOutput)
           case _    => (state, currentOutput)
+        }
+
+      case StateType.MAYBE_UNCOMMENT =>
+        ch match {
+          case '/' => (StateType.NORMAL, currentOutput)
+          case '*' => (state, currentOutput)
+          case _   => (StateType.BLOCK_COMMENT, currentOutput)
         }
 
       case StateType.DOUBLE_QUOTE =>

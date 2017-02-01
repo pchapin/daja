@@ -2,6 +2,20 @@ import std.stdio;
 
 // Don't be confused by /* in the middle of a // comment.
 /* Don't be confused by a // in the middle of a /* comment. */
+
+The following lines should all be blank (except for test numbers).
+---START---
+1: /+ This is a comment. /+ This is a nested comment. +/ This is a comment. +/
+2: /+ ... /+
+   Inner stuff!
+   +/+/
+3: /+/ This is a comment. +/
+4: // /+ ... +/ This is still a comment.
+5: /* /+ ... +/ This is still a comment. */
+6: /++++++/
+7: /++//+/++/+/
+---END---
+
 int main( )
 {
   char ch;
@@ -31,3 +45,4 @@ int main( )
   return 0;
 }
 
+    /* This is an enclosed comment that starts on column 5 of line 48
