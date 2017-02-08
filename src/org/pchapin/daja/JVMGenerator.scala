@@ -105,6 +105,9 @@ class JVMGenerator(
                 "ldc"
             output.println(
               "    " + instruction + " " + Literals.convertIntegerLiteral(node.getText))
+
+          case _ =>
+            // Ignore other tokens in expressions (like operators).
         }
       }
     }
