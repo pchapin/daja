@@ -1,17 +1,20 @@
 package org.pchapin.daja
 
-//import scala.collection.mutable
-
 /**
- * This class represents nondeterministic finite automata. The states of the NFA are numbered
- * with integers starting at stateLower and going to stateUpper. The range of states is
- * contiguous. The first state in the range is the start state and the last state in the range
- * is the final state. NFAs represented by the class contain only a single final state (this is
- * all that is necessary in this application).
- */
+  * This class represents nondeterministic finite automata. The states of the NFA are numbered
+  * with integers starting at stateLower and going to stateUpper. The range of states is
+  * contiguous. The first state in the range is the start state and the last state in the range
+  * is the final state.
+  *
+  * NFAs represented by the class contain only a single final state. While this is a restriction
+  * over the formal definition of an NFA, it is all that is necessary in this application. The
+  * restriction does not restrict expressiveness; for an NFA with multiple final states, a new
+  * NFA could be built that has a single final state reachable from the original final states
+  * via epsilon transitions.
+  */
 class NFA(private val stateLower: Int,
           private val stateUpper: Int,
-          private val transitionFunction: Map[TransitionFunctionArgument, Set[Integer]]) {
+          private val transitionFunction: Map[TransitionFunctionArgument, Set[Int]]) {
 
     import NFA._
 
@@ -23,34 +26,25 @@ class NFA(private val stateLower: Int,
         val secondEntry = stateUpper + 1
         val newLower = stateLower
         val newUpper = stateUpper + (other.stateUpper - other.stateLower + 1)
-        var newTransition = Map[TransitionFunctionArgument, Set[Integer]]()
+        var newTransition = transitionFunction
 
-        // Copy my transition function to the new one.
-        for ((key, value) <- transitionFunction) {
-          newTransition = newTransition + (key -> value)
-        }
-
-        // Copy the other transition function into newTransition, modifying the state numbers in the process.
-        for ((key, value) <- other.transitionFunction) {
-            val oldArgument: TransitionFunctionArgument = key
+        // Copy the other transition function into newTransition, modifying the state numbers.
+        for ((oldArgument, oldResult) <- other.transitionFunction) {
+            // Convert state numbers in the other NFA's transition function arguments.
             val newArgument =
               TransitionFunctionArgument(
                 oldArgument.state - other.stateLower + secondEntry,
                 oldArgument.inputCharacter)
 
-            val oldResult = value
-            var newResult = Set[Integer]()
-            for (state: Integer <- oldResult) {
-                newResult = newResult + (state - other.stateLower + secondEntry)
-            }
-
+            // Convert state numbers in the other NFA's transition function result sets.
+            val newResult = oldResult map { state => state - other.stateLower + secondEntry }
             newTransition = newTransition + (newArgument -> newResult)
         }
 
         // Add an epsilon transition between the original final state and the other start state.
+        // TODO: This will overwrite any existing epsilon transition from stateUpper!
         val extraArgument = TransitionFunctionArgument(stateUpper, '\u0000')
-        var extraResult = Set[Integer]()
-        extraResult = extraResult + secondEntry
+        var extraResult = Set[Int](secondEntry)
         newTransition = newTransition + (extraArgument -> extraResult)
 
         // Create the new NFA.
@@ -78,13 +72,13 @@ class NFA(private val stateLower: Int,
      * Returns true if this NFA is really a DFA (no use of epsilon transitions and only a single
      * state as the target of each transition.
      */
-    def isDFA(): Boolean = {
-        for ((key: TransitionFunctionArgument, value: Set[Integer]) <- transitionFunction) {
+    def isDFA: Boolean = {
+        for ((key: TransitionFunctionArgument, value: Set[Int]) <- transitionFunction) {
             // Make sure each set has exactly one element.
             if (value.size != 1) return false
 
             // Make sure no epsilon transitions occur.
-            if (key.inputCharacter == 0) return false
+            if (key.inputCharacter == '\u0000') return false
         }
         true
     }
@@ -93,7 +87,7 @@ class NFA(private val stateLower: Int,
      * Returns a DFA obtained from Subset Construction on this NFA. Note that the return value
      * will be such that isDFA() is true.
      */
-    def toDFA(): NFA = {
+    def toDFA: NFA = {
         // TODO: This method body is just a place holder!
         new NFA(stateLower, stateUpper, transitionFunction)
     }
@@ -102,7 +96,7 @@ class NFA(private val stateLower: Int,
      * Returns true if this NFA accepts the given text; false otherwise.
      */
     def `match`(text: String): Boolean = {
-        if (!isDFA()) {
+        if (!isDFA) {
             throw new SimulationException("Simulating an NFA without conversion to a DFA")
         }
 
