@@ -49,19 +49,47 @@ public abstract class Node {
         }
     }
 
-    public static class And extends Node {
-        private Node left, right;
+    public static class ConjunctExpr extends Node {
+        private Node simple, helper;
 
-        public And(Node left, Node right)
+        public ConjunctExpr(Node simple, Node helper)
         {
-            this.left = left;
-            this.right = right;
+            this.simple = simple;
+            this.helper = helper;
         }
 
         @Override
         public boolean evaluate(SymbolTable table)
         {
-            return left.evaluate(table) && right.evaluate(table);
+            if (helper != null) {
+                return simple.evaluate(table) && helper.evaluate(table);
+            }
+            else {
+                return simple.evaluate(table);
+            }
+        }
+    }
+
+    public static class ConjunctHelper extends Node {
+        private Node simple, helper;
+
+        public ConjunctHelper(Node simple, Node helper)
+        {
+            this.simple = simple;
+            this.helper = helper;
+        }
+
+        @Override
+        public boolean evaluate(SymbolTable table)
+        {
+            boolean result;
+            if (helper != null) {
+                result = simple.evaluate(table) && helper.evaluate(table);
+            }
+            else {
+                result = simple.evaluate(table);
+            }
+            return result;
         }
     }
 

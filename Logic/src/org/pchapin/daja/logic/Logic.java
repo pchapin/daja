@@ -129,37 +129,38 @@ public class Logic {
     }
 
 
-    private static void conjunct_expr(SymbolTable table)
+    private static Node conjunct_expr(SymbolTable table)
     {
-        simple_expr(table);
-        conjunct_helper(table);
+        Node simpleNode = simple_expr(table);
+        Node helperNode = conjunct_helper(table);
+        return new Node.ConjunctExpr(simpleNode, helperNode);
     }
 
 
-    private static void conjunct_helper(SymbolTable table)
+    private static Node conjunct_helper(SymbolTable table)
     {
         Token headToken = tokenList.get(0);
         if (headToken.getType() == LogicLexer.AND) {
             consumeToken();
-            simple_expr(table);
-            conjunct_helper(table);
+            Node simpleNode = simple_expr(table);
+            Node helperNode = conjunct_helper(table);
+            return new Node.ConjunctHelper(simpleNode, helperNode);
+        }
+        else {
+            // This is the epsilon case.
+            return null;
         }
     }
 
 
     private static Node simple_expr(SymbolTable table)
     {
-        //simple_expr  -> IDENTIFIER
-        //             -> 'true'
-        //             -> 'false'
-        //             -> 'not' simple_expr
-        //             -> '(' full_expr ')'
-
         switch (tokenList.get(0).getType()) {
             case LogicLexer.IDENTIFIER:
+                String tokenText = tokenList.get(0).getText();
                 consumeToken();
-                table.add(tokenList.get(0).getText());
-                return new Node.Identifier(tokenList.get(0).getText());
+                table.add(tokenText);
+                return new Node.Identifier(tokenText);
 
             case LogicLexer.TRUE:
                 consumeToken();
@@ -177,7 +178,10 @@ public class Logic {
                 consumeToken();
                 Node subtree = full_expr(table);
                 if (tokenList.get(0).getType() != LogicLexer.RPARENS) {
-                    // Error! Expected ')'
+                    System.out.printf(
+                            "(%d, %d) Error! Expected ')'\n",
+                            tokenList.get(0).getLine(),
+                            tokenList.get(0).getCharPositionInLine() + 1);
                 }
                 else {
                     consumeToken();
@@ -186,7 +190,7 @@ public class Logic {
 
             default:
                 // Error! Unexpected token!
-                // TODO: Decide on some suitable error recovery plan.
+                // TODO: Decide on some suitable error recovery strategy.
                 return null;
         }
     }
