@@ -34,14 +34,29 @@ class SemanticAnalyzer(
       case "bool"   => TypeRep.BoolRep
       case "double" => TypeRep.DoubleRep
     }
+
+    val isArrayType = ctx.LBRACKET != null
+    if (isArrayType) {
+      // TODO: Type check the array dimension expression.
+      val dimensionExpressionType = visit(ctx.expression)
+      if (dimensionExpressionType != TypeRep.IntRep) {
+        reporter.reportError(
+          ctx.LBRACKET.getSymbol.getLine,
+          ctx.LBRACKET.getSymbol.getCharPositionInLine + 1,
+          "Array dimension must have integral type")
+      }
+      else {
+        // TODO: Verify that the array dimension is a constant expression.
+        // TODO: Arrange to add the size of the array to the symbol table.
+      }
+    }
+
     for (initDeclarator <- initDeclarators) {
       val identifierName = initDeclarator.IDENTIFIER.getText
 
       // Are we dealing with an array declaration?
-      if (initDeclarator.LBRACKET != null) {
-        // TODO: Type check the array dimension expression.
-        // TODO: Verify that the array dimension is a constant expression.
-        // TODO: Arrange to add the size of the array to the symbol table.
+      if (isArrayType) {
+        // TODO: Type check the initialization expression (if present).
         symbolTable.addObjectName(identifierName, TypeRep.ArrayRep(basicTypeRep))
       }
       // ... otherwise it is a simple variable declaration.
@@ -57,7 +72,7 @@ class SemanticAnalyzer(
   override def visitExpression(ctx: DajaParser.ExpressionContext): TypeRep.Rep = {
     // Keep track of the number of nested open expressions.
     expressionLevel += 1
-    val expressionType = visit(ctx.assignment_expression)
+    val expressionType = visit(ctx.comma_expression)
     expressionLevel -= 1
     expressionType
   }

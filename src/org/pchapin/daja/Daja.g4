@@ -19,8 +19,10 @@ module
 // Declaration grammar...
 // ----------------------
 
+// For now, we support only single dimensional arrays.
 declaration
-    : basic_type init_declarator (COMMA init_declarator)* SEMI;
+    : basic_type (LBRACKET expression RBRACKET)?
+        init_declarator (COMMA init_declarator)* SEMI;
 
 basic_type
     : BOOL
@@ -28,8 +30,7 @@ basic_type
     | DOUBLE;
 
 init_declarator
-    : IDENTIFIER (EQUALS expression)?
-    | IDENTIFIER LBRACKET expression RBRACKET;  // Arrays cannot be initialized (for now).
+    : IDENTIFIER (EQUALS expression)?;
 
 // Statement grammar...
 // --------------------
@@ -57,7 +58,11 @@ while_statement
 // ---------------------
 
 expression
-    : assignment_expression;
+    : comma_expression;
+
+comma_expression
+    : assignment_expression COMMA comma_expression
+    | assignment_expression;
 
 assignment_expression
     : relational_expression
