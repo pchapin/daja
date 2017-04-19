@@ -12,17 +12,11 @@ object Main {
     * Specifies the different modes of operation that are supported.
     *
     * CHECK    : Syntax and semantic check only, no code generation or execution.
-    * INTERPRET: Execute the program without generating code for it.
-    * C        : Generate a Standard C program as output.
     * LLVM     : Generate LLVM assembly language as output.
-    * JVM      : Generate JVM assembly language as output.
     */
   private object Mode extends Enumeration {
     val CHECK = Value
-    val INTERPRET = Value
-    val C = Value
     val LLVM = Value
-    val JVM = Value
   }
 
   private val reporter = new BasicConsoleReporter
@@ -68,24 +62,10 @@ object Main {
         case Mode.CHECK =>
           // Do nothing. Semantic analysis is all that is required.
 
-        case Mode.INTERPRET =>
-          val myInterpreter = new Interpreter(symbolTable, reporter)
-          val interpreterWalker = new ParseTreeWalker
-          interpreterWalker.walk(myInterpreter, tree)
-          // myInterpreter.displayResults()
-
-        case Mode.C =>
-          val myCGenerator = new CGenerator(symbolTable, reporter)
-          myCGenerator.visit(tree)
-
         case Mode.LLVM =>
           System.out.println("LLVM code generation is not implemented!")
           val myLLVMGenerator = new LLVMGenerator(symbolTable, reporter)
           myLLVMGenerator.visit(tree)
-
-        case Mode.JVM =>
-          val myJVMGenerator = new JVMGenerator(symbolTable, reporter)
-          myJVMGenerator.visit(tree)
       }
     }
   }
@@ -104,21 +84,15 @@ object Main {
 
     // Analyze the command line.
     if (args.length != 2) {
-      println("Usage: java -jar Daja (-k | -i | -c | -l | -j) source-file")
+      println("Usage: java -jar Daja (-k | -l) source-file")
       System.exit(1)
     }
 
     val mode = args(0) match {
       case "-k" =>
         Mode.CHECK
-      case "-i" =>
-        Mode.INTERPRET
-      case "-c" =>
-        Mode.C
       case "-l" =>
         Mode.LLVM
-      case "-j" =>
-        Mode.JVM
       case _ =>
         println("Error: Unknown mode, defaulting to CHECK!\n")
         Mode.CHECK

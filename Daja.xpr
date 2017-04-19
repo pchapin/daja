@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="16.1">
+<project version="19.0">
     <meta>
         <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="16.1" xml:space="preserve">
-                <map>
+            <serialized version="19.0" xml:space="preserve">
+                <serializableOrderedMap>
                     <entry>
                         <String>ant.file.patterns</String>
                         <String>disable.xml</String>
@@ -33,7 +33,7 @@
                         <String>key.text.editor.option.pane</String>
                         <Boolean>true</Boolean>
                     </entry>
-                </map>
+                </serializableOrderedMap>
             </serialized>
         </options>
     </meta>
@@ -45,10 +45,6 @@
             <file name="doc/Requirements.xml"/>
             <file name="doc/User.xml"/>
             <file name="doc/Vision.xml"/>
-        </folder>
-        <folder name="Sandbox">
-            <file name="Sandbox/doc/Design.xml"/>
-            <file name="Sandbox/doc/Sandbox.xml"/>
         </folder>
         <folder name="Tutorials">
             <folder name="D2Scala">
