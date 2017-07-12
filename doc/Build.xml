@@ -28,7 +28,7 @@
       <term><ulink url="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java
           Development Kit</ulink></term>
       <listitem>
-        <para>We use JDK v1.8.0_77 but any 1.8 version would probably work. A full JDK is
+        <para>We use JDK v1.8.0_131 but any 1.8 version would probably work. A full JDK is
           necessary, and not just a JRE, because the Daja code base includes some Java
           files.</para>
       </listitem>
@@ -37,7 +37,7 @@
     <varlistentry>
       <term><ulink url="http://www.scala-lang.org/">Scala Compiler</ulink></term>
       <listitem>
-        <para>We use Scala v2.12.1. The Scala compiler is executed indirectly via the IntelliJ
+        <para>We use Scala v2.12.2. The Scala compiler is executed indirectly via the IntelliJ
           IDE. Currently no official method of building Daja outside the IDE is provided.</para>
 
         <para>It is important that you use a Scala version that is matched to the same major
