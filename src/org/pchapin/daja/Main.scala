@@ -2,6 +2,9 @@ package org.pchapin.daja
 
 import org.antlr.v4.runtime._
 import org.antlr.v4.runtime.tree._
+import scalax.collection.Graph
+import scalax.collection.edge.LDiEdge
+import scalax.collection.io.dot._
 
 /**
  * The main class of the Daja compiler.
@@ -16,6 +19,7 @@ object Main {
     */
   private object Mode extends Enumeration {
     val CHECK = Value
+    val DOT = Value
     val LLVM = Value
   }
 
@@ -50,22 +54,58 @@ object Main {
       // Analyze program for the use of uninitialized variables.
       Analysis.liveness(CFG)
       val ControlFlowGraph(entryBlock, _, _) = CFG
-      if (entryBlock.live.nonEmpty) {
-        print("The following variables may be used uninitialized => ")
-        for (varName <- entryBlock.live) {
-          print(s"$varName ")
-        }
-        print("\n")
-      }
 
       mode match {
         case Mode.CHECK =>
-          // Do nothing. Semantic analysis is all that is required.
+          if (entryBlock.live.nonEmpty) {
+            print("The following variables may be used uninitialized => ")
+            for (varName <- entryBlock.live) {
+              print(s"$varName ")
+            }
+            print("\n")
+          }
 
         case Mode.LLVM =>
           System.out.println("LLVM code generation is not implemented!")
           val myLLVMGenerator = new LLVMGenerator(symbolTable, reporter)
           myLLVMGenerator.visit(tree)
+
+        case Mode.DOT =>
+          // Generate a DOT graph using: http://scala-graph.org/guides/dot.html
+          val myDotRoot = DotRootGraph(directed=true, id=Some(Id("CFG")))
+          def myEdgeTransformer(innerEdge: Graph[BasicBlock,LDiEdge]#EdgeT): Option[(DotGraph,DotEdgeStmt)] = {
+            innerEdge.edge match {
+              case LDiEdge(source, target, label) =>
+                // label is one of 'T', 'F' or 'U' (true, false or unconditional)
+                Some((myDotRoot, DotEdgeStmt(
+                    node_1Id=NodeId(source.toString),
+                    node_2Id=NodeId(target.toString),
+                    attrList=List(DotAttr(Id("label"), Id(label.toString))),
+                )))
+            }
+          }
+          def myCNodeTransformer(innerNode: Graph[BasicBlock,LDiEdge]#NodeT): Option[(DotGraph,DotNodeStmt)] = {
+            def genLabel(outerNode: BasicBlock): List[String] = {
+              val assignmentsText = for (assignment <- outerNode.assignments) yield assignment.getText
+              val conditionText = if (outerNode.condition.isDefined) {
+                List(outerNode.condition.get.getText)
+              } else {
+                List()
+              }
+              List.concat(assignmentsText, conditionText)
+            }
+            val label: List[String] = genLabel(innerNode.toOuter)
+            Some((myDotRoot, DotNodeStmt(
+              nodeId=NodeId(innerNode.toString),
+              attrList=List(DotAttr(Id("label"), Id(label.toString))),
+            )))
+          }
+          val dot = CFG.graph.toDot(
+            myDotRoot,
+            myEdgeTransformer,
+            cNodeTransformer=Some(myCNodeTransformer)
+          )
+          System.out.println(dot)
       }
     }
   }
@@ -80,17 +120,20 @@ object Main {
     * @throws java.io.IOException If an I/O error occurs during File I/O.
     */
   def main(args: Array[String]): Unit = {
-    println("Daja D Compiler (C) 2017 by Vermont Technical College")
+    // Don't include with normal output. Makes piping, grepping, etc easier.
+    System.err.println("Daja D Compiler (C) 2017 by Vermont Technical College")
 
     // Analyze the command line.
     if (args.length != 2) {
-      println("Usage: java -jar Daja (-k | -l) source-file")
+      println("Usage: java -jar Daja (-k | -d | -l) source-file")
       System.exit(1)
     }
 
     val mode = args(0) match {
       case "-k" =>
         Mode.CHECK
+      case "-d" =>
+        Mode.DOT
       case "-l" =>
         Mode.LLVM
       case _ =>
