@@ -16,17 +16,17 @@ ThisBuild / scalacOptions :=
       "-Ywarn-unused-import",
       "-Ywarn-value-discard")
 
-logBuffered in Test := false
+Test / logBuffered := false
 
 lazy val daja = (project in file("."))
   .settings(
     name := "Daja",
     libraryDependencies ++= dajaDeps,
 
-    antlr4Version     in Antlr4 := "4.7.2",
-    antlr4PackageName in Antlr4 := Some("org.pchapin.daja"),
-    antlr4GenListener in Antlr4 := true,
-    antlr4GenVisitor  in Antlr4 := true
+    Antlr4 / antlr4Version     := "4.7.2",
+    Antlr4 / antlr4PackageName := Some("org.pchapin.daja"),
+    Antlr4 / antlr4GenListener := true,
+    Antlr4 / antlr4GenVisitor  := true
   )
   .dependsOn(dragon)
 
