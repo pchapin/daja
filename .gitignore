@@ -1,19 +1,17 @@
-# IntelliJ artifacts
-.idea/workspace.xml
-build
+# IntelliJ artifacts.
+.idea
 
-# Libraries from Maven...
+# Manually installed jars.
 lib/*.jar
 
-# ANTLR artifacts.
-Daja.tokens
-DajaBaseListener.java
-DajaBaseVisitor.java
-DajaLexer.java
-DajaLexer.tokens
-DajaListener.java
-DajaParser.java
-DajaVisitor.java
+# sbt generated files.
+target/
 
-Logic/src/org/pchapin/daja/logic/LogicLexer.java
-Logic/src/org/pchapin/daja/logic/LogicLexer.tokens
+# Testing artifacts.
+testData/output.ll
+*.err
+
+# ENSIME files.
+.ensime
+.ensime_cache
+

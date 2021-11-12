@@ -46,7 +46,15 @@
             <file name="doc/User.xml"/>
             <file name="doc/Vision.xml"/>
         </folder>
-        <folder name="Tutorials">
+         <folder name="Dragon">
+            <file name="Dragon/doc/Design.xml"/>
+            <file name="Dragon/doc/Dragon.xml"/>
+        </folder>
+        <folder name="Tiger">
+            <file name="Tiger/doc/Design.xml"/>
+            <file name="Tiger/doc/Tiger.xml"/>
+        </folder>
+       <folder name="Tutorials">
             <folder name="D2Scala">
                 <file name="doc/tutorials/D2Scala/D2Scala.xml"/>
             </folder>
