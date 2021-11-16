@@ -20,7 +20,7 @@ object Controller {
    * @param state If true then preconditions are evaluated; otherwise they are not evaluated. In
    * the later case the associated block is always executed.
    */
-  def preconditionsEvaluated(state: Boolean) {
+  def preconditionsEvaluated(state: Boolean): Unit = {
     preconditionsActive = state
   }
 }

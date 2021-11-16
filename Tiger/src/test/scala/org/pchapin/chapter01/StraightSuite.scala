@@ -6,10 +6,11 @@
 //-----------------------------------------------------------------------
 package org.pchapin.chapter01
 
-import org.scalatest.{Assertions, FunSuite}
-import org.scalatest.Matchers
+import org.scalatest._
+import funsuite._
+import matchers._
 
-class StraightSuite extends FunSuite with Assertions with Matchers {
+class StraightSuite extends AnyFunSuite with Assertions with should.Matchers {
   import Straight._
 
   // Nested print statements.

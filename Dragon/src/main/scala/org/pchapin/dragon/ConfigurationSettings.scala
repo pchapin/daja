@@ -30,7 +30,7 @@ class ConfigurationSettings(private val configurableItems: Map[String, String =>
    * @throws BadNameException if a name is encountered that is not configurable.
    * @throws BadValidationException if a value does not pass validation.
    */
-  def setDefaults(defaultValues: Map[String, String]) {
+  def setDefaults(defaultValues: Map[String, String]): Unit = {
     for ((name, value) <- defaultValues) {
       put(name, value)
     }
@@ -87,7 +87,7 @@ class ConfigurationSettings(private val configurableItems: Map[String, String =>
    * @throws BadNameException if a name is encountered that is not configurable.
    * @throws BadValidationException if any of the file members fail to pass validation.
    */
-  def readConfigurationFile(fileName: String) {
+  def readConfigurationFile(fileName: String): Unit = {
     // TODO: This method does not allow the value to contain an '=' character.
     // TODO: If a name is found that is not among the set of allowed configurable items, it is silently ignored.
 
@@ -154,7 +154,7 @@ class ConfigurationSettings(private val configurableItems: Map[String, String =>
    * @throws BadNameException if the name does not specify a configurable item.
    * @throws BadValidationException if the value does not pass validation.
    */
-  def put(name: String, value: String) {
+  def put(name: String, value: String): Unit = {
     if (configurableItems.contains(name))
       settings += ( name -> configurableItems(name)(value) )
     else

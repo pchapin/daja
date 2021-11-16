@@ -87,7 +87,7 @@ object Straight {
   class UndefinedIdentifierException(message: String) extends Exception(message)
 
 
-  def interpret(program: Statement) {
+  def interpret(program: Statement): Unit = {
     // The environment of the program itself contains no symbols. The program is a closed term.
     interpretStatement(program, List())
   }

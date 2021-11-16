@@ -6,6 +6,7 @@ lib/*.jar
 
 # sbt generated files.
 target/
+.bsp/
 
 # Testing artifacts.
 testData/output.ll

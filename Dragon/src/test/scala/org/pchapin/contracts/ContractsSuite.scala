@@ -7,10 +7,11 @@
 
 package org.pchapin.contracts
 
-import org.scalatest.{Assertions, FunSuite}
-import org.scalatest.Matchers
+import org.scalatest._
+import funsuite._
+import matchers._
 
-class ContractsSuite extends FunSuite with Assertions with Matchers {
+class ContractsSuite extends AnyFunSuite with Assertions with should.Matchers {
 
   test("Basic Precondition Test") {
 

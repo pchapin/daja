@@ -16,7 +16,7 @@ class ParserSpec extends UnitSpec {
     * @param testCaseNames An array of file names representing the test cases.
     * @param doParse A function that takes a DajaParser and executes the parse at a particular start symbol.
     */
-  private def doTests(testCaseNames: Array[String], doParse: DajaParser => Unit) {
+  private def doTests(testCaseNames: Array[String], doParse: DajaParser => Unit): Unit = {
     for (testCaseName <- testCaseNames) {
       val testCase = new File(syntaxPositive, testCaseName)
       val lexer  = new DajaLexer(new ANTLRFileStream(testCase.getPath))
@@ -27,22 +27,22 @@ class ParserSpec extends UnitSpec {
   }
 
 
-  private def doExpressionTests(testCaseNames: Array[String]) {
+  private def doExpressionTests(testCaseNames: Array[String]): Unit = {
     doTests(testCaseNames, _.expression())
   }
 
 
-  private def doDeclarationTests(testCaseNames: Array[String]) {
+  private def doDeclarationTests(testCaseNames: Array[String]): Unit = {
     doTests(testCaseNames, _.declaration())
   }
 
 
-  private def doStatementTests(testCaseNames: Array[String]) {
+  private def doStatementTests(testCaseNames: Array[String]): Unit = {
     doTests(testCaseNames, _.statement())
   }
 
 
-  private def doModuleTests(testCaseNames: Array[String]) {
+  private def doModuleTests(testCaseNames: Array[String]): Unit = {
     doTests(testCaseNames, _.module())
   }
 
