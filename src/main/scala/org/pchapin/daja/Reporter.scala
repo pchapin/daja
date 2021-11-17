@@ -1,6 +1,5 @@
 package org.pchapin.daja
 
-
 /**
  * Interface to error/warning message handling classes. A class implementing this interface can
  * be used by the rest of the compiler for communicating error information to the user.

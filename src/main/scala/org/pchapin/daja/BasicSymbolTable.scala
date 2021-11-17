@@ -1,6 +1,6 @@
 package org.pchapin.daja
 
-import org.pchapin.daja.SymbolTable._
+import org.pchapin.daja.SymbolTable.*
 
 class BasicSymbolTable extends SymbolTable {
 
@@ -15,7 +15,6 @@ class BasicSymbolTable extends SymbolTable {
     // TODO: Include in the message the position of the error in the source text.
     if (objectMap.contains(name))
       throw new DuplicateObjectNameException(s"$name already names an object")
-
     objectMap = objectMap + (name -> typeRep)
   }
 
@@ -27,7 +26,6 @@ class BasicSymbolTable extends SymbolTable {
     // TODO: Include in the message the position of the error in the source text.
     if (typeMap.contains(name))
       throw new DuplicateTypeNameException(s"$name already names a type")
-
     typeMap = typeMap + (name -> typeRep)
   }
 
@@ -39,7 +37,6 @@ class BasicSymbolTable extends SymbolTable {
     // TODO: Include in the message the position of the error in the source text.
     if (!objectMap.contains(name))
       throw new UnknownObjectNameException(s"$name is not the name of an object")
-
     objectMap(name)
   }
 
@@ -47,7 +44,6 @@ class BasicSymbolTable extends SymbolTable {
     // TODO: Include in the message the position of the error in the source text.
     if (!typeMap.contains(name))
       throw new UnknownTypeNameException(s"$name is not the name of a type")
-
     typeMap(name)
   }
 

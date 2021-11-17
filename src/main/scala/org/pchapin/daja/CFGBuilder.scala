@@ -1,5 +1,6 @@
 package org.pchapin.daja
 
+import scala.jdk.CollectionConverters.*
 import scalax.collection.Graph
 import scalax.collection.GraphPredef.*
 import scalax.collection.edge.LDiEdge
@@ -7,10 +8,6 @@ import scalax.collection.edge.LDiEdge
 class CFGBuilder(
   symbolTable: SymbolTable,
   reporter   : Reporter) extends DajaBaseVisitor[ControlFlowGraph] {
-
-  import scala.jdk.CollectionConverters.*
-
-  // ctx is a java.util.List, not a scala.List.
 
   private def combineStatementSequence(statements: Iterable[DajaParser.StatementContext]): ControlFlowGraph = {
 

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------
 // FILE    : Controller.scala
 // SUBJECT : Object containing methods that allow configuration of contract behaviors.
-// AUTHOR  : (C) Copyright 2012 by Peter C. Chapin <PChapin@vtc.vsc.edu>
+// AUTHOR  : (C) Copyright 2012 by Peter C. Chapin <pchapin@vtc.edu>
 //
 //-----------------------------------------------------------------------
 package org.pchapin.contracts

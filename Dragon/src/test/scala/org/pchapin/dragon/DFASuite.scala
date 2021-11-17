@@ -1,8 +1,8 @@
 package org.pchapin.dragon
 
-import org.scalatest._
-import funsuite._
-import matchers._
+import org.scalatest.*
+import funsuite.*
+import matchers.*
 
 class DFASuite extends AnyFunSuite with Assertions with should.Matchers {
 

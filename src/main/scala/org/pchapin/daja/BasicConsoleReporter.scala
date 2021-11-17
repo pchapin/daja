@@ -1,6 +1,5 @@
 package org.pchapin.daja
 
-
 class BasicConsoleReporter extends Reporter {
 
   var errorCount = 0

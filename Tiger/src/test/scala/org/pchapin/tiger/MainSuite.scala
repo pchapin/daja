@@ -6,9 +6,9 @@
 //-----------------------------------------------------------------------
 package org.pchapin.tiger
 
-import org.scalatest._
-import funsuite._
-import matchers._
+import org.scalatest.*
+import funsuite.*
+import matchers.*
 
 class MainSuite extends AnyFunSuite with Assertions with should.Matchers {
 

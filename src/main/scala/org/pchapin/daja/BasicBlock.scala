@@ -17,4 +17,4 @@ class BasicBlock(val assignments: List[DajaParser.Expression_statementContext],
                  var upwardlyExposed: Set[String] = Set(),
                  var killed         : Set[String] = Set(),
                  var live           : Set[String] = Set())
-// TODO: Do I need to override equals and hashCode for this class?
+// TODO: Do we need to override equals and hashCode for this class?

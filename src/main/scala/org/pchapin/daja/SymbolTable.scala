@@ -2,8 +2,8 @@ package org.pchapin.daja
 
 /**
  * An interface describing Daja symbol tables. Symbols are divided into object names and type
- * names. Note that symbol table objects are mutable. The built-in types int and bool and
- * double are known to all symbol tables after they are constructed.
+ * representations. Note that symbol table objects are mutable. The built-in types int and bool
+ * and double are known to all symbol tables after they are constructed.
  */
 trait SymbolTable {
 

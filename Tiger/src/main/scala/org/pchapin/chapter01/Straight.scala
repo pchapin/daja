@@ -42,7 +42,7 @@ object Straight {
    * is returned if there are no print statements embedded in topLevelStatement (or if all
    * embedded print statements have empty argument lists).
    */
-  def maximumPrintArgumentCount(topLevelStatement: Statement) = {
+  def maximumPrintArgumentCount(topLevelStatement: Statement): NumericLiteral = {
 
     // This helper method is needed since it must process both statements and expressions.
     // It is necessary to descend into expressions because an expression can contain embedded
@@ -54,7 +54,7 @@ object Straight {
         // This is the interesting case.
         case PrintStatement(arguments) =>
           val maximumsList = arguments map { ASTWalker }
-          val subordinateMaximum = maximumsList.foldLeft(0)( math.max(_, _) )
+          val subordinateMaximum = maximumsList.foldLeft(0)( math.max )
           math.max(subordinateMaximum, arguments.size)
 
         // The base cases.

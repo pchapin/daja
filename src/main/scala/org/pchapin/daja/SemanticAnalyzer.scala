@@ -1,15 +1,14 @@
 package org.pchapin.daja
 
+import scala.jdk.CollectionConverters.*
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.pchapin.daja.DajaParser.{Add_expressionContext, Primary_expressionContext}
-
-import scala.jdk.CollectionConverters.*
 
 /**
  * Class to do semantic analysis of Daja programs.
  */
 class SemanticAnalyzer(
-  private val symbolTable: BasicSymbolTable,
+  private val symbolTable: SymbolTable,
   private val reporter   : Reporter) extends DajaBaseVisitor[TypeRep.Rep] {
 
   private var expressionLevel = 0
