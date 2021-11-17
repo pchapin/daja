@@ -1,7 +1,7 @@
 package org.pchapin.daja
 
-import org.antlr.v4.runtime._
-import org.antlr.v4.runtime.tree._
+import org.antlr.v4.runtime.*
+import org.pchapin.daja.Main.Mode
 
 /**
  * The main class of the Daja compiler.
@@ -15,8 +15,8 @@ object Main {
     * LLVM     : Generate LLVM assembly language as output.
     */
   private object Mode extends Enumeration {
-    val CHECK = Value
-    val LLVM = Value
+    val CHECK: Mode.Value = Value
+    val LLVM : Mode.Value = Value
   }
 
   private val reporter = new BasicConsoleReporter
@@ -27,7 +27,7 @@ object Main {
     * @param input The input file to compile.
     * @param mode The desired target or mode of operation.
     */
-  private def processDaja(input: ANTLRFileStream, mode: Mode.Value): Unit = {
+  private def processDaja(input: CharStream, mode: Mode.Value): Unit = {
     // Parse the input file as Daja.
     val lexer  = new DajaLexer(input)
     val tokens = new CommonTokenStream(lexer)
@@ -65,7 +65,7 @@ object Main {
         case Mode.LLVM =>
           System.out.println("LLVM code generation is not implemented!")
           val myLLVMGenerator = new LLVMGenerator(symbolTable, reporter)
-          myLLVMGenerator.visit(tree)
+          myLLVMGenerator.visit(tree): @annotation.nowarn("msg=discarded non-Unit value")
       }
     }
   }
@@ -80,7 +80,7 @@ object Main {
     * @throws java.io.IOException If an I/O error occurs during File I/O.
     */
   def main(args: Array[String]): Unit = {
-    println("Daja D Compiler (C) 2017 by Vermont Technical College")
+    println("Daja D Compiler (C) 2021 by Vermont Technical College")
 
     // Analyze the command line.
     if (args.length != 2) {
@@ -99,7 +99,7 @@ object Main {
     }
 
     // Create a stream that reads from the specified file.
-    val input = new ANTLRFileStream(args(1))
+    val input = CharStreams.fromFileName(args(1))
     processDaja(input, mode)
   }
 }

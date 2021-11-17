@@ -89,7 +89,7 @@ object Straight {
 
   def interpret(program: Statement): Unit = {
     // The environment of the program itself contains no symbols. The program is a closed term.
-    interpretStatement(program, List())
+    interpretStatement(program, List()): @annotation.nowarn("msg=discarded non-Unit value")
   }
 
 
@@ -107,7 +107,7 @@ object Straight {
       case PrintStatement(arguments) =>
         val overallTable = arguments.foldLeft(table)( (currentTable, e) => {
           val (expressionResult, expressionTable) = interpretExpression(e, currentTable)
-          print(expressionResult + " ")
+          print(s"$expressionResult ")
           expressionTable
         })
         print("\n")

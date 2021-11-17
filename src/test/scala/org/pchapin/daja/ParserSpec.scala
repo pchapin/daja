@@ -1,7 +1,7 @@
 package org.pchapin.daja
 
 import java.io.File
-import org.antlr.v4.runtime.{ANTLRFileStream, CommonTokenStream}
+import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
 class ParserSpec extends UnitSpec {
 
@@ -19,7 +19,7 @@ class ParserSpec extends UnitSpec {
   private def doTests(testCaseNames: Array[String], doParse: DajaParser => Unit): Unit = {
     for (testCaseName <- testCaseNames) {
       val testCase = new File(syntaxPositive, testCaseName)
-      val lexer  = new DajaLexer(new ANTLRFileStream(testCase.getPath))
+      val lexer  = new DajaLexer(CharStreams.fromFileName(testCase.getPath))
       val tokens = new CommonTokenStream(lexer)
       val parser = new DajaParser(tokens)
       doParse(parser)
@@ -28,22 +28,22 @@ class ParserSpec extends UnitSpec {
 
 
   private def doExpressionTests(testCaseNames: Array[String]): Unit = {
-    doTests(testCaseNames, _.expression())
+    doTests(testCaseNames, _.expression(): @annotation.nowarn("msg=discarded non-Unit value"))
   }
 
 
   private def doDeclarationTests(testCaseNames: Array[String]): Unit = {
-    doTests(testCaseNames, _.declaration())
+    doTests(testCaseNames, _.declaration(): @annotation.nowarn("msg=discarded non-Unit value"))
   }
 
 
   private def doStatementTests(testCaseNames: Array[String]): Unit = {
-    doTests(testCaseNames, _.statement())
+    doTests(testCaseNames, _.statement(): @annotation.nowarn("msg=discarded non-Unit value"))
   }
 
 
   private def doModuleTests(testCaseNames: Array[String]): Unit = {
-    doTests(testCaseNames, _.module())
+    doTests(testCaseNames, _.module(): @annotation.nowarn("msg=discarded non-Unit value"))
   }
 
 

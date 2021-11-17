@@ -1,14 +1,14 @@
 package org.pchapin.daja
 
 import scalax.collection.Graph
-import scalax.collection.GraphPredef._
+import scalax.collection.GraphPredef.*
 import scalax.collection.edge.LDiEdge
 
 class CFGBuilder(
   symbolTable: SymbolTable,
   reporter   : Reporter) extends DajaBaseVisitor[ControlFlowGraph] {
 
-  import scala.collection.JavaConverters._
+  import scala.jdk.CollectionConverters.*
 
   // ctx is a java.util.List, not a scala.List.
 
@@ -23,7 +23,7 @@ class CFGBuilder(
 
           ControlFlowGraph(
             leftEntry,
-            (leftGraph union rightGraph) + LDiEdge(leftExit, rightEntry)('U'),
+            (leftGraph union rightGraph) union Set(LDiEdge(leftExit, rightEntry)('U')),
             rightExit)
       }
     }
@@ -65,10 +65,10 @@ class CFGBuilder(
 
     val allNodesGraph = Graph(expressionBlock, nullBlock) union bodyGraph
 
-    val overallGraph = allNodesGraph +
-      LDiEdge(expressionBlock, bodyEntry)('T') +
-      LDiEdge(expressionBlock, nullBlock)('F') +
-      LDiEdge(bodyExit, expressionBlock)('U')
+    val overallGraph = allNodesGraph union
+      Set(LDiEdge(expressionBlock, bodyEntry)('T'),
+          LDiEdge(expressionBlock, nullBlock)('F'),
+          LDiEdge(bodyExit, expressionBlock)('U'))
 
     ControlFlowGraph(expressionBlock, overallGraph, nullBlock)
   }

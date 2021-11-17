@@ -3,7 +3,7 @@ package org.pchapin.daja
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.pchapin.daja.DajaParser.{Add_expressionContext, Primary_expressionContext}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters.*
 
 /**
  * Class to do semantic analysis of Daja programs.
