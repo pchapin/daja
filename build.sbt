@@ -4,7 +4,7 @@ enablePlugins(Antlr4Plugin)
 
 ThisBuild / organization  := "org.pchapin"
 ThisBuild / version       := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion  := "2.13.7"   // Think about upgrading to Scala 3.1.0. Check libs!
+ThisBuild / scalaVersion  := "2.13.8"   // Think about upgrading to Scala 3.1.0. Check libs!
 ThisBuild / scalacOptions :=
   Seq("-encoding", "UTF-8", // Encoding of the source files.
       "-feature",

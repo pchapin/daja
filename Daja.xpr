@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="19.0">
+<project>
     <meta>
         <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="19.0" xml:space="preserve">
+            <serialized xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
                         <String>ant.file.patterns</String>
@@ -33,6 +33,10 @@
                         <String>key.text.editor.option.pane</String>
                         <Boolean>true</Boolean>
                     </entry>
+                    <entry>
+                        <String>storage.level.scenario.associations</String>
+                        <Boolean>false</Boolean>
+                    </entry>
                 </serializableOrderedMap>
             </serialized>
         </options>
@@ -46,7 +50,7 @@
             <file name="doc/User.xml"/>
             <file name="doc/Vision.xml"/>
         </folder>
-         <folder name="Dragon">
+        <folder name="Dragon">
             <file name="Dragon/doc/Design.xml"/>
             <file name="Dragon/doc/Dragon.xml"/>
         </folder>
@@ -54,7 +58,7 @@
             <file name="Tiger/doc/Design.xml"/>
             <file name="Tiger/doc/Tiger.xml"/>
         </folder>
-       <folder name="Tutorials">
+        <folder name="Tutorials">
             <folder name="D2Scala">
                 <file name="doc/tutorials/D2Scala/D2Scala.xml"/>
             </folder>
