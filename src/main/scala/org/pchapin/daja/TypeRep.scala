@@ -2,14 +2,17 @@ package org.pchapin.daja
 
 object TypeRep {
 
-  abstract class Rep
+  sealed abstract class Rep
 
   // Placeholder for situations where there is no type.
   case object NoTypeRep extends Rep
 
   // Primitive types.
-  case object BoolRep extends Rep
-  case object IntRep extends Rep
+  case object BoolRep   extends Rep
+  case object IntRep    extends Rep
+  case object UIntRep   extends Rep
+  case object Long      extends Rep
+  case object ULong     extends Rep
   case object DoubleRep extends Rep
 
   // Constructed types.

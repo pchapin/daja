@@ -109,8 +109,8 @@ class SemanticAnalyzer(
     else {
       // We are only concerned about identifiers in expressions.
       node.getSymbol.getType match {
-        // Currently the only numeric literals supported are integer literals.
-        case DajaLexer.NUMERIC_LITERAL =>
+        case DajaLexer.INTEGER_LITERAL =>
+          // TODO: Decode the token to obtain the type of the literal.
           TypeRep.IntRep
 
         case DajaLexer.TRUE =>

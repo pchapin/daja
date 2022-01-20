@@ -25,6 +25,9 @@ declaration
 basic_type
     : BOOL
     | INT
+    | UINT
+    | LONG
+    | ULONG
     | DOUBLE;
 
 init_declarator
@@ -84,7 +87,7 @@ postfix_expression
 
 primary_expression
     : IDENTIFIER
-    | NUMERIC_LITERAL
+    | INTEGER_LITERAL
     | TRUE
     | FALSE
     | LPARENS expression RPARENS;
@@ -114,19 +117,15 @@ BYTE         : 'byte';
 CASE         : 'case';
 CAST         : 'cast';
 CATCH        : 'catch';
-CDOUBLE      : 'cdouble';
 CENT         : 'cent';
-CFLOAT       : 'cfloat';
 CHAR         : 'char';
 CLASS        : 'class';
 CONST        : 'const';
 CONTINUE     : 'continue';
-CREAL        : 'creal';
 DCHAR        : 'dchar';
 DEBUG        : 'debug';
 DEFAULT      : 'default';
 DELEGATE     : 'delegate';
-DELETE       : 'delete';
 DEPRECATED   : 'deprecated';
 DO           : 'do';
 DOUBLE       : 'double';
@@ -143,9 +142,7 @@ FOREACH      : 'foreach';
 FOREACH_REVERSE : 'foreach_reverse';
 FUNCTION     : 'function';
 GOTO         : 'goto';
-IDOUBLE      : 'idouble';
 IF           : 'if';
-IFLOAT       : 'ifloat';
 IMMUTABLE    : 'immutable';
 IMPORT       : 'import';
 IN           : 'in';
@@ -153,7 +150,6 @@ INOUT        : 'inout';
 INT          : 'int';
 INTERFACE    : 'interface';
 INVARIANT    : 'invariant';
-IREAL        : 'ireal';
 IS           : 'is';
 LAZY         : 'lazy';
 LONG         : 'long';
@@ -187,7 +183,6 @@ THIS         : 'this';
 THROW        : 'throw';
 TRUE         : 'true';
 TRY          : 'try';
-TYPEDEF      : 'typedef';
 TYPEID       : 'typeid';
 TYPEOF       : 'typeof';
 UBYTE        : 'ubyte';
@@ -199,7 +194,6 @@ UNITTEST     : 'unittest';
 USHORT       : 'ushort';
 VERSION      : 'version';
 VOID         : 'void';
-VOLATILE     : 'volatile';
 WCHAR        : 'wchar';
 WHILE        : 'while';
 WITH         : 'with';
@@ -208,25 +202,26 @@ WITH         : 'with';
 // Should they be handled here too or treated as special identifiers in the symbol table?
 
 // Various punctuation and operator symbols.
-COMMA    : ',';
-DIVIDE   : '/';
-EQEQ     : '==';
-EQUALS   : '=';
-GREATER  : '>';
-GREATEREQ: '>=';
+// The order here follows that in the D language specification, section 2.7.
 LBRACE   : '{';
-LBRACKET : '[';
+RBRACE   : '}';
+DIVIDE   : '/';
+MINUS    : '-';
+PLUS     : '+';
 LESS     : '<';
 LESSEQ   : '<=';
-LPARENS  : '(';
-MINUS    : '-';
-MULTIPLY : '*';
+GREATER  : '>';
+GREATEREQ: '>=';
 NOTEQ    : '!=';
-PLUS     : '+';
-RBRACE   : '}';
-RBRACKET : ']';
+LPARENS  : '(';
 RPARENS  : ')';
+LBRACKET : '[';
+RBRACKET : ']';
+COMMA    : ',';
 SEMI     : ';';
+EQUALS   : '=';
+EQEQ     : '==';
+MULTIPLY : '*';
 
 IDENTIFIER
     :   [a-zA-Z_][a-zA-Z0-9_]*;
@@ -246,24 +241,19 @@ STRING_LITERAL
 CHARACTER_LITERAL
     :    '\'' .*? '\'';
 
-NUMERIC_LITERAL
+INTEGER_LITERAL
     :    DEC_NUMBER
+    |    BIN_NUMBER
     |    HEX_NUMBER;
 
 fragment DEC_NUMBER
-    :    ( DIGIT )+ ( NUMBER_SUFFIX )?;
+    :    [0-9_]+ ( NUMBER_SUFFIX )?;
+
+fragment BIN_NUMBER
+    :    ('0b' | '0B') [0-1_]+ ( NUMBER_SUFFIX )?;
 
 fragment HEX_NUMBER
-    :    NUMBER_PREFIX ( HEX_DIGIT )+ ( NUMBER_SUFFIX )?;
-
-fragment DIGIT
-    :    [0-9];
-
-fragment HEX_DIGIT
-    :    [0-9a-fA-F];
-
-fragment NUMBER_PREFIX
-    :    '0x';
+    :    ('0x' | '0X') [0-9a-fA-F_]+ ( NUMBER_SUFFIX )?;
 
 fragment NUMBER_SUFFIX
     :    ('L' | 'u' | 'U' | 'Lu' | 'uL' | 'LU' | 'UL');

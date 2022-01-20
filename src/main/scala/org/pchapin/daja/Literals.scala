@@ -1,20 +1,8 @@
 package org.pchapin.daja
 
+import scala.math.BigInt
+
 object Literals {
-
-  object StateType extends Enumeration {
-    val Start      : StateType.Value = Value
-    val LeadingZero: StateType.Value = Value
-    val GetDigits  : StateType.Value = Value
-    val GetSuffix  : StateType.Value = Value
-    val AtEnd      : StateType.Value = Value
-  }
-
-  object BaseType extends Enumeration {
-    val Decimal: BaseType.Value = Value
-    val Binary : BaseType.Value = Value
-    val Hex    : BaseType.Value = Value
-  }
 
   class InvalidLiteralException(message: String) extends Exception(message)
 
@@ -41,17 +29,31 @@ object Literals {
    * @param text The text of the literal (e.g., "1_234U")
    * @return The converted value (e.g., 1234)
    */
-  def convertIntegerLiteral(text: String): Int = {
+  def convertIntegerLiteral(text: String): (BigInt, TypeRep.Rep) = {
+
+    // Enumeration type to define the states of the DFA.
+    object StateType extends Enumeration {
+      val Start      : StateType.Value = Value
+      val LeadingZero: StateType.Value = Value
+      val GetDigits  : StateType.Value = Value
+      val GetSuffix  : StateType.Value = Value
+      val AtEnd      : StateType.Value = Value
+    }
+
+    // Enumeration type to define the various allowed bases.
+    object BaseType extends Enumeration {
+      val Decimal: BaseType.Value = Value
+      val Binary : BaseType.Value = Value
+      val Hex    : BaseType.Value = Value
+    }
+
     // TODO: Make the error strings for invalid literals more specific.
-    // TODO: Right now literals such as 0xL are allowed. They should be illegal.
+    // TODO: Right now literals such as 0xUL are allowed. They should be illegal.
     var state = StateType.Start
     var base = BaseType.Decimal
-    var value = 0
-    var ch = '\u0000'
+    var value: BigInt = 0
 
-    for (i <- 0 until text.length()) {
-      // TODO: This allows 'l' to be used instead of 'L'. Instead 'l' should be an error.
-      ch = Character.toUpperCase(text.charAt(i))
+    for (ch <- text) {
       state match {
         case StateType.Start =>
           if (ch == '0') {
@@ -62,7 +64,7 @@ object Literals {
             state = StateType.GetDigits
           }
           else {
-            throw new InvalidLiteralException("Invalid start of literal.")
+            throw new InvalidLiteralException("Invalid start of literal")
           }
 
         case StateType.LeadingZero =>
@@ -76,11 +78,11 @@ object Literals {
               state = StateType.GetDigits
 
             case _ =>
-              throw new InvalidLiteralException("Invalid number prefix.");
+              throw new InvalidLiteralException("Invalid number prefix in literal");
           }
 
         case StateType.GetDigits =>
-          if (ch == 'L' || ch == 'U') {
+          if (ch == 'L' || ch == 'U' || ch == 'u') {
             state = StateType.GetSuffix
           }
           else {
@@ -92,7 +94,7 @@ object Literals {
                   }
                 }
                 else {
-                  throw new InvalidLiteralException("Invalid decimal digit.")
+                  throw new InvalidLiteralException("Invalid decimal digit in literal")
                 }
 
               case BaseType.Binary =>
@@ -102,19 +104,19 @@ object Literals {
                   }
                 }
                 else {
-                  throw new InvalidLiteralException("Invalid binary digit.")
+                  throw new InvalidLiteralException("Invalid binary digit in literal")
                 }
 
               case BaseType.Hex =>
-                if ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'F') || ch == '_') {
+                if ((ch >= '0' && ch <= '9') || (ch.toUpper >= 'A' && ch.toUpper <= 'F') || ch == '_') {
                   if (ch != '_') {
                     val hexConversion = "0123456789ABCDEF"
-                    val digitValue = hexConversion.indexOf(ch)
+                    val digitValue = hexConversion.indexOf(ch.toUpper)
                     value = 16 * value + digitValue
                   }
                 }
                 else {
-                  throw new InvalidLiteralException("Invalid hex digit.")
+                  throw new InvalidLiteralException("Invalid hex digit in literal")
                 }
             }
           }
@@ -124,7 +126,7 @@ object Literals {
             state = StateType.AtEnd
           }
           else {
-            throw new InvalidLiteralException("Invalid suffix character.")
+            throw new InvalidLiteralException("Invalid suffix character in literal")
           }
 
         case StateType.AtEnd =>
@@ -135,10 +137,10 @@ object Literals {
     // Now check the state at the end looking for errors.
     state match {
       case StateType.Start =>
-        throw new InvalidLiteralException("Error: Empty literal")
+        throw new InvalidLiteralException("Empty literal")
 
       case StateType.LeadingZero =>
-        // No error. A single leading zero is allowed (and has the valuel zero).
+        // No error. A single leading zero is allowed (and has the value zero).
 
       case StateType.GetDigits =>
         // No error. This means there was no suffix.
@@ -149,7 +151,8 @@ object Literals {
       case StateType.AtEnd =>
         // No error. This means there were two suffix characters.
     }
-    value
+    // TODO: Return proper type information about this integer literal.
+    (value, TypeRep.NoTypeRep)
   }
 
 }
