@@ -6,4 +6,4 @@ using Scala as the implementation language. The purpose of the project is primar
 It is used to support Vermont Technical College's CIS-4050 and CIS-6050, Compiler Design courses.
 
 Peter Chapin  
-peter@pchapin.org  
+chapinp@acm.org   

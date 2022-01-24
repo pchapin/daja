@@ -1,6 +1,6 @@
 package org.pchapin.daja
 
-import scala.math.BigInt
+import scala.math.{BigInt, BigDecimal}
 
 object Literals {
 
@@ -27,7 +27,7 @@ object Literals {
    * </pre>
    *
    * @param text The text of the literal (e.g., "1_234U")
-   * @return The converted value (e.g., 1234)
+   * @return The converted value (e.g., 1234) and type (e.g., TypeRep.UIntRep)
    */
   def convertIntegerLiteral(text: String): (BigInt, TypeRep.Rep) = {
 
@@ -48,10 +48,11 @@ object Literals {
     }
 
     // TODO: Make the error strings for invalid literals more specific.
-    // TODO: Right now literals such as 0xUL are allowed. They should be illegal.
+    // TODO: Literals such as 0xUL are allowed. They should be illegal.
+    // TODO: Literals with leading or trailing underscores are allowed. They should be illegal.
     var state = StateType.Start
-    var base = BaseType.Decimal
-    var value: BigInt = 0
+    var base  = BaseType.Decimal
+    var value = BigInt(0)
 
     for (ch <- text) {
       state match {
@@ -76,6 +77,10 @@ object Literals {
             case 'x' | 'X' =>
               base = BaseType.Hex
               state = StateType.GetDigits
+
+            // This case arises for literals like '0L', '0U', '0LU', etc.
+            case 'L' | 'U' | 'u' =>
+              state = StateType.GetSuffix
 
             case _ =>
               throw new InvalidLiteralException("Invalid number prefix in literal");
@@ -122,7 +127,7 @@ object Literals {
           }
 
         case StateType.GetSuffix =>
-          if (ch == 'L' || ch == 'U') {
+          if (ch == 'L' || ch == 'U' || ch == 'u') {
             state = StateType.AtEnd
           }
           else {
@@ -152,6 +157,28 @@ object Literals {
         // No error. This means there were two suffix characters.
     }
     // TODO: Return proper type information about this integer literal.
+    (value, TypeRep.NoTypeRep)
+  }
+
+
+  /**
+   * Uses a finite state machine to find the floating value of a floating literal. Note that
+   * the lexical analyzer has already verified the format so certain simplifying assumptions
+   * can potentially be made in the implementation of this method.
+   *
+   * This program implements the following finite state machine:
+   *
+   * <pre>
+   *     DOCUMENT ME!
+   * </pre>
+   *
+   * @param text The text of the literal (e.g., "1.2345678e+4F")
+   * @return The converted value (e.g., 12345.678) and type (e.g., TypeRep.FloatRep)
+   */
+  def convertFloatingLiteral(text: String): (BigDecimal, TypeRep.Rep) = {
+    var value = BigDecimal(0)
+
+    // TODO: FINISH ME!
     (value, TypeRep.NoTypeRep)
   }
 

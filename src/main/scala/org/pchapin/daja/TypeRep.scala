@@ -11,9 +11,11 @@ object TypeRep {
   case object BoolRep   extends Rep
   case object IntRep    extends Rep
   case object UIntRep   extends Rep
-  case object Long      extends Rep
-  case object ULong     extends Rep
+  case object LongRep   extends Rep
+  case object ULongRep  extends Rep
+  case object FloatRep  extends Rep
   case object DoubleRep extends Rep
+  case object RealRep   extends Rep
 
   // Constructed types.
   // Note that an array's size is not part of its type.

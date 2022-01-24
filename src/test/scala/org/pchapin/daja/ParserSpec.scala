@@ -54,21 +54,21 @@ class ParserSpec extends UnitSpec {
   }
 
 
-  "DajaParser" should "parse a basic declaration" in {
+  it should "parse a basic declaration" in {
     val testCaseNames =
       Array("Declaration0000.daja")
     doDeclarationTests(testCaseNames)
   }
 
 
-  "DajaParser" should "parse simple statements" in {
+  it should "parse simple statements" in {
     val testCaseNames =
       Array("Statement0000.daja")
     doStatementTests(testCaseNames)
   }
 
 
-  "DajaParser" should "parse a basic module" in {
+  it should "parse a basic module" in {
     val testCaseNames =
       Array("Module0000.daja", "Module0001.daja")
     doModuleTests(testCaseNames)
