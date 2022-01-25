@@ -235,6 +235,7 @@ COMMENT1
 COMMENT2
     :   '//' .*? [\r\n] -> skip;
 
+// This isn't quite right because it won't handle enclosed \" escaped double quotes.
 STRING_LITERAL
     :    '"' .*? '"';
 
@@ -255,5 +256,7 @@ fragment BIN_NUMBER
 fragment HEX_NUMBER
     :    ('0x' | '0X') [0-9a-fA-F_]+ ( NUMBER_SUFFIX )?;
 
+// Lower case 'l' is not actually allowed.
+// We will rule this out later when we can produce a nice error message.
 fragment NUMBER_SUFFIX
-    :    ('L' | 'u' | 'U' | 'Lu' | 'uL' | 'LU' | 'UL');
+    :    ('l' | 'L' | 'u' | 'U' | 'lu' | 'lU' | 'Lu' | 'LU' | 'ul' | 'uL' | 'Ul' | 'UL');

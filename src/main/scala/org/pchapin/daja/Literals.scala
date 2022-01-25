@@ -53,6 +53,17 @@ object Literals {
     var state = StateType.Start
     var base  = BaseType.Decimal
     var value = BigInt(0)
+    var lCount = 0  // The number of 'L' suffix characters
+    var uCount = 0  // The number of 'U' suffix characters
+
+    def countSuffixLetter(ch: Char): Unit = {
+      ch match {
+        case 'u' => uCount += 1
+        case 'L' => lCount += 1
+        case 'U' => uCount += 1
+        case _ => // Do nothing; should never occur.
+      }
+    }
 
     for (ch <- text) {
       state match {
@@ -78,16 +89,25 @@ object Literals {
               base = BaseType.Hex
               state = StateType.GetDigits
 
-            // This case arises for literals like '0L', '0U', '0LU', etc.
-            case 'L' | 'U' | 'u' =>
+            // This case arises for literals like '0l', which are illegal.
+            case 'l' =>
+              throw new InvalidLiteralException("Invalid suffix in literal: 'l' not allowed")
+
+            // These cases arise for literals like '0L', '0U', '0LU', etc.
+            case 'u' | 'L' | 'U' =>
+              countSuffixLetter(ch)
               state = StateType.GetSuffix
 
             case _ =>
-              throw new InvalidLiteralException("Invalid number prefix in literal");
+              throw new InvalidLiteralException("Invalid number prefix in literal")
           }
 
         case StateType.GetDigits =>
-          if (ch == 'L' || ch == 'U' || ch == 'u') {
+          if (ch == 'l') {
+            throw new InvalidLiteralException("Invalid suffix in literal: 'l' not allowed")
+          }
+          if (ch == 'u' || ch == 'L' || ch == 'U') {
+            countSuffixLetter(ch)
             state = StateType.GetSuffix
           }
           else {
@@ -127,11 +147,16 @@ object Literals {
           }
 
         case StateType.GetSuffix =>
-          if (ch == 'L' || ch == 'U' || ch == 'u') {
+          // Try to get the second suffix character (if there is one)
+          if (ch == 'l') {
+            throw new InvalidLiteralException("Invalid suffix in literal: 'l' not allowed")
+          }
+          if (ch == 'u' || ch == 'L' || ch == 'U') {
+            countSuffixLetter(ch)
             state = StateType.AtEnd
           }
           else {
-            throw new InvalidLiteralException("Invalid suffix character in literal")
+            throw new InvalidLiteralException("Invalid suffix in literal")
           }
 
         case StateType.AtEnd =>
@@ -156,8 +181,50 @@ object Literals {
       case StateType.AtEnd =>
         // No error. This means there were two suffix characters.
     }
-    // TODO: Return proper type information about this integer literal.
-    (value, TypeRep.NoTypeRep)
+
+    // Two suffix characters of the same kind are not allowed.
+    if (lCount > 1 || uCount > 1) {
+      throw new InvalidLiteralException("Invalid suffix in literal")
+    }
+
+    // Now analyze the type. There are four cases to consider.
+    val literalType =
+      if (lCount == 0 && uCount == 0) {
+        // No suffix
+        if (value <= BigInt("2147483647"))
+          TypeRep.IntRep
+        else if (value <= BigInt("9223372036854775807"))
+          TypeRep.LongRep
+        else if (value <= BigInt("18446744073709551615"))
+          TypeRep.ULongRep
+        else
+          throw new InvalidLiteralException("Literal out of range")
+      }
+      else if (lCount == 1 && uCount == 0) {
+        // L suffix
+        if (value <= BigInt("9223372036854775807"))
+          TypeRep.LongRep
+        else
+          throw new InvalidLiteralException("Literal out of range")
+      }
+      else if (lCount == 0 && uCount == 1) {
+        // U suffix
+        if (value <= BigInt("4294967295"))
+          TypeRep.UIntRep
+        else if (value <= BigInt("18446744073709551615"))
+          TypeRep.ULongRep
+        else
+          throw new InvalidLiteralException("Literal out of range")
+      }
+      else {
+        // LU suffix
+        if (value <= BigInt("18446744073709551615"))
+          TypeRep.ULongRep
+        else
+          throw new InvalidLiteralException("Literal out of range")
+      }
+
+    (value, literalType)
   }
 
 
