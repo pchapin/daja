@@ -1,8 +1,8 @@
-package org.pchapin.daja
+package edu.vtc.daja
 
 import scala.jdk.CollectionConverters.*
 import org.antlr.v4.runtime.tree.TerminalNode
-import org.pchapin.daja.DajaParser.{Add_expressionContext, Primary_expressionContext}
+import DajaParser.{Add_expressionContext, Primary_expressionContext}
 
 /**
  * Class to do semantic analysis of Daja programs.

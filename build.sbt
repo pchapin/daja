@@ -2,7 +2,7 @@ import Dependencies._
 
 enablePlugins(Antlr4Plugin)
 
-ThisBuild / organization  := "org.pchapin"
+ThisBuild / organization  := "edu.vtc"
 ThisBuild / version       := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion  := "2.13.8"   // Think about upgrading to Scala 3.1.0. Check libs!
 ThisBuild / scalacOptions :=
@@ -23,7 +23,7 @@ lazy val daja = (project in file("."))
     libraryDependencies ++= dajaDeps,
 
     Antlr4 / antlr4Version     := "4.9.2",
-    Antlr4 / antlr4PackageName := Some("org.pchapin.daja"),
+    Antlr4 / antlr4PackageName := Some("edu.vtc.daja"),
     Antlr4 / antlr4GenListener := true,
     Antlr4 / antlr4GenVisitor  := true
   )

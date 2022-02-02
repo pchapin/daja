@@ -1,4 +1,4 @@
-package org.pchapin.daja
+package edu.vtc.daja
 
 /**
  * Interface to error/warning message handling classes. A class implementing this interface can

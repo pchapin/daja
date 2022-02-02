@@ -1,4 +1,4 @@
-package org.pchapin.daja
+package edu.vtc.daja
 
 /**
  * This object contains methods that perform various kinds of analysis on the program's CFG.

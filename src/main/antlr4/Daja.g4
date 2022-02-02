@@ -28,7 +28,9 @@ basic_type
     | UINT
     | LONG
     | ULONG
-    | DOUBLE;
+    | FLOAT
+    | DOUBLE
+    | REAL;
 
 init_declarator
     : IDENTIFIER (EQUALS expression)?;
@@ -62,8 +64,8 @@ expression
     : comma_expression;
 
 comma_expression
-    : assignment_expression COMMA comma_expression
-    | assignment_expression;
+    : assignment_expression
+    | assignment_expression COMMA comma_expression;
 
 assignment_expression
     : relational_expression
@@ -83,7 +85,7 @@ multiply_expression
 
 postfix_expression
     : primary_expression
-    | postfix_expression LBRACE expression RBRACE;
+    | postfix_expression LBRACKET expression RBRACKET;
 
 primary_expression
     : IDENTIFIER

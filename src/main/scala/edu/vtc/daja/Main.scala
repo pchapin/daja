@@ -1,4 +1,4 @@
-package org.pchapin.daja
+package edu.vtc.daja
 
 import org.antlr.v4.runtime.*
 
@@ -104,7 +104,7 @@ object Main {
     * @throws java.io.IOException If an I/O error occurs during File I/O.
     */
   def main(args: Array[String]): Unit = {
-    println("Daja D Compiler (C) 2021 by Vermont Technical College")
+    println("Daja D Compiler (C) 2022 by Vermont Technical College")
 
     // Analyze the command line.
     // TODO: Provide a more comprehensive and full-featured command line processing step.

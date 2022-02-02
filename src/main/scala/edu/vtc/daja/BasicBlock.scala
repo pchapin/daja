@@ -1,4 +1,4 @@
-package org.pchapin.daja
+package edu.vtc.daja
 
 /**
   * A representation of basic blocks. Here the assignment statements are "full" expression

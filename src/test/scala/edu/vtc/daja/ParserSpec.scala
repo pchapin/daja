@@ -1,4 +1,4 @@
-package org.pchapin.daja
+package edu.vtc.daja
 
 import java.io.File
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}

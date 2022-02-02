@@ -1,4 +1,4 @@
-package org.pchapin.daja
+package edu.vtc.daja
 
 import Literals.*
 

@@ -1,5 +1,5 @@
-package org.pchapin.daja
+package edu.vtc.daja
 
-class CGenerator(
+class JVMGenerator(
   private val symbolTable: SymbolTable,
   private val reporter   : Reporter) extends DajaBaseVisitor[Void]
