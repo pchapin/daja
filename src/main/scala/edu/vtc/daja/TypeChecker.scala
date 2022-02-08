@@ -2,36 +2,28 @@ package edu.vtc.daja
 
 import scala.jdk.CollectionConverters.*
 import org.antlr.v4.runtime.tree.TerminalNode
-import DajaParser.{Add_expressionContext, Primary_expressionContext}
 
 /**
- * Class to do semantic analysis of Daja programs.
+ * Class to do type checking of Daja programs.
  */
-class SemanticAnalyzer(
+class TypeChecker(
   private val symbolTable: SymbolTable,
   private val reporter   : Reporter) extends DajaBaseVisitor[TypeRep.Rep] {
 
   private var expressionLevel = 0
 
-  override def visitModule(ctx: DajaParser.ModuleContext): TypeRep.Rep = {
-    val name: TerminalNode = ctx.IDENTIFIER()
-    if (name.getText != "main") {
-      reporter.reportError(
-        name.getSymbol.getLine,
-        name.getSymbol.getCharPositionInLine + 1,
-        "Main function must be named 'main'")
-    }
-    visit(ctx.block_statement)
-  }
-
-
   override def visitDeclaration(ctx: DajaParser.DeclarationContext): TypeRep.Rep = {
     val initDeclarators = ctx.init_declarator.asScala
     val basicType = ctx.basic_type.getText
     val basicTypeRep = basicType match {
-      case "int"    => TypeRep.IntRep
       case "bool"   => TypeRep.BoolRep
+      case "int"    => TypeRep.IntRep
+      case "uint"   => TypeRep.UIntRep
+      case "long"   => TypeRep.LongRep
+      case "ulong"  => TypeRep.ULongRep
+      case "float"  => TypeRep.FloatRep
       case "double" => TypeRep.DoubleRep
+      case "real"   => TypeRep.RealRep
     }
 
     val isArrayType = ctx.LBRACKET != null
@@ -42,7 +34,7 @@ class SemanticAnalyzer(
         reporter.reportError(
           ctx.LBRACKET.getSymbol.getLine,
           ctx.LBRACKET.getSymbol.getCharPositionInLine + 1,
-          "Array dimension must have integral type")
+          "Array dimension must have type int")
       }
       else {
         // TODO: Verify that the array dimension is a constant expression.
@@ -67,6 +59,7 @@ class SemanticAnalyzer(
     TypeRep.NoTypeRep
   }
 
+  // TODO: Type check statement forms
 
   override def visitExpression(ctx: DajaParser.ExpressionContext): TypeRep.Rep = {
     // Keep track of the number of nested open expressions.
@@ -76,25 +69,81 @@ class SemanticAnalyzer(
     expressionType
   }
 
+  // TODO: Comma expression
+  // TODO: Assignment expression
+  // TODO: Relational expression
 
-  override def visitAdd_expression(ctx: Add_expressionContext): TypeRep.Rep = {
-    val multExpressionType = visit(ctx.multiply_expression)
+  override def visitAdd_expression(ctx: DajaParser.Add_expressionContext): TypeRep.Rep = {
+    val multiplyExpressionType = visit(ctx.multiply_expression)
     if (ctx.add_expression == null) {
-      multExpressionType
+      multiplyExpressionType
     }
     else {
       val addExpressionType = visit(ctx.add_expression)
-      if (addExpressionType == multExpressionType)
+      if (addExpressionType == multiplyExpressionType)
         addExpressionType
       else
-        // TODO: Deal with implicit type conversions!
+        // TODO: Deal with implicit type conversions and report errors as necessary!
         TypeRep.NoTypeRep
     }
   }
 
 
-  override def visitPrimary_expression(ctx: Primary_expressionContext): TypeRep.Rep = {
+  override def visitMultiply_expression(ctx: DajaParser.Multiply_expressionContext): TypeRep.Rep = {
+    val postfixExpressionType = visit(ctx.postfix_expression)
+    if (ctx.multiply_expression == null) {
+      postfixExpressionType
+    }
+    else {
+      val multiplyExpressionType = visit(ctx.multiply_expression)
+      if (multiplyExpressionType == postfixExpressionType)
+        multiplyExpressionType
+      else
+        // TODO: Deal with implicit type conversions and report errors as necessary!
+        TypeRep.NoTypeRep
+    }
+  }
+
+
+  override def visitPostfix_expression(ctx: DajaParser.Postfix_expressionContext): TypeRep.Rep = {
+    // If this postfix expression is just a primary expression...
+    if (ctx.primary_expression != null) {
+      visit(ctx.primary_expression)
+    }
+    // Otherwise we are trying to access an array...
+    else {
+      // Check that the postfix expression has an array type.
+      val postfixExpressionType = visit(ctx.postfix_expression)
+      val elementType = postfixExpressionType match {
+        case TypeRep.ArrayRep(elementType) =>
+          elementType
+        case _ =>
+          reporter.reportError(
+            ctx.LBRACKET.getSymbol.getLine,
+            ctx.LBRACKET.getSymbol.getCharPositionInLine + 1,
+            "Indexing a non-array")
+          TypeRep.NoTypeRep
+      }
+      // Now check that the index expression has type int.
+      if (visit(ctx.expression) != TypeRep.IntRep) {
+        reporter.reportError(
+          ctx.LBRACKET.getSymbol.getLine,
+          ctx.LBRACKET.getSymbol.getCharPositionInLine + 1,
+          "Index type must be int")
+        TypeRep.NoTypeRep
+      }
+      else {
+        elementType
+      }
+    }
+  }
+
+
+  override def visitPrimary_expression(ctx: DajaParser.Primary_expressionContext): TypeRep.Rep = {
     if (ctx.LPARENS == null) {
+      // This simple approach works because there is only one child, which is a terminal.
+      // Thus visitTerminal is called on that child and the (single) result is what is
+      // returned by visitChildren.
       visitChildren(ctx)
     }
     else {
@@ -112,6 +161,10 @@ class SemanticAnalyzer(
         case DajaLexer.INTEGER_LITERAL =>
           // TODO: Decode the token to obtain the type of the literal.
           TypeRep.IntRep
+
+        //case DajaLexer.FLOATING_LITERAL =>
+        //  // TODO: Decode the token to obtain the type of the literal.
+        //  TypeRep.FloatRep
 
         case DajaLexer.TRUE =>
           TypeRep.BoolRep
@@ -132,7 +185,7 @@ class SemanticAnalyzer(
               TypeRep.NoTypeRep
           }
 
-        // In an expression, things that are not identifiers don't have a type.
+        // In an expression, things that are not covered above don't have a type.
         case _ =>
           TypeRep.NoTypeRep
       }

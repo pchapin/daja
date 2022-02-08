@@ -89,9 +89,9 @@ postfix_expression
 
 primary_expression
     : IDENTIFIER
-    | INTEGER_LITERAL
     | TRUE
     | FALSE
+    | INTEGER_LITERAL
     | LPARENS expression RPARENS;
 
 /* =========== */

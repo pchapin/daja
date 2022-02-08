@@ -41,8 +41,10 @@ object Main {
 
     // Walk the tree created during the parse and analyze it for semantic errors.
     val mySymbolTable = new BasicSymbolTable
-    val myAnalyzer  = new SemanticAnalyzer(mySymbolTable, reporter)
-    myAnalyzer.visit(tree)
+    val myTypeChecker = new TypeChecker(mySymbolTable, reporter)
+    myTypeChecker.visit(tree)
+    val myRuleChecker = new RuleChecker(mySymbolTable, reporter)
+    myRuleChecker.visit(tree)
 
     if (reporter.getErrorCount > 0) {
       // Errors have already been reported.
