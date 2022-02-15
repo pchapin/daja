@@ -1,0 +1,11 @@
+
+void main( )
+{
+    int[10] a, b;
+    int x, y, z;
+
+    x = 2 * a[5] + y;
+    x = a[y + z];
+    a[5] = x;
+    a = b;
+}

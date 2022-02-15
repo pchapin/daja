@@ -1,0 +1,14 @@
+
+void main( )
+{
+    bool a;
+    int  b, c;
+    // TODO: Also check other types participating in relational operations.
+
+    a = (b == c);
+    a = (b != c);
+    a = (b <= c);
+    a = (b <  c);
+    a = (b >= c);
+    a = (b >  c);
+}

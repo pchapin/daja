@@ -1,0 +1,9 @@
+
+void main( )
+{
+    int a, b, c;
+
+    // Basic expression forms.
+    if( a == b )   { a = b + c; }
+    while( a < b ) { a = b + c; }
+}

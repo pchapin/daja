@@ -28,7 +28,8 @@ class TypeChecker(
 
     val isArrayType = ctx.LBRACKET != null
     if (isArrayType) {
-      // TODO: Type check the array dimension expression.
+      // TODO: Does D allow arrays to be indexed by any integral type or just int?
+      // Daja requires arrays to be indexed by int (only).
       val dimensionExpressionType = visit(ctx.expression)
       if (dimensionExpressionType != TypeRep.IntRep) {
         reporter.reportError(
@@ -37,7 +38,7 @@ class TypeChecker(
           "Array dimension must have type int")
       }
       else {
-        // TODO: Verify that the array dimension is a constant expression.
+        // TODO: Verify that the array dimension is a constant expression (or integer literal?).
         // TODO: Arrange to add the size of the array to the symbol table.
       }
     }
@@ -124,7 +125,7 @@ class TypeChecker(
             "Indexing a non-array")
           TypeRep.NoTypeRep
       }
-      // Now check that the index expression has type int.
+      // Now check that the index expression has type int (Daja allows only int).
       if (visit(ctx.expression) != TypeRep.IntRep) {
         reporter.reportError(
           ctx.LBRACKET.getSymbol.getLine,
@@ -147,6 +148,7 @@ class TypeChecker(
       visitChildren(ctx)
     }
     else {
+      // This case handles parenthesized subexpressions.
       visitExpression(ctx.expression)
     }
   }
@@ -159,8 +161,8 @@ class TypeChecker(
       // We are only concerned about identifiers in expressions.
       node.getSymbol.getType match {
         case DajaLexer.INTEGER_LITERAL =>
-          // TODO: Decode the token to obtain the type of the literal.
-          TypeRep.IntRep
+          val (_, literalType) = Literals.convertIntegerLiteral(node.getText)
+          literalType
 
         //case DajaLexer.FLOATING_LITERAL =>
         //  // TODO: Decode the token to obtain the type of the literal.

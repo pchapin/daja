@@ -1,0 +1,14 @@
+
+void main( )
+{
+    int   x = 1,   y = 2,   z = 3;
+    uint  i = 1U,  j = 2U,  k = 3U;
+    long  a = 1L,  b = 2L,  c = 3L;
+    ulong d = 1UL, e = 2UL, f = 3UL;
+
+    // Types match exactly.
+    x = y + z;
+    i = (j + k) * (2U - i);
+    a = b * c;
+    d = (e + f) / (2UL - d);
+}

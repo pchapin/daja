@@ -1,0 +1,11 @@
+
+void main( )
+{
+    int a, b, c;
+
+    // Non-boolean as condition.
+    if( a + 1 ) { a = b + c; }
+
+    // Non-boolean as condition.
+    while( c ) { a = b + c; }
+}

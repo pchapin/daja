@@ -1,0 +1,8 @@
+
+void main( )
+{
+    int  a, b, c;
+    long x, y, z;
+
+    a = b + x;  // In the current version of Daja types must match exactly!
+}

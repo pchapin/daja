@@ -47,7 +47,7 @@ class ParserSpec extends UnitSpec {
   }
 
 
-  "DajaParser" should "parse simple expressions" in {
+  "The Daja Parser" should "parse simple expressions" in {
     val testCaseNames =
       Array("Expression0000.daja")
     doExpressionTests(testCaseNames)
