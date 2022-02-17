@@ -5,7 +5,7 @@ object Dependencies {
 
   // Versions
   lazy val scalaTestVersion = "3.2.10"
-  lazy val scalaGraphCoreVersion = "1.13.2"
+  lazy val scalaGraphCoreVersion = "1.13.4"
 
   // Kiama and ScalaZ don't appear to have binaries for Scala 2.13.x.
   // Fortunately, they are not needed at this time.
