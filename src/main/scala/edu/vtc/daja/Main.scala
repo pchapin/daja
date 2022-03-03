@@ -74,7 +74,6 @@ object Main {
           // Do nothing. Semantic analysis is all that is required.
 
         case Mode.Interpret =>
-          println("Interpretation is not implemented!")
           val myInterpreter = new Interpreter(mySymbolTable, reporter)
           myInterpreter.visit(tree): @annotation.nowarn("msg=discarded non-Unit value")
 
