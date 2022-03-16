@@ -88,9 +88,8 @@ object Main {
           myJVMGenerator.visit(tree): @annotation.nowarn("msg=discarded non-Unit value")
 
         case Mode.LLVM =>
-          println("LLVM code generation is not implemented!")
-          val myLLVMGenerator = new LLVMGenerator(mySymbolTable, reporter)
-          myLLVMGenerator.visit(tree): @annotation.nowarn("msg=discarded non-Unit value")
+          val myLLVMGenerator = new LLVMGenerator(mySymbolTable, CFG, reporter)
+          myLLVMGenerator.generateCodeForCFG()
       }
     }
   }
