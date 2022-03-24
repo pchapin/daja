@@ -236,17 +236,171 @@ object Literals {
    * This program implements the following finite state machine:
    *
    * <pre>
-   *     DOCUMENT ME!
+   *     GET_1ST_WHOLE -- digit --> GET_WHOLE
+   *
+   *     GET_WHOLE -- digit --> GET_WHOLE
+   *     GET_WHOLE -- '.' --> GET_1ST_FRACTIONAL
+   *
+   *     GET_1ST_FRACTIONAL -- digit --> GET_FRACTIONAL
+   *
+   *     GET_FRACTIONAL -- digit --> GET_FRACTIONAL
+   *     GET_FRACTIONAL -- 'f' or 'F' or 'L' --> GOT_SUFFIX
+   *     GET_FRACTIONAL -- 'e' or 'E' --> GET_EXPONENT
+   *
+   *     GET_EXPONENT -- '+' or '-' --> GET_1ST_EXPONENT_DIGIT
+   *     GET_EXPONENT -- digit --> GET_EXPONENT_DIGIT
+   *
+   *     GET_1ST_EXPONENT_DIGIT -- digit --> GET_EXPONENT_DIGIT
+   *
+   *     GET_EXPONENT_DIGIT -- digit --> GET_EXPONENT_DIGIT
+   *     GET_EXPONENT_DIGIT -- 'f' or 'F' or 'L' --> GOT_SUFFIX
    * </pre>
    *
    * @param text The text of the literal (e.g., "1.2345678e+4F")
    * @return The converted value (e.g., 12345.678) and type (e.g., TypeRep.FloatRep)
    */
   def convertFloatingLiteral(text: String): (BigDecimal, TypeRep.Rep) = {
-    var value = BigDecimal(0)
 
-    // TODO: FINISH ME!
-    (value, TypeRep.NoTypeRep)
+    // Enumeration type to define the states of the DFA.
+    object StateType extends Enumeration {
+      val Get_1st_Whole          : StateType.Value = Value
+      val Get_Whole              : StateType.Value = Value
+      val Get_1st_Fractional     : StateType.Value = Value
+      val Get_Fractional         : StateType.Value = Value
+      val Get_Exponent           : StateType.Value = Value
+      val Get_1st_Exponent_Digit : StateType.Value = Value
+      val Get_Exponent_Digit     : StateType.Value = Value
+      val Got_Suffix             : StateType.Value = Value
+    }
+
+    var state = StateType.Get_1st_Whole
+    var mantissa = BigDecimal(0)
+    var fraction = BigDecimal("0.1")
+    var exponent = 0  // A regular integer is probably fine here.
+
+    for (ch <- text) {
+      state match {
+        case StateType.Get_1st_Whole =>
+          if (ch >= '0' && ch <= '9') {
+            mantissa = (10 * mantissa) + BigDecimal(ch - '0')
+            state = StateType.Get_Whole
+          }
+          else {
+            throw new InvalidLiteralException("Invalid start of literal")
+          }
+
+        case StateType.Get_Whole =>
+          if (ch >= '0' && ch <= '9') {
+            mantissa = (10 * mantissa) + BigDecimal(ch - '0')
+          }
+          else if (ch == '.') {
+            state = StateType.Get_1st_Fractional
+          }
+          else {
+            // TODO: If the 'illegal digit' is the letter 'E' we might give a better message.
+            // In that case the user is apparently trying to do something like: 1234E5.
+            throw new InvalidLiteralException("Invalid digit in literal")
+          }
+
+        case StateType.Get_1st_Fractional =>
+          if (ch >= '0' && ch <= '9') {
+            mantissa += fraction * (ch - '0')
+            fraction /= 10
+            state = StateType.Get_Fractional
+          }
+          else {
+            throw new InvalidLiteralException("Invalid start of fractional part in literal")
+          }
+
+        case StateType.Get_Fractional =>
+          if (ch >= '0' && ch <= '9') {
+            mantissa += fraction * (ch - '0')
+            fraction /= 10
+          }
+          else if (ch == 'f' || ch == 'F' || ch == 'L') {
+            // TODO: Remember which suffix for later type analysis.
+            state = StateType.Got_Suffix
+          }
+          else if (ch == 'e' || ch == 'E') {
+            state = StateType.Get_Exponent;
+          }
+          else {
+            // TODO: If the 'illegal digit' is 'l' we might give a better message.
+            // In that case the user is apparently trying to do something like: 1.234l.
+            throw new InvalidLiteralException("Invalid digit in fractional part of literal")
+          }
+
+        case StateType.Get_Exponent =>
+          if (ch >= '0' && ch <= '9') {
+            exponent = (10 * exponent) + (ch - '0')
+            state = StateType.Get_Exponent_Digit
+          }
+          else if (ch == '+' || ch == '-') {
+            // TODO: Remember the sign on the exponent for later value construction.
+            state = StateType.Get_1st_Exponent_Digit
+          }
+          else {
+            throw new InvalidLiteralException("Invalid exponent digit in literal")
+          }
+
+        case StateType.Get_1st_Exponent_Digit =>
+          if (ch >= '0' && ch <= '9') {
+            exponent = (10 * exponent) + (ch - '0')
+            state = StateType.Get_Exponent_Digit
+          }
+          else {
+            throw new InvalidLiteralException("Invalid exponent digit in literal")
+          }
+
+        case StateType.Get_Exponent_Digit =>
+          if (ch >= '0' && ch <= '9') {
+            exponent = (10 * exponent) + (ch - '0')
+          }
+          else if (ch == 'f' || ch == 'F' || ch == 'L') {
+            // TODO: Remember which suffix for later type analysis.
+            state = StateType.Got_Suffix
+          }
+          else {
+            throw new InvalidLiteralException("Invalid exponent digit in literal")
+          }
+
+        case StateType.Got_Suffix =>
+          throw new InvalidLiteralException("Extraneous characters after literal")
+      }
+    }
+
+    // Now check the state at the end looking for errors.
+    state match {
+      case StateType.Get_1st_Whole =>
+        throw new InvalidLiteralException("Empty literal")
+
+      case StateType.Get_Whole =>
+        throw new InvalidLiteralException("Floating literal without a decimal point")
+
+      case StateType.Get_1st_Fractional =>
+        throw new InvalidLiteralException("Floating literal without a fractional part")
+
+      case StateType.Get_Fractional =>
+      // No error. This means there was no exponent or suffix.
+
+      case StateType.Get_Exponent =>
+        throw new InvalidLiteralException("Floating literal has exponent without a value")
+
+      case StateType.Get_1st_Exponent_Digit =>
+        throw new InvalidLiteralException("Floating literal has exponent without a value")
+
+      case StateType.Get_Exponent_Digit =>
+      // No error. This means there was an exponent.
+
+      case StateType.Got_Suffix =>
+      // No error. This means there was a suffix.
+    }
+
+    // TODO: Construct the value from the mantissa and exponent (if present)
+    // TODO: Do type analysis: verify value is the right range for its type (based on suffix)
+
+    // TODO: Fix this. Right now we ignore the exponent and assume the literal has type double.
+    (mantissa, TypeRep.DoubleRep)
   }
 
 }
