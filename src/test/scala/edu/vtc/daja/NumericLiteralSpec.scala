@@ -49,9 +49,9 @@ class NumericLiteralSpec extends UnitSpec {
   // Strictly speaking we only need to test for invalid literals that would pass the RE used
   // by the lexical analyzer. The lexical analyzer will not tokenize anything that doesn't match
   // one of its regular expressions. It may be reasonable to let the lexical analyzer match a
-  // variety of illegal things that nevertheless appear approximately like integer literals so
-  // that better error messages can be produced by 'convertIntegerLiteral' than the lexical
-  // analyzer might otherwise produce.
+  // variety of illegal things that nevertheless appear approximately like integer literals since
+  // 'convertIntegerLiteral' is likely able to produce better error messages than the lexical
+  // analyzer could.
   it should "be detected as invalid where appropriate" in {
     val testCases = Array(
       ("xyz", "Invalid start of literal") // Should never occur. The lexer won't tokenize this.
@@ -68,11 +68,31 @@ class NumericLiteralSpec extends UnitSpec {
 
 
   "A floating literal" should "be decoded and typed correctly" in {
-    // TODO: Finish me!
+    val testCases = Array(
+      // A couple of basic test cases
+      ("1.234", BigDecimal("1.234"), TypeRep.DoubleRep),
+      ("0.01234", BigDecimal("0.01234"), TypeRep.DoubleRep)
+      // TODO: Add more test cases (especially when the TODO items in Literals.scala are fixed)!
+    )
+    for (testCase <- testCases) {
+      val (literalValue, literalType) = convertFloatingLiteral(testCase._1)
+      assert(literalValue == testCase._2)
+      assert(literalType  == testCase._3)
+    }
   }
 
+  // See the comment on the testing of invalid integer literals above. The same applies here.
   it should "be detected as invalid where appropriate" in {
-    // TODO: Finish me!
+    val testCases = Array(
+      ("1.a", "Invalid start of fractional part in literal")
+      // TODO: Add more! (Lots more!)
+    )
+    for (testCase <- testCases) {
+      val caught = intercept[InvalidLiteralException] {
+        val (_, _) = convertFloatingLiteral(testCase._1)
+      }
+      assert(caught.getMessage == testCase._2)
+    }
   }
 
 }

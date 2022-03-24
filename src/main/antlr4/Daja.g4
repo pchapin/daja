@@ -250,15 +250,29 @@ INTEGER_LITERAL
     |    HEX_NUMBER;
 
 fragment DEC_NUMBER
-    :    [0-9_]+ ( NUMBER_SUFFIX )?;
+    :    [0-9_]+ ( INT_NUMBER_SUFFIX )?;
 
 fragment BIN_NUMBER
-    :    ('0b' | '0B') [0-1_]+ ( NUMBER_SUFFIX )?;
+    :    ('0b' | '0B') [0-1_]+ ( INT_NUMBER_SUFFIX )?;
 
 fragment HEX_NUMBER
-    :    ('0x' | '0X') [0-9a-fA-F_]+ ( NUMBER_SUFFIX )?;
+    :    ('0x' | '0X') [0-9a-fA-F_]+ ( INT_NUMBER_SUFFIX )?;
 
 // Lower case 'l' is not actually allowed.
 // We will rule this out later when we can produce a nice error message.
-fragment NUMBER_SUFFIX
+fragment INT_NUMBER_SUFFIX
     :    ('l' | 'L' | 'u' | 'U' | 'lu' | 'lU' | 'Lu' | 'LU' | 'ul' | 'uL' | 'Ul' | 'UL');
+
+FLOAT_LITERAL
+    :    DEC_FLOAT;
+
+fragment DEC_FLOAT
+    :    [0-9_]+ '.' [0-9_]+ ( FLT_EXPONENT )? ( FLT_NUMBER_SUFFIX )?;
+
+fragment FLT_EXPONENT
+    :    ( 'e' | 'E' ) ( '+' | '-' )? [0-9]+;
+
+// Lower case 'l' is not actually allowed.
+// We will rule this out later when we can produce a nice error message.
+fragment FLT_NUMBER_SUFFIX
+    :    ('f' | 'F' | 'l' | 'L');
