@@ -92,6 +92,7 @@ primary_expression
     | TRUE
     | FALSE
     | INTEGER_LITERAL
+    | FLOAT_LITERAL
     | LPARENS expression RPARENS;
 
 /* =========== */
