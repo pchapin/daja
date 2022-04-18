@@ -2,19 +2,18 @@ package org.pchapin.dragon
 
 /**
   * This class represents nondeterministic finite automata. The states of the NFA are numbered
-  * with integers starting at stateLower and going to stateUpper. The range of states is
-  * contiguous. The first state in the range is the start state and the last state in the range
-  * is the final state.
+  * with integers starting at startState and going to acceptState. The range of states is
+  * contiguous.
   *
-  * NFAs represented by this class contain only a single final state. While this is a restriction
-  * over the formal definition of an NFA, it is all that is necessary in this application. The
-  * restriction does not limit expressiveness; for an NFA with multiple final states, a new NFA
-  * could be built that has a single final state reachable from the original final states via
-  * epsilon transitions.
+  * NFAs represented by this class contain only a single accept state. While this is a
+  * restriction over the formal definition of an NFA, it is all that is necessary in this
+  * application. The restriction does not limit expressiveness; for an NFA with multiple accept
+  * states, a new NFA could be built that has a single accept state reachable from the original
+  * accept states via epsilon transitions.
   */
 class NFA(
-  private val stateLower: Int,
-  private val stateUpper: Int,
+  private val startState : Int,
+  private val acceptState: Int,
   private val transitionFunction: Map[NFATransitionFunctionArgument, Set[Int]]) {
 
   type TransitionFunctionType = Map[NFATransitionFunctionArgument, Set[Int]]
@@ -27,27 +26,27 @@ class NFA(
     * For example, suppose 'target' is from an NFA with states numbered 11 .. 20 (inclusive) and
     * 'other' is from an NFA with states numbered 51 .. 55 (inclusive). It is not necessary for
     * all of these states to actually participate in the transition function(s). In this case,
-    * otherStateLower would be 51 and newStateLower would be 21. The merged transition function
+    * otherStartState would be 51 and newStartState would be 21. The merged transition function
     * would use states 11 .. 25.
     *
     * More commonly the NFAs might be using overlapping ranges of states such as 0 .. 9 and
-    * 0 .. 14. In that case otherStateLower would be 0 and newStateLower would be 10, resulting
+    * 0 .. 14. In that case otherStartState would be 0 and newStartState would be 10, resulting
     * in a transition function that ranges (potentially) over state numbers 0 .. 24.
     *
     * @param target The base transition function. No states are renumbered.
     * @param other The transition function that is added to target. State renumbering occurs.
-    * @param otherStateLower The "start state" of the 'other' transition function. This state
+    * @param otherStartState The "start state" of the 'other' transition function. This state
     * is a reference point. It is not necessary for there to be a transition from this state in
     * the 'other' transition function.
-    * @param newStateLower The new effective start state of the transitions that are renumbered.
-    * As with otherStateLower this is a reference point only.
+    * @param newStartState The new effective start state of the transitions that are renumbered.
+    * As with otherStartState this is a reference point only.
     * @return A new, combined transition function.
     */
   private def mergeTransitionFunctions(
     target: TransitionFunctionType,
     other : TransitionFunctionType,
-    otherStateLower: Int,
-    newStateLower  : Int): TransitionFunctionType = {
+    otherStartState: Int,
+    newStartState  : Int): TransitionFunctionType = {
 
     // Create transformed associations for the 'other' transition function, modifying the state
     // numbers in the process.
@@ -56,11 +55,11 @@ class NFA(
       // Convert state numbers in the other NFA's transition function argument.
       val newArgument =
         NFATransitionFunctionArgument(
-          otherArgument.state - otherStateLower + newStateLower,
+          otherArgument.state - otherStartState + newStartState,
           otherArgument.inputCharacter)
 
       // Convert state numbers in the other NFA's transition function result set.
-      val newResult = otherResult map { state => state - otherStateLower + newStateLower }
+      val newResult = otherResult map { state => state - otherStartState + newStartState }
       newArgument -> newResult
     }
 
@@ -73,25 +72,33 @@ class NFA(
     * NFA input to this operation is modified.
     */
   def concatenate(other: NFA): NFA = {
-    val secondEntry = stateUpper + 1
-    val newLower = stateLower
-    val newUpper = stateUpper + (other.stateUpper - other.stateLower + 1)
+    val secondEntry = acceptState + 1
+    val newStartState = startState
+    val newAcceptState = acceptState + (other.acceptState - other.startState + 1)
 
     val newTransitionFunction =
       mergeTransitionFunctions(
         transitionFunction,
         other.transitionFunction,
-        other.stateLower,
+        other.startState,
         secondEntry)
 
     // Add an epsilon transition between the original final state and the other start state.
-    // TODO: This will overwrite any existing epsilon transition from stateUpper!
-    val extraArgument = NFATransitionFunctionArgument(stateUpper, '\u0000')
+    val extraArgument = NFATransitionFunctionArgument(acceptState, '\u0000')
     val extraResult = Set[Int](secondEntry)
-    val augmentedTransitionFunction = newTransitionFunction + (extraArgument -> extraResult)
+    val augmentedTransitionFunction =
+      if (newTransitionFunction.contains(extraArgument)) {
+        // Handle the case where there is already an epsilon transition from acceptState.
+        val augmentedSet = newTransitionFunction(extraArgument) ++ extraResult
+        newTransitionFunction + (extraArgument -> augmentedSet)
+      }
+      else {
+        // Handle the case where there was no epsilon transition from acceptState.
+        newTransitionFunction + (extraArgument -> extraResult)
+      }
 
     // Create the new NFA.
-    new NFA(newLower, newUpper, augmentedTransitionFunction)
+    new NFA(newStartState, newAcceptState, augmentedTransitionFunction)
   }
 
 
@@ -101,7 +108,7 @@ class NFA(
     */
   def union(other: NFA): NFA = {
     // TODO: This method body is just a place holder!
-    new NFA(stateLower, stateUpper, transitionFunction)
+    new NFA(startState, acceptState, transitionFunction)
   }
 
 
@@ -110,7 +117,7 @@ class NFA(
     */
   def kleeneClosure: NFA = {
     // TODO: This method body is just a place holder!
-    new NFA(stateLower, stateUpper, transitionFunction)
+    new NFA(startState, acceptState, transitionFunction)
   }
 
 
@@ -132,7 +139,7 @@ class NFA(
     */
   def toDFA: DFA = {
     // TODO: This method body is just a place holder!
-    new DFA(stateLower, stateUpper, Map())
+    new DFA(startState, acceptState, Map())
   }
 
 }
