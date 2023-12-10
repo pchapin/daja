@@ -23,7 +23,7 @@ lazy val daja = (project in file("."))
     libraryDependencies ++= dajaDeps,
 
     Antlr4 / antlr4Version     := "4.13.1",
-    Antlr4 / antlr4PackageName := Some("edu.vtc.daja"),
+    Antlr4 / antlr4PackageName := Some("edu.vermontstate.daja"),
     Antlr4 / antlr4GenListener := true,
     Antlr4 / antlr4GenVisitor  := true
   )
@@ -43,4 +43,3 @@ lazy val dragon = (project in file("Dragon"))
     name := "Dragon",
     libraryDependencies ++= dragonDeps
   )
-
