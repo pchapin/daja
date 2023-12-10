@@ -89,7 +89,7 @@ object Straight {
 
   def interpret(program: Statement): Unit = {
     // The environment of the program itself contains no symbols. The program is a closed term.
-    interpretStatement(program, List()): @annotation.nowarn("msg=discarded non-Unit value")
+    interpretStatement(program, List())
   }
 
 

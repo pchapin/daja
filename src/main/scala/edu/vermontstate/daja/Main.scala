@@ -75,17 +75,17 @@ object Main {
 
         case Mode.Interpret =>
           val myInterpreter = new Interpreter(mySymbolTable, reporter)
-          myInterpreter.visit(tree): @annotation.nowarn("msg=discarded non-Unit value")
+          myInterpreter.visit(tree)
 
         case Mode.C =>
           println("C code generation is not implemented")
           val myCGenerator = new CGenerator(mySymbolTable, reporter)
-          myCGenerator.visit(tree): @annotation.nowarn("msg=discarded non-Unit value")
+          myCGenerator.visit(tree)
 
         case Mode.JVM =>
           println("JVM code generation is not implemented")
           val myJVMGenerator = new JVMGenerator(mySymbolTable, reporter)
-          myJVMGenerator.visit(tree): @annotation.nowarn("msg=discarded non-Unit value")
+          myJVMGenerator.visit(tree)
 
         case Mode.LLVM =>
           val myLLVMGenerator = new LLVMGenerator(mySymbolTable, CFG, reporter)

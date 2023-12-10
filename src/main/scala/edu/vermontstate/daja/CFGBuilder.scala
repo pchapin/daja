@@ -60,7 +60,7 @@ class CFGBuilder(
     val ControlFlowGraph(bodyEntry, bodyGraph, bodyExit) =
       combineStatementSequence(ctx.block_statement.statement.asScala)
 
-    val allNodesGraph = Graph(expressionBlock, nullBlock) union bodyGraph
+    val allNodesGraph = Graph[BasicBlock, LDiEdge](expressionBlock, nullBlock) ++ bodyGraph
 
     val overallGraph = allNodesGraph union
       Set(LDiEdge(expressionBlock, bodyEntry)('T'),

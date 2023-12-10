@@ -28,22 +28,22 @@ class ParserSpec extends UnitSpec {
 
 
   private def doExpressionTests(testCaseNames: Array[String]): Unit = {
-    doTests(testCaseNames, _.expression(): @annotation.nowarn("msg=discarded non-Unit value"))
+    doTests(testCaseNames, _.expression())
   }
 
 
   private def doDeclarationTests(testCaseNames: Array[String]): Unit = {
-    doTests(testCaseNames, _.declaration(): @annotation.nowarn("msg=discarded non-Unit value"))
+    doTests(testCaseNames, _.declaration())
   }
 
 
   private def doStatementTests(testCaseNames: Array[String]): Unit = {
-    doTests(testCaseNames, _.statement(): @annotation.nowarn("msg=discarded non-Unit value"))
+    doTests(testCaseNames, _.statement())
   }
 
 
   private def doModuleTests(testCaseNames: Array[String]): Unit = {
-    doTests(testCaseNames, _.module(): @annotation.nowarn("msg=discarded non-Unit value"))
+    doTests(testCaseNames, _.module())
   }
 
 
