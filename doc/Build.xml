@@ -28,24 +28,20 @@
       <term><ulink url="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java
           Development Kit</ulink></term>
       <listitem>
-        <para>We use JDK v1.8.0_131 but any 1.8 version would probably work. A full JDK is
-          necessary, and not just a JRE, because the Daja code base includes some Java
-          files.</para>
+        <para>We use JDK v21.0.1. A full JDK is necessary, and not just a JRE, because the Daja
+          code base includes some Java files.</para>
       </listitem>
     </varlistentry>
 
     <varlistentry>
       <term><ulink url="http://www.scala-lang.org/">Scala Compiler</ulink></term>
       <listitem>
-        <para>We use Scala v2.12.2. The Scala compiler is executed indirectly via the IntelliJ
+        <para>We use Scala v2.13.12. The Scala compiler is executed indirectly via the IntelliJ
           IDE. Currently no official method of building Daja outside the IDE is provided.</para>
 
         <para>It is important that you use a Scala version that is matched to the same major
-          version we are using (2.12 in this case). Scala major releases are not binary
-          compatible with each other and also have other significant differences. Switching, for
-          example, to Scala 2.13 will require updating all supporting Scala libraries; it is not
-          a drop-in upgrade from Scala 2.12. However all minor releases within the same major
-          release should be compatible.</para>
+          version we are using (2.13 in this case). Scala major releases are not binary
+          compatible with each other and also have other significant differences.</para>
       </listitem>
     </varlistentry>
 
@@ -68,7 +64,7 @@
     <varlistentry>
       <term><ulink url="http://www.jetbrains.com/idea/">IntelliJ IDEA</ulink></term>
       <listitem>
-        <para>We use IntelliJ IDEA, Community Edition, version 2016.3.2 with the IntelliJ Scala
+        <para>We use IntelliJ IDEA, Community Edition, version 2023.3 with the IntelliJ Scala
           plugin developed by JetBrains as our integrated development environment. The plugin
           can be installed from inside IntelliJ once the main IDE is installed.</para>
 

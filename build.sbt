@@ -4,7 +4,7 @@ enablePlugins(Antlr4Plugin)
 
 ThisBuild / organization  := "edu.vtc"
 ThisBuild / version       := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion  := "2.13.8"   // Think about upgrading to Scala 3.1.0. Check libs!
+ThisBuild / scalaVersion  := "2.13.12"
 ThisBuild / scalacOptions :=
   Seq("-encoding", "UTF-8", // Encoding of the source files.
       "-feature",
@@ -22,7 +22,7 @@ lazy val daja = (project in file("."))
     name := "Daja",
     libraryDependencies ++= dajaDeps,
 
-    Antlr4 / antlr4Version     := "4.9.2",
+    Antlr4 / antlr4Version     := "4.13.1",
     Antlr4 / antlr4PackageName := Some("edu.vtc.daja"),
     Antlr4 / antlr4GenListener := true,
     Antlr4 / antlr4GenVisitor  := true
