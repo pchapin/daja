@@ -4,7 +4,7 @@
 
 <!-- FILE        : Tiger.xml
      SUBJECT     : Master document for the Tiger documentation set.
-     AUTHOR      : (C) Copyright 2018 by Peter C. Chapin <chapinp@acm.org>
+     AUTHOR      : (C) Copyright 2024 by Peter Chapin <peter.chapin@vermontstate.edu>
 
 This is the documentation for the Tiger compiler. -->
 
@@ -14,20 +14,16 @@ This is the documentation for the Tiger compiler. -->
   <info>
     <title>Tiger</title>
     <author>
-      <personname>
-      <firstname>Peter</firstname>
-      <surname>Chapin</surname>
-      <othername role="mi">C.</othername>
-      </personname>
+      <personname><firstname>Peter</firstname> <surname>Chapin</surname></personname>
       <affiliation>
-        <orgname>Vermont Technical College</orgname>
+        <orgname>Vermont State University</orgname>
         <orgdiv>Computer Information Systems Department</orgdiv>
       </affiliation>
     </author>
     <authorinitials>pcc</authorinitials>
     <copyright>
-      <year>2018</year>
-      <holder>Peter C. Chapin</holder>
+      <year>2024</year>
+      <holder>Peter Chapin</holder>
     </copyright>
     <legalnotice>
       <para> Permission is granted to copy, distribute and/or modify this document under the
@@ -41,7 +37,7 @@ This is the documentation for the Tiger compiler. -->
     <revhistory>
       <revision>
         <revnumber>1.0</revnumber>
-        <date>2018-05-01</date>
+        <date>2024-12-31</date>
         <authorinitials>pcc</authorinitials>
       </revision>
     </revhistory>
@@ -57,7 +53,7 @@ This is the documentation for the Tiger compiler. -->
 
   <!-- <xi:include href="Build.xml"/> -->
   <xi:include href="Design.xml"/>
-  
+
   <!-- <bibliography> ... </bibliography> -->
 
 </book>

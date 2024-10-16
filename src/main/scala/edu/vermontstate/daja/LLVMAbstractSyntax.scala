@@ -6,7 +6,7 @@ object LLVMAbstractSyntax {
 
   /**
    * An Instruction is an AST node that returns a result as a named temporary. Many instructions
-   * take instructions as parameters, i.e., the temporary holding the result of previous
+   * take instructions as parameters, i.e., the temporary containing the result of previous
    * computations.
    */
   abstract class Instruction extends AST
@@ -23,7 +23,7 @@ object LLVMAbstractSyntax {
 
   /**
    * A Declaration is an AST node representing LLVM declarations. It will likely need parameters
-   * at some point (declared name? type? etc?)
+   * at some point (declared name? type? etc.?)
    */
   abstract class Declaration extends AST
 
@@ -60,15 +60,15 @@ object LLVMAbstractSyntax {
   case class ConstantInstruction(constantValue: Int) extends Instruction
 
   // Store isn't really an instruction because it doesn't return a temporary. However, the
-  // "temporary" it returns should never be used so it doesn't matter. Damn imperative languages!
+  // "temporary" it returns should never be used, so it doesn't matter. Damn imperative languages!
   case class StoreInstruction(value: Instruction, varName: String) extends Instruction
 
-  // Used to mark unimplemented things. Ultimately this should be removed.
+  // Used to mark unimplemented things. Ultimately, this should be removed.
   case class NullInstruction(message: String) extends Instruction
 
   private var tempNumber = 0
 
-  // Each time generateTemp is called it returns a "fresh" temporary name.
+  // Each time generateTemp is called, it returns a "fresh" temporary name.
   private def generateTemp(): String = {
     tempNumber += 1
     "%tmp" + tempNumber

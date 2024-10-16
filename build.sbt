@@ -2,7 +2,7 @@ import Dependencies._
 
 enablePlugins(Antlr4Plugin)
 
-ThisBuild / organization  := "edu.vtc"
+ThisBuild / organization  := "edu.vermontstate"
 ThisBuild / version       := "0.1.0-SNAPSHOT"
 //ThisBuild / scalaVersion  := "2.13.12"
 ThisBuild / scalaVersion  := "3.3.1"

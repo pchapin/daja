@@ -1,8 +1,9 @@
-<?xml version="1.0"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-  "http://www.docbook.org/xml/4.5/docbookx.dtd">
-  
-<chapter id="Build">
+<?xml version="1.0"?>  
+<?xml-model href="http://docbook.org/xml/5.1/rng/docbookxi.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.1/sch/docbook.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="5.1" xml:id="build">
   <title>Building Daja</title>
 
   <para>This chapter describes how to build Daja and its associated documentation and how to run
@@ -25,8 +26,9 @@
     <title>Build Tools</title>
 
     <varlistentry>
-      <term><ulink url="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java
-          Development Kit</ulink></term>
+      <term><link
+        xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java
+        Development Kit</link></term>
       <listitem>
         <para>We use JDK v21.0.1. A full JDK is necessary, and not just a JRE, because the Daja
           code base includes some Java files.</para>
@@ -34,7 +36,7 @@
     </varlistentry>
 
     <varlistentry>
-      <term><ulink url="http://www.scala-lang.org/">Scala Compiler</ulink></term>
+      <term><link xlink:href="http://www.scala-lang.org/">Scala Compiler</link></term>
       <listitem>
         <para>We use Scala v2.13.12. The Scala compiler is executed indirectly via the IntelliJ
           IDE. Currently no official method of building Daja outside the IDE is provided.</para>
@@ -46,14 +48,14 @@
     </varlistentry>
 
     <varlistentry>
-      <term><ulink url="http://www.docbook.org/">DocBook</ulink></term>
+      <term><link xlink:href="http://www.docbook.org/">DocBook</link></term>
       <listitem>
         <para>The Daja documentation is written primarily in DocBook. This is an XML format and
           so is readable (and writable) in an ordinary text editor. However, if you want to
           build nicely formatted documentation or benefit from a more advanced editing features,
-          you will need a tool chain for processing DocBook. We currently use <ulink
-            url="http://oxygenxml.com/">&lt;oXygen/&gt;</ulink> as our primary DocBook editing
-          tool.</para>
+          you will need a tool chain for processing DocBook. We currently use <link
+          xlink:href="http://oxygenxml.com/">&lt;oXygen/&gt;</link> as our primary DocBook
+          editing tool.</para>
 
         <para>IntelliJ can also edit DocBook using its general support for XML. Emacs's nXML
           mode is also useful. To set up IntelliJ for DocBook first download and unpack the
@@ -62,7 +64,7 @@
     </varlistentry>
 
     <varlistentry>
-      <term><ulink url="http://www.jetbrains.com/idea/">IntelliJ IDEA</ulink></term>
+      <term><link xlink:href="http://www.jetbrains.com/idea/">IntelliJ IDEA</link></term>
       <listitem>
         <para>We use IntelliJ IDEA, Community Edition, version 2023.3 with the IntelliJ Scala
           plugin developed by JetBrains as our integrated development environment. The plugin
@@ -85,12 +87,12 @@
     </varlistentry>
 
     <varlistentry>
-      <term><ulink url="http://llvm.org">LLVM</ulink></term>
+      <term><link xlink:href="http://llvm.org">LLVM</link></term>
       <listitem>
         <para>Daja uses the LLVM v3.8 compiler back-end framework as a target for its code
           generator. Only the back-end tools are needed. Setting up LLVM is outside the current
           scope of this document; see the LLVM web site for more information. <emphasis>TODO:
-            Describe how to set up LLVM.</emphasis></para>
+          Describe how to set up LLVM.</emphasis></para>
 
         <para>At this time LLVM is not strictly necessary as no back-end code generation is
           currently being done.</para>
@@ -98,12 +100,12 @@
     </varlistentry>
 
     <varlistentry>
-      <term><ulink url="http://jenkins-ci.org/">Jenkins</ulink></term>
+      <term><link xlink:href="http://jenkins-ci.org/">Jenkins</link></term>
       <listitem>
         <para>We use Jenkins as our continuous integration system. Our practice is to run
-          Jenkins from the <ulink url="http://glassfish.java.net/">Glassfish</ulink> application
-          server. You do not need to set up Jenkins if you are a single developer.
-            <emphasis>TODO: Give more details about setting up Glassfish and
+          Jenkins from the <link xlink:href="http://glassfish.java.net/">Glassfish</link>
+          application server. You do not need to set up Jenkins if you are a single developer.
+          <emphasis>TODO: Give more details about setting up Glassfish and
           Jenkins.</emphasis></para>
       </listitem>
     </varlistentry>
@@ -111,17 +113,17 @@
   </variablelist>
 
   <para>In addition to the tools above we may in the future make use of various additional tools
-    to improve the quality of the Daja code base. These tools might include, for example, <ulink
-      url="http://babelfish.arc.nasa.gov/trac/jpf">Java Pathfinder</ulink>, and <ulink
-      url="https://github.com/mdr/scalariform">Scalariform</ulink>. More information will be
+    to improve the quality of the Daja code base. These tools might include, for example, <link
+    xlink:href="http://babelfish.arc.nasa.gov/trac/jpf">Java Pathfinder</link>, and <link
+    xlink:href="https://github.com/mdr/scalariform">Scalariform</link>. More information will be
     provided about setting up these tools when (and if) they are employed.</para>
 
-  <para>You can use IntelliJ's integrated Git support to check out the Daja project from <ulink
-      url="https://github.com/pchapin/daja.git"/>. Before you can build the project you need to
-    populate the <literal>lib</literal> folder (see the README). You also need to manually
-    generate the Daja parser by running <filename>bin/build-daja-parser.{bat,sh}</filename> from
-    the root folder of the project. You can then use IntelliJ to do a full build of the
-    project.</para>
+  <para>You can use IntelliJ's integrated Git support to check out the Daja project from <link
+    xlink:href="https://github.com/pchapin/daja.git"/>. Before you can build the project you
+    need to populate the <literal>lib</literal> folder (see the README). You also need to
+    manually generate the Daja parser by running
+    <filename>bin/build-daja-parser.{bat,sh}</filename> from the root folder of the project. You
+    can then use IntelliJ to do a full build of the project.</para>
 
   <para><emphasis>TODO: Say something about testing!</emphasis></para>
 

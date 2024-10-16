@@ -3,7 +3,7 @@ package edu.vermontstate.dragon
 /**
   * This class represents deterministic finite automata. The states of the NFA are numbered with
   * integers starting at startState and going to acceptState. The range of states is contiguous.
-  * The first state in the range is the start state and the last state in the range is the final
+  * The first state in the range is the start state, and the last state in the range is the final
   * state.
   *
   * DFAs represented by this class contain only a single final state. While this is a restriction
@@ -18,7 +18,7 @@ class DFA(
     * This method implements a state minimization algorithm (Hopcroft's Algorithm) to minimize
     * the number of states in a DFA.
     *
-    * @return An DFA that recognizes the same language but that contains a minimal number of states.
+    * @return A DFA that recognizes the same language but that contains a minimal number of states.
     */
   def minimize: DFA = {
     // TODO: This method body is just a place holder!

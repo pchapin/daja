@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="http://www.oasis-open.org/docbook/xml/5.0/rng/docbookxi.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.1/rng/docbookxi.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.1/sch/docbook.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
-  xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="5.1">
   <info>
     <title>Scala for D Programmers</title>
     <author>
-      <orgname>Vermont Technical College</orgname>
+      <orgname>Vermont State University</orgname>
       <address>
-        <street>201 Lawrence Place</street>
+        <street>141 Lawrence Place</street>
         <city>Williston</city>
         <state>Vermont</state>
         <postcode>05495</postcode>
         <country>USA</country>
       </address>
-      <email>PChapin@vtc.vsc.edu</email>
+      <email>peter.chapin@vermontstate.edu</email>
     </author>
   </info>
 

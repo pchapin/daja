@@ -21,7 +21,7 @@ class NFA(
   /**
     * Blends the 'other' transition function into 'target' while renumbering states as necessary.
     * The combined transition function does not include any transitions from between the two
-    * collection of states; they would have to be added later.
+    * collections of states; they would have to be added later.
     *
     * For example, suppose 'target' is from an NFA with states numbered 11 .. 20 (inclusive) and
     * 'other' is from an NFA with states numbered 51 .. 55 (inclusive). It is not necessary for
@@ -29,7 +29,7 @@ class NFA(
     * otherStartState would be 51 and newStartState would be 21. The merged transition function
     * would use states 11 .. 25.
     *
-    * More commonly the NFAs might be using overlapping ranges of states such as 0 .. 9 and
+    * More commonly, the NFAs might be using overlapping ranges of states such as 0 .. 9 and
     * 0 .. 14. In that case otherStartState would be 0 and newStartState would be 10, resulting
     * in a transition function that ranges (potentially) over state numbers 0 .. 24.
     *

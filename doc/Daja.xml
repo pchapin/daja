@@ -1,42 +1,28 @@
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-   "http://www.docbook.org/xml/4.5/docbookx.dtd" [
-
-<!ELEMENT xi:include (xi:fallback?) >
-<!ATTLIST xi:include
-    xmlns:xi   CDATA      #FIXED     "http://www.w3.org/2001/XInclude"
-    href       CDATA      #REQUIRED
-    parse      (xml|text) "xml"
-    encoding   CDATA      #IMPLIED >
-<!ELEMENT xi:fallback ANY>
-<!ATTLIST xi:fallback
-    xmlsn:xi   CDATA      #FIXED     "http://www.w3.org/2001/XInclude" >
-<!ENTITY % local.chapter.class "| xi:include">
-<!ENTITY % local.section.class "| xi:include">
-]>
+<?xml-model href="http://docbook.org/xml/5.1/rng/docbookxi.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.1/sch/docbook.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 
 <!-- FILE    : Daja.xml
      SUBJECT : Master document for the Daja documentation set.
-     AUTHOR  : (C) Copyright 2017 by Peter C. Chapin <peter@pchapin.org>
+     AUTHOR  : (C) Copyright 2024 by Peter Chapin <peter.chapin@vermontstate.edu>
 
 This is the documentation for the Daja D compiler. -->
 
-<book status="draft">
-  <bookinfo>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="5.1" status="draft">
+  <info>
     <title>Daja</title>
     <author>
-      <firstname>Peter</firstname>
-      <surname>Chapin</surname>
-      <othername role="mi">C.</othername>
+      <personname><firstname>Peter</firstname> <surname>Chapin</surname></personname>
       <affiliation>
-        <orgname>Vermont Technical College</orgname>
+        <orgname>Vermont State University</orgname>
         <orgdiv>Computer Information Systems Department</orgdiv>
       </affiliation>
     </author>
     <authorinitials>pcc</authorinitials>
     <copyright>
-      <year>2017</year>
-      <holder>Peter C. Chapin</holder>
+      <year>2024</year>
+      <holder>Peter Chapin</holder>
     </copyright>
     <legalnotice>
       <para> Permission is granted to copy, distribute and/or modify this document under the
@@ -50,22 +36,22 @@ This is the documentation for the Daja D compiler. -->
     <revhistory>
       <revision>
         <revnumber>1.0</revnumber>
-        <date>2020-12-31</date>
+        <date>2024-12-31</date>
         <authorinitials>pcc</authorinitials>
         <revremark>This is a work in progress. Release 1.0 is scheduled for the end of
-          2020.</revremark>
+          2024.</revremark>
       </revision>
     </revhistory>
-  </bookinfo>
-  <preface id="Introduction">
+  </info>
+  <preface xml:id="Introduction">
     <title>Introduction</title>
 
     <para>Daja is an open source D compiler developed as a personal project by me, Peter C.
-      Chapin. I created Daja primarily to support the compiler design course at Vermont
-      Technical College, and thus it is intended to be an educational compiler. However, it is
-      also my hope that Daja may eventually provide another option for those interested in using
-      an open source D compiler. Although the existing D compilers are all fine products, I
-      believe in the value of diversity when it comes to available programming tools.</para>
+      Chapin. I created Daja primarily to support the compiler design course at Vermont State
+      University, and thus it is intended to be an educational compiler. However, it is also my
+      hope that Daja may eventually provide another option for those interested in using an open
+      source D compiler. Although the existing D compilers are all fine products, I believe in
+      the value of diversity when it comes to available programming tools.</para>
 
     <para>Daja is written primarily in the Scala programming language. I chose Scala because it
       is a functional language, and thus supports features that I believe will be helpful for
@@ -86,20 +72,16 @@ This is the documentation for the Daja D compiler. -->
       becomes a bridge between the Scala/Java and D communities, my choice might prove to be
       strategic after all.</para>
 
-    <para>Daja is intended to target the LLVM compiler framework. This allows me to defer the
-      details of low level code generation and optimization to the framework. Thus in theory
-      Daja supports all target architectures supported by LLVM, both now and in the future. This
-      approach also allows me to capitalize on future advances made in LLVM technology. However,
-      unlike high level virtual machines such as the JVM or the CLR, LLVM should not restrict my
-      implementation options. I believe it will be easier to accurately implement a language
-      like D, which is intended to support low level programming, on top of a low level
-      framework.</para>
+    <para>Daja is intended to target the Java Virtual Machine. This allows me to defer the
+      details of hardware code generation and optimization to the JVM. The JVM also provides
+      automatic support for certain services such as garbage collection.</para>
 
     <para>However, as a concession to educational practicalities, Daja currently has multiple
-      code generating modes that include the generation of C or JVM assembly language. It also
+      code generating modes that include the generation of C or LLVM assembly language. It also
       supports an interpretive mode. It is likely that support for some or all of these
       additional modes will be dropped as Daja matures since developing and maintaining multiple
-      code generators adds considerably to the work involved in building Daja.</para>
+      code generators adds considerably to the work involved in building Daja. However, these'
+      options remain on the table for now.</para>
 
     <para>I anticipate that as Daja matures others will become attracted to the project and may
       join the effort. For this reason, along with the fact that many of my students have

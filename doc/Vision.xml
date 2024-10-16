@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-  "http://www.docbook.org/xml/4.5/docbookx.dtd">
-  
-<chapter id="Vision">
+<?xml-model href="http://docbook.org/xml/5.1/rng/docbookxi.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.1/sch/docbook.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="5.1" xml:id="vision">
   <title>Daja Vision Statement</title>
 
   <para>In this section we outline the philosophy and long range goals of Daja. By doing so we
@@ -44,7 +45,7 @@
     </listitem>
 
     <listitem>
-      <para>Daja should attempt to integrate the D, Scala, and LLVM communities. It should, to
+      <para>Daja should attempt to integrate the D, Scala, and Java communities. It should, to
         the greatest extent possible, follow the best practices of all these communities and
         attempt to create a "comfortable common ground" for potential contributors from these
         communities.</para>

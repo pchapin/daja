@@ -96,37 +96,37 @@ object Main {
 
 
   /**
-    * The main program of the Daja educational compiler. This program accepts a file to compile
-    * on the command line, along with some options the desired target, and produces error
-    * messages or a compiled output file. Daja programs can also be interpreted in some cases.
-    *
-    * @param args The command line arguments.
-    * @throws java.io.IOException If an I/O error occurs during File I/O.
-    */
+   * The main program of the Daja compiler. This program accepts a file to compile on the
+   * command line, along with some options for the desired target, and produces error messages
+   * or a compiled output file. Daja programs can also be interpreted in some cases.
+   *
+   * @param args The command line arguments.
+   * @throws java.io.IOException If an I/O error occurs during File I/O.
+   */
   def main(args: Array[String]): Unit = {
-    println("Daja D Compiler (C) 2022 by Vermont Technical College")
+    println("Daja D Compiler (C) 2024 by Vermont State University")
 
     // Analyze the command line.
     // TODO: Provide a more comprehensive and full-featured command line processing step.
     // Most compilers have a LOT of options. Daja will be no different eventually.
     if (args.length != 2) {
-      println("Usage: java -jar Daja (-k | -i | -c | -j | -l) source-file")
+      println("Usage: java -jar Daja (-k | -interp | -genc | -genj | -genl) source-file")
       System.exit(1)
     }
 
     val mode = args(0) match {
       case "-k" =>
         Mode.Check
-      case "-i" =>
+      case "-interp" =>
         Mode.Interpret
-      case "-c" =>
+      case "-genc" =>
         Mode.C
-      case "-j" =>
+      case "-genj" =>
         Mode.JVM
-      case "-l" =>
+      case "-genl" =>
         Mode.LLVM
       case _ =>
-        println("Error: Unknown mode, defaulting to Check!\n")
+        println("Warning: Unknown mode, defaulting to Check!\n")
         Mode.Check
     }
 
