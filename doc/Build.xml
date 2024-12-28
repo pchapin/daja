@@ -30,7 +30,7 @@
         xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java
         Development Kit</link></term>
       <listitem>
-        <para>We use JDK v21.0.1. A full JDK is necessary, and not just a JRE, because the Daja
+        <para>We use JDK v21.0.3. A full JDK is necessary, and not just a JRE, because the Daja
           code base includes some Java files.</para>
       </listitem>
     </varlistentry>
@@ -38,22 +38,19 @@
     <varlistentry>
       <term><link xlink:href="http://www.scala-lang.org/">Scala Compiler</link></term>
       <listitem>
-        <para>We use Scala v2.13.12. The Scala compiler is executed indirectly via the IntelliJ
-          IDE. Currently no official method of building Daja outside the IDE is provided.</para>
-
-        <para>It is important that you use a Scala version that is matched to the same major
-          version we are using (2.13 in this case). Scala major releases are not binary
-          compatible with each other and also have other significant differences.</para>
+        <para>We use Scala v3.3.4. The Scala compiler is executed indirectly via the SBT build
+          tool. You do not need to download and install Scala separately. SBT will take care of
+          that detail when it downloads the other project dependencies.</para>
       </listitem>
     </varlistentry>
 
     <varlistentry>
       <term><link xlink:href="http://www.docbook.org/">DocBook</link></term>
       <listitem>
-        <para>The Daja documentation is written primarily in DocBook. This is an XML format and
-          so is readable (and writable) in an ordinary text editor. However, if you want to
-          build nicely formatted documentation or benefit from a more advanced editing features,
-          you will need a tool chain for processing DocBook. We currently use <link
+        <para>The Daja documentation is written in DocBook. This is an XML format and so is
+          readable (and writable) in an ordinary text editor. However, if you want to build
+          nicely formatted documentation or benefit from a more advanced editing features, you
+          will need a tool chain for processing DocBook. We currently use <link
           xlink:href="http://oxygenxml.com/">&lt;oXygen/&gt;</link> as our primary DocBook
           editing tool.</para>
 
@@ -66,19 +63,17 @@
     <varlistentry>
       <term><link xlink:href="http://www.jetbrains.com/idea/">IntelliJ IDEA</link></term>
       <listitem>
-        <para>We use IntelliJ IDEA, Community Edition, version 2023.3 with the IntelliJ Scala
-          plugin developed by JetBrains as our integrated development environment. The plugin
-          can be installed from inside IntelliJ once the main IDE is installed.</para>
+        <para>We use IntelliJ IDEA, Community Edition, version 2024.3.1.1 with the IntelliJ
+          Scala plugin developed by JetBrains as our integrated development environment. The
+          plugin can be installed from inside IntelliJ once the main IDE is installed.</para>
 
-        <para>You will have to set up your Scala SDK in IntelliJ (this basically entails
-          selecting the folder where Scala is installed).</para>
+        <para>IntelliJ should automatically recognize and import the SBT build configuration, so
+          simply opening the folder containing <filename>build.sbt</filename> should result in a
+          functional configuration for the IDE.</para>
 
-        <para>In addition you must configure two path variables in IntelliJ. The first is
-          SCALA_HOME and it should point at the folder containing your Scala distribution. It is
-          used to locate the Scala jar files when building the artifacts of this project. The
-          second path variable is DOCBOOK_XML and it should point at the folder containing your
-          DocBook XML DTD. It is used by IntelliJ's DocBook editor to locate the DTD so it can
-          do validation.</para>
+        <para>In addition, set the DOCBOOK_XML variable inside IntelliJ to point at the folder
+          containing your DocBook XML DTD. It is used by IntelliJ's DocBook editor to locate the
+          DTD so it can do validation of the DocBook content.</para>
 
         <para>We also recommend installing the ANTLR v4 grammar plugin and the Markdown editing
           plugin from the IntelliJ plugin repository. While not required these plugins can make
@@ -89,7 +84,7 @@
     <varlistentry>
       <term><link xlink:href="http://llvm.org">LLVM</link></term>
       <listitem>
-        <para>Daja uses the LLVM v3.8 compiler back-end framework as a target for its code
+        <para>Daja uses the LLVM v19 compiler back-end framework as a target for its code
           generator. Only the back-end tools are needed. Setting up LLVM is outside the current
           scope of this document; see the LLVM web site for more information. <emphasis>TODO:
           Describe how to set up LLVM.</emphasis></para>

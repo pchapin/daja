@@ -4,7 +4,7 @@
 
 <!-- FILE    : Daja.xml
      SUBJECT : Master document for the Daja documentation set.
-     AUTHOR  : (C) Copyright 2024 by Peter Chapin <peter.chapin@vermontstate.edu>
+     AUTHOR  : (C) Copyright 2025 by Peter Chapin <spicacality@kelseymountain.org>
 
 This is the documentation for the Daja D compiler. -->
 
@@ -15,13 +15,12 @@ This is the documentation for the Daja D compiler. -->
     <author>
       <personname><firstname>Peter</firstname> <surname>Chapin</surname></personname>
       <affiliation>
-        <orgname>Vermont State University</orgname>
-        <orgdiv>Computer Information Systems Department</orgdiv>
+        <orgname>Kelsey Mountain Software</orgname>
       </affiliation>
     </author>
     <authorinitials>pcc</authorinitials>
     <copyright>
-      <year>2024</year>
+      <year>2025</year>
       <holder>Peter Chapin</holder>
     </copyright>
     <legalnotice>
@@ -36,18 +35,18 @@ This is the documentation for the Daja D compiler. -->
     <revhistory>
       <revision>
         <revnumber>1.0</revnumber>
-        <date>2024-12-31</date>
+        <date>2025-12-31</date>
         <authorinitials>pcc</authorinitials>
         <revremark>This is a work in progress. Release 1.0 is scheduled for the end of
-          2024.</revremark>
+          2025.</revremark>
       </revision>
     </revhistory>
   </info>
   <preface xml:id="Introduction">
     <title>Introduction</title>
 
-    <para>Daja is an open source D compiler developed as a personal project by me, Peter C.
-      Chapin. I created Daja primarily to support the compiler design course at Vermont State
+    <para>Daja is an open source D compiler developed as a personal project by me, Peter Chapin.
+      I created Daja primarily to support the compiler design course at Vermont State
       University, and thus it is intended to be an educational compiler. However, it is also my
       hope that Daja may eventually provide another option for those interested in using an open
       source D compiler. Although the existing D compilers are all fine products, I believe in
@@ -55,8 +54,8 @@ This is the documentation for the Daja D compiler. -->
 
     <para>Daja is written primarily in the Scala programming language. I chose Scala because it
       is a functional language, and thus supports features that I believe will be helpful for
-      compiler construction (such as algebraic data types and pattern matching). Also the use of
-      Scala fits well into the context of my compiler design course. Accordingly, it is my
+      compiler construction (such as algebraic data types and pattern matching). Also, the use
+      of Scala fits well into the context of my compiler design course. Accordingly, it is my
       intention to write Daja in as purely a functional style as feasible with the hope that
       doing so will make the code more understandable, more reliable, and more amenable to
       parallelization. In addition, Scala gives me access to an enormous collection of Java
@@ -72,8 +71,8 @@ This is the documentation for the Daja D compiler. -->
       becomes a bridge between the Scala/Java and D communities, my choice might prove to be
       strategic after all.</para>
 
-    <para>Daja is intended to target the Java Virtual Machine. This allows me to defer the
-      details of hardware code generation and optimization to the JVM. The JVM also provides
+    <para>Daja is intended to primarily target the Java Virtual Machine. This allows me to defer
+      the details of hardware code generation and optimization to the JVM. The JVM also provides
       automatic support for certain services such as garbage collection.</para>
 
     <para>However, as a concession to educational practicalities, Daja currently has multiple

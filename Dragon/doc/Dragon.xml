@@ -4,7 +4,7 @@
 
 <!-- FILE        : Dragon.xml
      SUBJECT     : Master document for the Dragon documentation set.
-     AUTHOR      : (C) Copyright 2024 by Peter Chapin <peter.chapin@vermontstate.edu>
+     AUTHOR      : (C) Copyright 2024 by Peter Chapin <spicacality@kelseymountain.org>
 
 This is the documentation for the Dragon compiler support library. -->
 
@@ -16,13 +16,12 @@ This is the documentation for the Dragon compiler support library. -->
     <author>
       <personname><firstname>Peter</firstname> <surname>Chapin</surname></personname>
       <affiliation>
-        <orgname>Vermont State University</orgname>
-        <orgdiv>Computer Information Systems Department</orgdiv>
+        <orgname>Kelsey Mountain Software</orgname>
       </affiliation>
     </author>
     <authorinitials>pcc</authorinitials>
     <copyright>
-      <year>2024</year>
+      <year>2025</year>
       <holder>Peter Chapin</holder>
     </copyright>
     <legalnotice>
@@ -37,7 +36,7 @@ This is the documentation for the Dragon compiler support library. -->
     <revhistory>
       <revision>
         <revnumber>1.0</revnumber>
-        <date>2024-12-31</date>
+        <date>2025-12-31</date>
         <authorinitials>pcc</authorinitials>
       </revision>
     </revhistory>
