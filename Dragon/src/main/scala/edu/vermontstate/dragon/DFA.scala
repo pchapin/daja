@@ -28,21 +28,30 @@ class DFA(
   /**
     * Returns true if this DFA accepts the given text; false otherwise.
     */
-  def `match`(text: String): Boolean = {
-    var currentState = startState;  // The start state.
-    for (ch <- text) {
-      val argument = DFATransitionFunctionArgument(currentState, ch)
+  import scala.util.control.Breaks._
 
-      // If there is no explicit transition for this (state, character) input, then make a
-      // transition to an implicit error state that is non-accepting and that absorbs all
-      // following characters. The text does not match.
-      // TODO: Rewrite to eliminate the return?
-      if (!transitionFunction.contains(argument)) return false
-      currentState = transitionFunction(argument)
+  def `match`(text: String): Boolean = {
+    var currentState = startState  // The start state.
+    var accepts = true
+
+    breakable {
+      for (i <- 0 until text.length) {
+        val argument = DFATransitionFunctionArgument(currentState, text.charAt(i))
+
+        // If there is no explicit transition for this (state, character) input, then make a
+        // transition to an implicit error state that is non-accepting and that absorbs all
+        // following characters. The text does not match.
+        //
+        if (!transitionFunction.contains(argument)) {
+          accepts = false
+          break
+        }
+        currentState = transitionFunction(argument)
+      }
     }
 
     // Are we in the accepting state at the end?
-    currentState == acceptState
+    accepts && currentState == acceptState
   }
 
 }

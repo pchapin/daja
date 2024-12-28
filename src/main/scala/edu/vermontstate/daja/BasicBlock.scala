@@ -3,7 +3,7 @@ package edu.vermontstate.daja
 /**
   * A representation of basic blocks. Here the assignment statements are "full" expression
   * statements with arbitrary expressions (and not, for example, SSA form assignments).
-  * Similarly the expression used at the end of the basic block is an arbitrary expression.
+  * Similarly, the expression used at the end of the basic block is an arbitrary expression.
   *
   * @param assignments A list of expression statements forming the basic block.
   * @param condition The condition at the end of the basic block or None if the block ends with

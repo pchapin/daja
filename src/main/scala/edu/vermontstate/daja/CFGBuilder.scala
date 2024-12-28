@@ -1,9 +1,9 @@
 package edu.vermontstate.daja
 
 import scala.jdk.CollectionConverters.*
-import scalax.collection.Graph
-import scalax.collection.GraphPredef.*
-import scalax.collection.edge.LDiEdge
+import scalax.collection.mutable.Graph
+import scalax.collection.OuterImplicits.toOuterEdge
+import scalax.collection.OuterImplicits.anyToNode    // Is this really correct?
 
 class CFGBuilder(
   symbolTable: SymbolTable,
@@ -20,7 +20,7 @@ class CFGBuilder(
 
           ControlFlowGraph(
             leftEntry,
-            (leftGraph union rightGraph) union Set(LDiEdge(leftExit, rightEntry)('U')),
+            (leftGraph union rightGraph) union Graph(ControlFlowEdge('U', leftExit, rightEntry)),
             rightExit)
       }
     }
@@ -60,12 +60,13 @@ class CFGBuilder(
     val ControlFlowGraph(bodyEntry, bodyGraph, bodyExit) =
       combineStatementSequence(ctx.block_statement.statement.asScala)
 
-    val allNodesGraph = Graph[BasicBlock, LDiEdge](expressionBlock, nullBlock) ++ bodyGraph
+    val allNodesGraph: Graph[BasicBlock, ControlFlowEdge[BasicBlock]] =
+      Graph(expressionBlock, nullBlock) union bodyGraph
 
     val overallGraph = allNodesGraph union
-      Set(LDiEdge(expressionBlock, bodyEntry)('T'),
-          LDiEdge(expressionBlock, nullBlock)('F'),
-          LDiEdge(bodyExit, expressionBlock)('U'))
+      Graph(ControlFlowEdge('T', expressionBlock, bodyEntry),
+            ControlFlowEdge('F', expressionBlock, nullBlock),
+            ControlFlowEdge('U', bodyExit, expressionBlock))
 
     ControlFlowGraph(expressionBlock, overallGraph, nullBlock)
   }
