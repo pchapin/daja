@@ -10,13 +10,16 @@ ThisBuild / scalacOptions :=
       "-feature",
       "-deprecation",       // Tell us about deprecated things.
       "-unchecked")
-
 Test / logBuffered := false
 
 lazy val daja = (project in file("."))
   .settings(
     name := "Daja",
     libraryDependencies ++= dajaDeps,
+
+    Compile / doc / scalacOptions ++=
+      Seq("-author",
+          "-doc-title", "Daja Documentation"),
 
     Antlr4 / antlr4Version     := "4.13.2",
     Antlr4 / antlr4PackageName := Some("org.kelseymountain.daja"),
@@ -29,7 +32,10 @@ lazy val daja = (project in file("."))
 lazy val tiger = (project in file("Tiger"))
   .settings(
     name := "Tiger",
-    libraryDependencies ++= tigerDeps
+    libraryDependencies ++= tigerDeps,
+    Compile / doc / scalacOptions ++=
+      Seq("-author",
+          "-doc-title", "Tiger Documentation")
   )
   .dependsOn(dragon)
 
@@ -37,5 +43,8 @@ lazy val tiger = (project in file("Tiger"))
 lazy val dragon = (project in file("Dragon"))
   .settings(
     name := "Dragon",
-    libraryDependencies ++= dragonDeps
+    libraryDependencies ++= dragonDeps,
+    Compile / doc / scalacOptions ++=
+      Seq("-author",
+          "-doc-title", "Dragon Library Documentation")
   )
