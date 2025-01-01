@@ -5,6 +5,15 @@
     "cSpell.words": [
         "ANTLR",
         "Daja",
+        "javac",
+        "Scaladoc",
         "subprojects"
-    ]
+    ],
+    "xml.fileAssociations": [
+        {
+            "pattern": "*.xml",
+            "systemId": "lib/docbookxi.rnc"
+        }
+    ],
+    "xml.validation.enabled": true
 }

@@ -3,3 +3,10 @@ Chapin
 Appel
 sbt
 ANTLR
+JLine
+Scaladoc
+FIXME
+LTeX
+GitLens
+XInclude
+classpath

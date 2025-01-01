@@ -56,8 +56,22 @@ The documentation for Daja (and Dragon and Tiger) are written using DocBook 5.1.
 `Daja.xpr` in the root of the repository is an oXygen project file that can be used to open the
 documentation in the [oXygen XML editor](https://www.oxygenxml.com/).
 
-_TODO_: Provide details on how to edit and build the documentation using an open source tool,
-such as Visual Studio Code.
+The documentation can also be effectively edited in Visual Studio Code using the XML extension
+by Red Hat. For maximum assistance, you should download and install the DocBook schema. See the
+README file in the `lib` folder for more information. Visual Studio Code is already configured
+by the repository `settings.json` file to use the schema once it is in place.
+
+Embedded API documentation can be generated using the `sbt doc` command. The generated Scaladoc
+is placed in the `target/scala-3.3.4/api` folder. The Dragon and Tiger projects have their own
+`doc` commands that generate their respective API documentation.
+
+```shell
+sbt dragon/doc
+sbt tiger/doc
+```
+
+The documentation for Dragon and Tiger is placed in the `api` folders in their respective
+`target` folders.
 
 ## Development Environments
 
@@ -84,6 +98,25 @@ Download and install [Visual Studio Code](https://code.visualstudio.com/). Then,
 following extension into Visual Studio Code:
 
 + Scala (Metals) by Scalameta
++ XML by Red Hat
++ D Programming Language by WebFreak (**Recommended**)
++ Code Spell Checker by Street Side Software (**Optional**)
++ GitLens by GitKraken (**Optional**)
++ Rewrap by stkb (**Optional**)
++ Todo Tree by Gruntfuggly (**Optional**)
+
+The XML extension is only necessary if you plan to edit the DocBook documentation.
+
+The D Programming Language extension is for D programming using an existing D compiler (which
+must be installed separately). Since writing a compiler generally requires a lot of expertise in
+the source language, we do recommend that you configure a useable D development environment for
+exploring and experimenting with D.
+
+The Code Spell Checker extension is a useful spell checker. The GitLens extension is a popular
+extension that provides many services when editing files from a Git repository. The Rewrap
+extension simplifies the task of wrapping paragraphs and comments in text files and program
+code. The Todo Tree extension is useful for keeping track of TODO and FIXME comments in the
+code.
 
 Open Visual Studio Code on the top level folder of this repository. The Metals extension should
 notice that there is an SBT build defined, and prompt you to import it. Some time is required to
