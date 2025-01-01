@@ -1,15 +1,9 @@
-//-----------------------------------------------------------------------
-// FILE    : package.scala
-// SUBJECT : The package object for edu.vtc.contracts
-// AUTHOR  : (C) Copyright 2012 by Peter C. Chapin <pchapin@vtc.edu>
-//
-//-----------------------------------------------------------------------
 package org.kelseymountain
 
 /**
  * Object to wrap various contract methods and other related materials.
  */
-package object contracts {
+package object contracts:
 
   class ContractFailureException(message: String) extends Exception(message)
 
@@ -23,18 +17,10 @@ package object contracts {
    * @throws ContractFailureException if the condition is false and precondition evaluation is
    * active.
    */
-  def requiring[T](condition: => Boolean)(action: => T): T = {
-    if (Controller.preconditionsActive) {
-      if (!condition) {
-        throw new ContractFailureException("Failed precondition")
-      }
-      else {
-        action
-      }
-    }
-    else {
+  def requiring[T](condition: => Boolean)(action: => T): T =
+    if !Controller.preconditionsActive then
       action
-    }
-  }
-
-}
+    else if condition then
+      action
+    else
+      throw new ContractFailureException("Failed precondition")

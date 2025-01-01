@@ -1,6 +1,6 @@
 package org.kelseymountain.daja
 
-object LLVMAbstractSyntax {
+object LLVMAbstractSyntax:
 
   sealed abstract class AST
 
@@ -69,13 +69,12 @@ object LLVMAbstractSyntax {
   private var tempNumber = 0
 
   // Each time generateTemp is called, it returns a "fresh" temporary name.
-  private def generateTemp(): String = {
+  private def generateTemp(): String =
     tempNumber += 1
     "%tmp" + tempNumber
-  }
 
-  def makeConcrete(abstractSyntax: Instruction): String = {
-    abstractSyntax match {
+  def makeConcrete(abstractSyntax: Instruction): String =
+    abstractSyntax match
       case AllocaInstruction(name) =>
         val temp = "%" + name + "_ptr"
         println(temp + " = alloca i32, i32 1")
@@ -116,7 +115,6 @@ object LLVMAbstractSyntax {
         val rightTemp = makeConcrete(right)
         println(temp + " = mul i32 " + leftTemp + ", " + rightTemp)
         temp
-    }
-  }
+    end match
 
-}
+end LLVMAbstractSyntax

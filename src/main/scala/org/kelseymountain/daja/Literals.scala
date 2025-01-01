@@ -2,13 +2,13 @@ package org.kelseymountain.daja
 
 import scala.math.{BigInt, BigDecimal}
 
-object Literals {
+object Literals:
 
   class InvalidLiteralException(message: String) extends Exception(message)
 
   /**
    * Uses a finite state machine to find the integer value of an integer literal. Note that
-   * the lexical analyzer has already verified the format so certain simplifying assumptions
+   * the lexical analyzer has already verified the format, so certain simplifying assumptions
    * can potentially be made in the implementation of this method.
    *
    * This program implements the following finite state machine:
@@ -29,23 +29,15 @@ object Literals {
    * @param text The text of the literal (e.g., "1_234U")
    * @return The converted value (e.g., 1234) and type (e.g., TypeRep.UIntRep)
    */
-  def convertIntegerLiteral(text: String): (BigInt, TypeRep.Rep) = {
+  def convertIntegerLiteral(text: String): (BigInt, TypeRep.Rep) =
 
     // Enumeration type to define the states of the DFA.
-    object StateType extends Enumeration {
-      val Start      : StateType.Value = Value
-      val LeadingZero: StateType.Value = Value
-      val GetDigits  : StateType.Value = Value
-      val GetSuffix  : StateType.Value = Value
-      val AtEnd      : StateType.Value = Value
-    }
+    enum StateType:
+      case Start, LeadingZero, GetDigits, GetSuffix, AtEnd
 
     // Enumeration type to define the various allowed bases.
-    object BaseType extends Enumeration {
-      val Decimal: BaseType.Value = Value
-      val Binary : BaseType.Value = Value
-      val Hex    : BaseType.Value = Value
-    }
+    enum BaseType:
+      case Decimal, Binary, Hex
 
     // TODO: Make the error strings for invalid literals more specific.
     // TODO: Literals such as 0xUL are allowed. They should be illegal.
@@ -56,31 +48,26 @@ object Literals {
     var lCount = 0  // The number of 'L' suffix characters
     var uCount = 0  // The number of 'U' suffix characters
 
-    def countSuffixLetter(ch: Char): Unit = {
-      ch match {
+    def countSuffixLetter(ch: Char): Unit =
+      ch match
         case 'u' => uCount += 1
         case 'L' => lCount += 1
         case 'U' => uCount += 1
         case _ => // Do nothing; should never occur.
-      }
-    }
 
-    for (ch <- text) {
-      state match {
+    for ch <- text do
+      state match
         case StateType.Start =>
-          if (ch == '0') {
+          if ch == '0' then
             state = StateType.LeadingZero
-          }
-          else if (ch >= '1' && ch <= '9') {
+          else if ch >= '1' && ch <= '9' then
             value = 10 * value + (ch - '0')
             state = StateType.GetDigits
-          }
-          else {
+          else
             throw new InvalidLiteralException("Invalid start of literal")
-          }
 
         case StateType.LeadingZero =>
-          ch match {
+          ch match
             case 'b' | 'B' =>
               base = BaseType.Binary
               state = StateType.GetDigits
@@ -100,77 +87,61 @@ object Literals {
 
             case _ =>
               throw new InvalidLiteralException("Invalid number prefix in literal")
-          }
 
         case StateType.GetDigits =>
-          if (ch == 'l') {
+          if ch == 'l' then
             throw new InvalidLiteralException("Invalid suffix in literal: 'l' not allowed")
-          }
-          if (ch == 'u' || ch == 'L' || ch == 'U') {
+          if ch == 'u' || ch == 'L' || ch == 'U' then
             countSuffixLetter(ch)
             state = StateType.GetSuffix
-          }
-          else {
-            base match {
+          else
+            base match
               case BaseType.Decimal =>
-                if ((ch >= '0' && ch <= '9') || ch == '_') {
-                  if (ch != '_') {
+                if (ch >= '0' && ch <= '9') || ch == '_' then
+                  if ch != '_' then
                     value = 10 * value + (ch - '0')
-                  }
-                }
-                else {
+                else
                   throw new InvalidLiteralException("Invalid decimal digit in literal")
-                }
 
               case BaseType.Binary =>
-                if ((ch >= '0' && ch <= '1') || ch == '_') {
-                  if (ch != '_') {
+                if (ch >= '0' && ch <= '1') || ch == '_' then
+                  if ch != '_' then
                     value = 2 * value + (ch - '0')
-                  }
-                }
-                else {
+                else
                   throw new InvalidLiteralException("Invalid binary digit in literal")
-                }
 
               case BaseType.Hex =>
-                if ((ch >= '0' && ch <= '9') || (ch.toUpper >= 'A' && ch.toUpper <= 'F') || ch == '_') {
-                  if (ch != '_') {
+                if (ch >= '0' && ch <= '9') || (ch.toUpper >= 'A' && ch.toUpper <= 'F') || ch == '_' then
+                  if ch != '_' then
                     val hexConversion = "0123456789ABCDEF"
                     val digitValue = hexConversion.indexOf(ch.toUpper)
                     value = 16 * value + digitValue
-                  }
-                }
-                else {
+                else
                   throw new InvalidLiteralException("Invalid hex digit in literal")
-                }
-            }
-          }
 
         case StateType.GetSuffix =>
           // Try to get the second suffix character (if there is one)
-          if (ch == 'l') {
+          if ch == 'l' then
             throw new InvalidLiteralException("Invalid suffix in literal: 'l' not allowed")
-          }
-          if (ch == 'u' || ch == 'L' || ch == 'U') {
+          if ch == 'u' || ch == 'L' || ch == 'U' then
             countSuffixLetter(ch)
             state = StateType.AtEnd
-          }
-          else {
+          else
             throw new InvalidLiteralException("Invalid suffix in literal")
-          }
 
         case StateType.AtEnd =>
           throw new InvalidLiteralException("Extraneous characters after literal")
-      }
-    }
+
+      end match
+    end for
 
     // Now check the state at the end looking for errors.
-    state match {
+    state match
       case StateType.Start =>
         throw new InvalidLiteralException("Empty literal")
 
       case StateType.LeadingZero =>
-        // No error. A single leading zero is allowed (and has the value zero).
+        // No error. A single leading zero is allowed (and has value zero).
 
       case StateType.GetDigits =>
         // No error. This means there was no suffix.
@@ -180,16 +151,15 @@ object Literals {
 
       case StateType.AtEnd =>
         // No error. This means there were two suffix characters.
-    }
+    end match
 
     // Two suffix characters of the same kind are not allowed.
-    if (lCount > 1 || uCount > 1) {
+    if lCount > 1 || uCount > 1 then
       throw new InvalidLiteralException("Invalid suffix in literal")
-    }
 
     // Now analyze the type. There are four cases to consider.
-    val literalType =
-      if (lCount == 0 && uCount == 0) {
+    val literalType = {
+      if lCount == 0 && uCount == 0 then
         // No suffix
         if (value <= BigInt("2147483647"))
           TypeRep.IntRep
@@ -199,38 +169,36 @@ object Literals {
           TypeRep.ULongRep
         else
           throw new InvalidLiteralException("Literal out of range")
-      }
-      else if (lCount == 1 && uCount == 0) {
+
+      else if lCount == 1 && uCount == 0 then
         // L suffix
-        if (value <= BigInt("9223372036854775807"))
+        if value <= BigInt("9223372036854775807") then
           TypeRep.LongRep
         else
           throw new InvalidLiteralException("Literal out of range")
-      }
-      else if (lCount == 0 && uCount == 1) {
+
+      else if lCount == 0 && uCount == 1 then
         // U suffix
-        if (value <= BigInt("4294967295"))
+        if value <= BigInt("4294967295") then
           TypeRep.UIntRep
-        else if (value <= BigInt("18446744073709551615"))
+        else if value <= BigInt("18446744073709551615") then
           TypeRep.ULongRep
         else
           throw new InvalidLiteralException("Literal out of range")
-      }
-      else {
+
+      else
         // LU suffix
-        if (value <= BigInt("18446744073709551615"))
+        if value <= BigInt("18446744073709551615") then
           TypeRep.ULongRep
         else
           throw new InvalidLiteralException("Literal out of range")
-      }
-
+    }
     (value, literalType)
-  }
-
+  end convertIntegerLiteral
 
   /**
    * Uses a finite state machine to find the floating value of a floating literal. Note that
-   * the lexical analyzer has already verified the format so certain simplifying assumptions
+   * the lexical analyzer has already verified the format, so certain simplifying assumptions
    * can potentially be made in the implementation of this method.
    *
    * This program implements the following finite state machine:
@@ -259,118 +227,98 @@ object Literals {
    * @param text The text of the literal (e.g., "1.2345678e+4F")
    * @return The converted value (e.g., 12345.678) and type (e.g., TypeRep.FloatRep)
    */
-  def convertFloatingLiteral(text: String): (BigDecimal, TypeRep.Rep) = {
+  def convertFloatingLiteral(text: String): (BigDecimal, TypeRep.Rep) =
 
     // Enumeration type to define the states of the DFA.
-    object StateType extends Enumeration {
-      val Get_1st_Whole          : StateType.Value = Value
-      val Get_Whole              : StateType.Value = Value
-      val Get_1st_Fractional     : StateType.Value = Value
-      val Get_Fractional         : StateType.Value = Value
-      val Get_Exponent           : StateType.Value = Value
-      val Get_1st_Exponent_Digit : StateType.Value = Value
-      val Get_Exponent_Digit     : StateType.Value = Value
-      val Got_Suffix             : StateType.Value = Value
-    }
+    enum StateType:
+      case Get_1st_Whole,
+           Get_Whole,
+           Get_1st_Fractional,
+           Get_Fractional,
+           Get_Exponent,
+           Get_1st_Exponent_Digit,
+           Get_Exponent_Digit,
+           Got_Suffix
 
     var state = StateType.Get_1st_Whole
     var mantissa = BigDecimal(0)
     var fraction = BigDecimal("0.1")
     var exponent = 0  // A regular integer is probably fine here.
 
-    for (ch <- text) {
-      state match {
+    for ch <- text do
+      state match
         case StateType.Get_1st_Whole =>
-          if (ch >= '0' && ch <= '9') {
+          if ch >= '0' && ch <= '9' then
             mantissa = (10 * mantissa) + BigDecimal(ch - '0')
             state = StateType.Get_Whole
-          }
-          else {
+          else
             throw new InvalidLiteralException("Invalid start of literal")
-          }
 
         case StateType.Get_Whole =>
-          if (ch >= '0' && ch <= '9') {
+          if ch >= '0' && ch <= '9' then
             mantissa = (10 * mantissa) + BigDecimal(ch - '0')
-          }
-          else if (ch == '.') {
+          else if ch == '.' then
             state = StateType.Get_1st_Fractional
-          }
-          else {
+          else
             // TODO: If the 'illegal digit' is the letter 'E' we might give a better message.
             // In that case the user is apparently trying to do something like: 1234E5.
             throw new InvalidLiteralException("Invalid digit in literal")
-          }
 
         case StateType.Get_1st_Fractional =>
-          if (ch >= '0' && ch <= '9') {
+          if ch >= '0' && ch <= '9' then
             mantissa += fraction * (ch - '0')
             fraction /= 10
             state = StateType.Get_Fractional
-          }
-          else {
+          else
             throw new InvalidLiteralException("Invalid start of fractional part in literal")
-          }
 
         case StateType.Get_Fractional =>
-          if (ch >= '0' && ch <= '9') {
+          if ch >= '0' && ch <= '9' then
             mantissa += fraction * (ch - '0')
             fraction /= 10
-          }
-          else if (ch == 'f' || ch == 'F' || ch == 'L') {
+          else if ch == 'f' || ch == 'F' || ch == 'L' then
             // TODO: Remember which suffix for later type analysis.
             state = StateType.Got_Suffix
-          }
-          else if (ch == 'e' || ch == 'E') {
+          else if ch == 'e' || ch == 'E' then
             state = StateType.Get_Exponent;
-          }
-          else {
+          else
             // TODO: If the 'illegal digit' is 'l' we might give a better message.
             // In that case the user is apparently trying to do something like: 1.234l.
             throw new InvalidLiteralException("Invalid digit in fractional part of literal")
-          }
 
         case StateType.Get_Exponent =>
-          if (ch >= '0' && ch <= '9') {
+          if ch >= '0' && ch <= '9' then
             exponent = (10 * exponent) + (ch - '0')
             state = StateType.Get_Exponent_Digit
-          }
-          else if (ch == '+' || ch == '-') {
+          else if ch == '+' || ch == '-' then
             // TODO: Remember the sign on the exponent for later value construction.
             state = StateType.Get_1st_Exponent_Digit
-          }
-          else {
+          else
             throw new InvalidLiteralException("Invalid exponent digit in literal")
-          }
 
         case StateType.Get_1st_Exponent_Digit =>
-          if (ch >= '0' && ch <= '9') {
+          if ch >= '0' && ch <= '9' then
             exponent = (10 * exponent) + (ch - '0')
             state = StateType.Get_Exponent_Digit
-          }
-          else {
+          else
             throw new InvalidLiteralException("Invalid exponent digit in literal")
-          }
 
         case StateType.Get_Exponent_Digit =>
-          if (ch >= '0' && ch <= '9') {
+          if ch >= '0' && ch <= '9' then
             exponent = (10 * exponent) + (ch - '0')
-          }
-          else if (ch == 'f' || ch == 'F' || ch == 'L') {
+          else if ch == 'f' || ch == 'F' || ch == 'L' then
             // TODO: Remember which suffix for later type analysis.
             state = StateType.Got_Suffix
-          }
-          else {
+          else
             throw new InvalidLiteralException("Invalid exponent digit in literal")
-          }
 
         case StateType.Got_Suffix =>
           throw new InvalidLiteralException("Extraneous characters after literal")
-      }
-    }
+      end match
+    end for
 
     // Now check the state at the end looking for errors.
-    state match {
+    state match
       case StateType.Get_1st_Whole =>
         throw new InvalidLiteralException("Empty literal")
 
@@ -394,13 +342,13 @@ object Literals {
 
       case StateType.Got_Suffix =>
       // No error. This means there was a suffix.
-    }
+    end match
 
     // TODO: Construct the value from the mantissa and exponent (if present)
     // TODO: Do type analysis: verify value is the right range for its type (based on suffix)
 
     // TODO: Fix this. Right now we ignore the exponent and assume the literal has type double.
     (mantissa, TypeRep.DoubleRep)
-  }
+  end convertFloatingLiteral
 
-}
+end Literals

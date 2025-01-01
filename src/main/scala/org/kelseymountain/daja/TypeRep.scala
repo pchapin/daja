@@ -1,6 +1,6 @@
 package org.kelseymountain.daja
 
-object TypeRep {
+object TypeRep:
 
   sealed abstract class Rep
 
@@ -22,4 +22,5 @@ object TypeRep {
   case class ArrayRep(elementType: Rep) extends Rep
   case class FunctionRep(resultType: Rep, parameters: List[Rep]) extends Rep
   case class PointerRep(pointedAtType: Rep) extends Rep
-}
+
+end TypeRep

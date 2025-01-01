@@ -1,5 +1,3 @@
 package org.kelseymountain.daja
 
-class ModuleSymbolTable {
-
-}
+class ModuleSymbolTable

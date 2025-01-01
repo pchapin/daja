@@ -10,7 +10,7 @@ import org.scalatest.*
 import funsuite.*
 import matchers.*
 
-class ConfigurationSuite extends AnyFunSuite with Assertions with should.Matchers {
+class ConfigurationSuite extends AnyFunSuite with Assertions with should.Matchers:
 
   test("Basic configuration") {
     // TODO: Enhance the ConfigurationSettings test.
@@ -37,4 +37,4 @@ class ConfigurationSuite extends AnyFunSuite with Assertions with should.Matcher
     assert(currentSettings("IntegerItem").contains("1234" ))
   }
 
-}
+end ConfigurationSuite

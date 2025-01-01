@@ -2,49 +2,48 @@ package org.kelseymountain.daja
 
 import SymbolTable.*
 
-class BasicSymbolTable extends SymbolTable {
+class BasicSymbolTable extends SymbolTable:
 
   private var objectMap = Map[String, TypeRep.Rep]()
   private var typeMap = Map[String, TypeRep.Rep]()
 
-  def addObjectName(name: String, typeRep: TypeRep.Rep): Unit = {
+  def addObjectName(name: String, typeRep: TypeRep.Rep): Unit =
     // TODO: Include in the message the position of the error in the source text.
-    if (typeMap.contains(name))
+    if typeMap.contains(name) then
       throw new ConflictingNameException(s"$name already names a type")
 
     // TODO: Include in the message the position of the error in the source text.
-    if (objectMap.contains(name))
+    if objectMap.contains(name) then
       throw new DuplicateObjectNameException(s"$name already names an object")
     objectMap = objectMap + (name -> typeRep)
-  }
 
-  def addTypeName(name: String, typeRep: TypeRep.Rep): Unit = {
+
+  def addTypeName(name: String, typeRep: TypeRep.Rep): Unit =
     // TODO: Include in the message the position of the error in the source text.
-    if (objectMap.contains(name))
+    if objectMap.contains(name) then
       throw new ConflictingNameException(s"$name already names an object")
 
     // TODO: Include in the message the position of the error in the source text.
-    if (typeMap.contains(name))
+    if typeMap.contains(name) then
       throw new DuplicateTypeNameException(s"$name already names a type")
     typeMap = typeMap + (name -> typeRep)
-  }
 
-  def getObjectNames: Iterable[String] = {
+
+  def getObjectNames: Iterable[String] =
     objectMap.keys
-  }
 
-  def getObjectType(name: String): TypeRep.Rep = {
+
+  def getObjectType(name: String): TypeRep.Rep =
     // TODO: Include in the message the position of the error in the source text.
-    if (!objectMap.contains(name))
+    if !objectMap.contains(name) then
       throw new UnknownObjectNameException(s"$name is not the name of an object")
     objectMap(name)
-  }
 
-  def getTypeRepresentation(name: String): TypeRep.Rep = {
+
+  def getTypeRepresentation(name: String): TypeRep.Rep =
     // TODO: Include in the message the position of the error in the source text.
-    if (!typeMap.contains(name))
+    if !typeMap.contains(name) then
       throw new UnknownTypeNameException(s"$name is not the name of a type")
     typeMap(name)
-  }
 
-}
+end BasicSymbolTable

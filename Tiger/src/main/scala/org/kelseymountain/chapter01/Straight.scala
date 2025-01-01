@@ -1,12 +1,6 @@
-//-----------------------------------------------------------------------
-// FILE    : Straight.scala
-// SUBJECT : Interpreter for the "straight line" language in MCIML Chapter 1.
-// AUTHOR  : (C) Copyright 2012 by Peter C. Chapin <PChapin@vtc.edu.edu>
-//
-//-----------------------------------------------------------------------
 package org.kelseymountain.chapter01
 
-object Straight {
+object Straight:
 
   sealed abstract class ASTNode
 
@@ -16,8 +10,8 @@ object Straight {
   case object Multiply extends BinaryOperator
   case object Divide   extends BinaryOperator
 
-  type Identifier = String
-  type NumericLiteral = Int
+  private type Identifier = String
+  private type NumericLiteral = Int
 
   sealed abstract class Statement extends ASTNode
   case class CompoundStatement(s1: Statement,  s2: Statement) extends Statement
@@ -35,23 +29,23 @@ object Straight {
    * Computes the largest number of arguments in any print statement embedded in
    * topLevelStatement.
    *
-   * @param topLevelStatement The statement to analyze. It does not need to be a print statement
+   * @param topLevelStatement The statement to analyze. It does not need to be a print statement,
    * but it can (and probably does) contain embedded print statements.
    *
    * @return The number of arguments in the print statement containing the most arguments. Zero
    * is returned if there are no print statements embedded in topLevelStatement (or if all
    * embedded print statements have empty argument lists).
    */
-  def maximumPrintArgumentCount(topLevelStatement: Statement): NumericLiteral = {
+  def maximumPrintArgumentCount(topLevelStatement: Statement): NumericLiteral =
 
     // This helper method is needed since it must process both statements and expressions.
     // It is necessary to descend into expressions because an expression can contain embedded
     // statements.
     //
-    def ASTWalker(node: ASTNode): Int = {
+    def ASTWalker(node: ASTNode): Int =
 
-      node match {
-        // This is the interesting case.
+      node match
+        // This is an interesting case.
         case PrintStatement(arguments) =>
           val maximumsList = arguments map { ASTWalker }
           val subordinateMaximum = maximumsList.foldLeft(0)( math.max )
@@ -72,14 +66,14 @@ object Straight {
         // These cases should never occur.
         case Divide | Minus | Multiply | Plus =>
           throw new Exception("Internal Error: ASTWalker called on binary operator!")
-      }
-    }
+      end match
+    end ASTWalker
 
     ASTWalker(topLevelStatement)
-  }
+  end maximumPrintArgumentCount
 
   // Not a very elegant data structure for maintaining symbol information, but it will work.
-  type SymbolTable = List[(String,  Int)]
+  private type SymbolTable = List[(String,  Int)]
 
   /**
    * Exception thrown when an undefined identifier is encountered during interpretation.
@@ -87,14 +81,13 @@ object Straight {
   class UndefinedIdentifierException(message: String) extends Exception(message)
 
 
-  def interpret(program: Statement): Unit = {
+  def interpret(program: Statement): Unit =
     // The environment of the program itself contains no symbols. The program is a closed term.
     interpretStatement(program, List())
-  }
 
 
-  def interpretStatement(statement: Statement, table: SymbolTable): SymbolTable = {
-    statement match {
+  private def interpretStatement(statement: Statement, table: SymbolTable): SymbolTable =
+    statement match
       case CompoundStatement(s1, s2) =>
         val symbolsAfterStatement1 = interpretStatement(s1, table)
         interpretStatement(s2, symbolsAfterStatement1)
@@ -112,12 +105,12 @@ object Straight {
         })
         print("\n")
         overallTable
-    }
-  }
+    end match
+  end interpretStatement
 
 
-  def interpretExpression(expression: Expression, table: SymbolTable): (Int,  SymbolTable) = {
-    expression match {
+  private def interpretExpression(expression: Expression, table: SymbolTable): (Int,  SymbolTable) =
+    expression match
       case IdentifierExpression(id) =>
         val possibleTableEntry = table.find( entry => id == entry._1 )
         val entry = possibleTableEntry.getOrElse(
@@ -142,6 +135,7 @@ object Straight {
       case SequenceExpression(s, e) =>
         val symbolsAfterStatement = interpretStatement(s, table)
         interpretExpression(e, symbolsAfterStatement)
-    }
-  }
-}
+    end match
+  end interpretExpression
+
+end Straight

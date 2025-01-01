@@ -3,7 +3,7 @@ package org.kelseymountain.daja
 import java.io.File
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
-class ParserSpec extends UnitSpec {
+class ParserSpec extends UnitSpec:
 
   private val testRoot   = new File("testData")
   private val testSyntax = new File(testRoot, "Syntax")
@@ -16,35 +16,29 @@ class ParserSpec extends UnitSpec {
     * @param testCaseNames An array of file names representing the test cases.
     * @param doParse A function that takes a DajaParser and executes the parse at a particular start symbol.
     */
-  private def doTests(testCaseNames: Array[String], doParse: DajaParser => Unit): Unit = {
-    for (testCaseName <- testCaseNames) {
+  private def doTests(testCaseNames: Array[String], doParse: DajaParser => Unit): Unit =
+    for testCaseName <- testCaseNames do
       val testCase = new File(syntaxPositive, testCaseName)
       val lexer  = new DajaLexer(CharStreams.fromFileName(testCase.getPath))
       val tokens = new CommonTokenStream(lexer)
       val parser = new DajaParser(tokens)
       doParse(parser)
-    }
-  }
 
 
-  private def doExpressionTests(testCaseNames: Array[String]): Unit = {
+  private def doExpressionTests(testCaseNames: Array[String]): Unit =
     doTests(testCaseNames, _.expression())
-  }
 
 
-  private def doDeclarationTests(testCaseNames: Array[String]): Unit = {
+  private def doDeclarationTests(testCaseNames: Array[String]): Unit =
     doTests(testCaseNames, _.declaration())
-  }
 
 
-  private def doStatementTests(testCaseNames: Array[String]): Unit = {
+  private def doStatementTests(testCaseNames: Array[String]): Unit =
     doTests(testCaseNames, _.statement())
-  }
 
 
-  private def doModuleTests(testCaseNames: Array[String]): Unit = {
+  private def doModuleTests(testCaseNames: Array[String]): Unit =
     doTests(testCaseNames, _.module())
-  }
 
 
   "The Daja Parser" should "parse simple expressions" in {
@@ -74,4 +68,4 @@ class ParserSpec extends UnitSpec {
     doModuleTests(testCaseNames)
   }
 
-}
+end ParserSpec

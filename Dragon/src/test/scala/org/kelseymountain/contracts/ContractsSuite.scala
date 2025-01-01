@@ -11,7 +11,7 @@ import org.scalatest.*
 import funsuite.*
 import matchers.*
 
-class ContractsSuite extends AnyFunSuite with Assertions with should.Matchers {
+class ContractsSuite extends AnyFunSuite with Assertions with should.Matchers:
 
   test("Basic Precondition Test") {
 
@@ -47,4 +47,4 @@ class ContractsSuite extends AnyFunSuite with Assertions with should.Matchers {
     Controller.preconditionsEvaluated(state = true)
   }
 
-}
+end ContractsSuite

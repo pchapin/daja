@@ -1,16 +1,10 @@
-//-----------------------------------------------------------------------
-// FILE    : StraightSuite.scala
-// SUBJECT : Tests for the "straight line" language in MCIML Chapter 1
-// AUTHOR  : (C) Copyright 2012 by Peter C. Chapin <PChapin@vtc.edu.edu>
-//
-//-----------------------------------------------------------------------
 package org.kelseymountain.chapter01
 
 import org.scalatest.*
 import funsuite.*
 import matchers.*
 
-class StraightSuite extends AnyFunSuite with Assertions with should.Matchers {
+class StraightSuite extends AnyFunSuite with Assertions with should.Matchers:
   import Straight.*
 
   // Nested print statements.
@@ -79,4 +73,4 @@ class StraightSuite extends AnyFunSuite with Assertions with should.Matchers {
     interpret(program3)
   }
 
-}
+end StraightSuite

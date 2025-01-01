@@ -1,6 +1,6 @@
 package org.kelseymountain.daja
 
-class TrivialSpec extends UnitSpec {
+class TrivialSpec extends UnitSpec:
 
   // "Subject" should "statement of specification" in ...
   "The universe" should "work correctly" in {
@@ -25,4 +25,5 @@ class TrivialSpec extends UnitSpec {
     }
     assert(caught.getMessage.indexOf("5") != -1)
   }
-}
+
+end TrivialSpec

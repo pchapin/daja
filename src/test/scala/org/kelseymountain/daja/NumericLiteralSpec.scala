@@ -2,7 +2,7 @@ package org.kelseymountain.daja
 
 import Literals.*
 
-class NumericLiteralSpec extends UnitSpec {
+class NumericLiteralSpec extends UnitSpec:
 
   "An integer literal" should "be decoded and typed correctly" in {
     val testCases = Array(
@@ -39,14 +39,13 @@ class NumericLiteralSpec extends UnitSpec {
       // Let's explore binary values with suffixes...
     )
 
-    for (testCase <- testCases) {
+    for testCase <- testCases do
       val (literalValue, literalType) = convertIntegerLiteral(testCase._1)
       assert(literalValue == testCase._2)
       assert(literalType  == testCase._3)
-    }
   }
 
-  // Strictly speaking we only need to test for invalid literals that would pass the RE used
+  // Strictly speaking, we only need to test for invalid literals that would pass the RE used
   // by the lexical analyzer. The lexical analyzer will not tokenize anything that doesn't match
   // one of its regular expressions. It may be reasonable to let the lexical analyzer match a
   // variety of illegal things that nevertheless appear approximately like integer literals since
@@ -58,12 +57,11 @@ class NumericLiteralSpec extends UnitSpec {
       // TODO: Add more! Out of range values, bad suffix combinations, bad use of underscore...
     )
 
-    for (testCase <- testCases) {
+    for testCase <- testCases do
       val caught = intercept[InvalidLiteralException] {
         val (_, _) = convertIntegerLiteral(testCase._1)
       }
       assert(caught.getMessage == testCase._2)
-    }
   }
 
 
@@ -74,11 +72,10 @@ class NumericLiteralSpec extends UnitSpec {
       ("0.01234", BigDecimal("0.01234"), TypeRep.DoubleRep)
       // TODO: Add more test cases (especially when the TODO items in Literals.scala are fixed)!
     )
-    for (testCase <- testCases) {
+    for testCase <- testCases do
       val (literalValue, literalType) = convertFloatingLiteral(testCase._1)
       assert(literalValue == testCase._2)
       assert(literalType  == testCase._3)
-    }
   }
 
   // See the comment on the testing of invalid integer literals above. The same applies here.
@@ -87,12 +84,11 @@ class NumericLiteralSpec extends UnitSpec {
       ("1.a", "Invalid start of fractional part in literal")
       // TODO: Add more! (Lots more!)
     )
-    for (testCase <- testCases) {
+    for testCase <- testCases do
       val caught = intercept[InvalidLiteralException] {
         val (_, _) = convertFloatingLiteral(testCase._1)
       }
       assert(caught.getMessage == testCase._2)
-    }
   }
 
-}
+end NumericLiteralSpec

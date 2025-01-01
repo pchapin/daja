@@ -1,15 +1,8 @@
-//-----------------------------------------------------------------------
-// FILE    : Main.scala
-// SUBJECT : Main program of the Tiger compiler.
-// AUTHOR  : (C) Copyright 2012 by Peter C. Chapin <PChapin@vtc.vsc.edu>
-//
-//-----------------------------------------------------------------------
 package org.kelseymountain.tiger
 
-object Main {
+object Main:
 
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit =
     println("Meow")
-  }
 
-}
+end Main

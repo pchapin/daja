@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.*
 /**
  * The main class of the Daja compiler.
  */
-object Main {
+object Main:
 
   /**
    * Specifies the different code generation modes that are supported.
@@ -16,13 +16,8 @@ object Main {
    * JVM   : Generate JVM assembly language as output.
    * LLVM  : Generate LLVM assembly language as output.
    */
-  private object Mode extends Enumeration {
-    val Check    : Mode.Value = Value
-    val Interpret: Mode.Value = Value
-    val C        : Mode.Value = Value
-    val JVM      : Mode.Value = Value
-    val LLVM     : Mode.Value = Value
-  }
+  enum Mode:
+    case Check, Interpret, C, JVM, LLVM
 
   private val reporter = new BasicConsoleReporter
 
@@ -32,7 +27,7 @@ object Main {
     * @param input The input file to compile/analyze/process.
     * @param mode The desired code generation target.
     */
-  private def processDaja(input: CharStream, mode: Mode.Value): Unit = {
+  private def processDaja(input: CharStream, mode: Mode): Unit =
     // Parse the input file as Daja.
     val lexer  = new DajaLexer(input)
     val tokens = new CommonTokenStream(lexer)
@@ -46,11 +41,10 @@ object Main {
     val myRuleChecker = new RuleChecker(mySymbolTable, reporter)
     myRuleChecker.visit(tree)
 
-    if (reporter.getErrorCount > 0) {
+    if reporter.getErrorCount > 0 then
       // Errors have already been reported.
       printf("%d errors found; compilation aborted!", reporter.getErrorCount)
-    }
-    else {
+    else
       // No parse or semantic errors. Do various forms of analysis...
 
       // Construct the control flow graph of the module (really one function).
@@ -60,16 +54,14 @@ object Main {
       // Analyze program for the use of uninitialized variables.
       Analysis.liveness(CFG)
       val ControlFlowGraph(entryBlock, _, _) = CFG
-      if (entryBlock.live.nonEmpty) {
+      if entryBlock.live.nonEmpty then
         print("The following variables may be used uninitialized => ")
-        for (varName <- entryBlock.live) {
+        for varName <- entryBlock.live do
           print(s"$varName ")
-        }
         print("\n")
-      }
 
       // Finally, code generation (if requested)...
-      mode match {
+      mode match
         case Mode.Check =>
           // Do nothing. Semantic analysis is all that is required.
 
@@ -90,9 +82,7 @@ object Main {
         case Mode.LLVM =>
           val myLLVMGenerator = new LLVMGenerator(mySymbolTable, CFG, reporter)
           myLLVMGenerator.generateCodeForCFG()
-      }
-    }
-  }
+  end processDaja
 
 
   /**
@@ -103,18 +93,17 @@ object Main {
    * @param args The command line arguments.
    * @throws java.io.IOException If an I/O error occurs during File I/O.
    */
-  def main(args: Array[String]): Unit = {
-    println("Daja D Compiler (C) 2024 by Vermont State University")
+  def main(args: Array[String]): Unit =
+    println("Daja D Compiler (C) 2025 by Kelsey Mountain Software")
 
     // Analyze the command line.
     // TODO: Provide a more comprehensive and full-featured command line processing step.
     // Most compilers have a LOT of options. Daja will be no different eventually.
-    if (args.length != 2) {
+    if args.length != 2 then
       println("Usage: java -jar Daja (-k | -interp | -genc | -genj | -genl) source-file")
       System.exit(1)
-    }
 
-    val mode = args(0) match {
+    val mode = args(0) match
       case "-k" =>
         Mode.Check
       case "-interp" =>
@@ -128,11 +117,11 @@ object Main {
       case _ =>
         println("Warning: Unknown mode, defaulting to Check!\n")
         Mode.Check
-    }
 
     // Create a stream that reads from the specified file.
     // TODO: Add support for processing multiple files.
     val input = CharStreams.fromFileName(args(1))
     processDaja(input, mode)
-  }
-}
+  end main
+
+end Main

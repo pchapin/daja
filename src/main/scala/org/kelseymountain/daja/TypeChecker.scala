@@ -8,14 +8,14 @@ import org.antlr.v4.runtime.tree.TerminalNode
  */
 class TypeChecker(
   private val symbolTable: SymbolTable,
-  private val reporter   : Reporter) extends DajaBaseVisitor[TypeRep.Rep] {
+  private val reporter   : Reporter) extends DajaBaseVisitor[TypeRep.Rep]:
 
   private var expressionLevel = 0
 
-  override def visitDeclaration(ctx: DajaParser.DeclarationContext): TypeRep.Rep = {
+  override def visitDeclaration(ctx: DajaParser.DeclarationContext): TypeRep.Rep =
     val initDeclarators = ctx.init_declarator.asScala
     val basicType = ctx.basic_type.getText
-    val basicTypeRep = basicType match {
+    val basicTypeRep = basicType match
       case "bool"   => TypeRep.BoolRep
       case "int"    => TypeRep.IntRep
       case "uint"   => TypeRep.UIntRep
@@ -24,95 +24,83 @@ class TypeChecker(
       case "float"  => TypeRep.FloatRep
       case "double" => TypeRep.DoubleRep
       case "real"   => TypeRep.RealRep
-    }
 
     val isArrayType = ctx.LBRACKET != null
-    if (isArrayType) {
+    if isArrayType then
       // TODO: Does D allow arrays to be indexed by any integral type or just int?
       // Daja requires arrays to be indexed by int (only).
       val dimensionExpressionType = visit(ctx.expression)
-      if (dimensionExpressionType != TypeRep.IntRep) {
+      if dimensionExpressionType != TypeRep.IntRep then
         reporter.reportError(
           ctx.LBRACKET.getSymbol.getLine,
           ctx.LBRACKET.getSymbol.getCharPositionInLine + 1,
           "Array dimension must have type int")
-      }
-      else {
+      else
+        ()
         // TODO: Verify that the array dimension is a constant expression (or integer literal?).
         // TODO: Arrange to add the size of the array to the symbol table.
-      }
-    }
-
-    for (initDeclarator <- initDeclarators) {
+    end if
+    
+    for initDeclarator <- initDeclarators do
       val identifierName = initDeclarator.IDENTIFIER.getText
 
       // Are we dealing with an array declaration?
-      if (isArrayType) {
+      if isArrayType then
         // TODO: Type check the initialization expression (if present).
         symbolTable.addObjectName(identifierName, TypeRep.ArrayRep(basicTypeRep))
-      }
       // ... otherwise it is a simple variable declaration.
-      else {
+      else
         // TODO: Type check the initialization expression (if present).
         symbolTable.addObjectName(identifierName, basicTypeRep)
-      }
-    }
+    end for    
     TypeRep.NoTypeRep
-  }
-
+  end visitDeclaration
+  
   // TODO: Type check statement forms
 
-  override def visitExpression(ctx: DajaParser.ExpressionContext): TypeRep.Rep = {
+  override def visitExpression(ctx: DajaParser.ExpressionContext): TypeRep.Rep =
     // Keep track of the number of nested open expressions.
     expressionLevel += 1
     val expressionType = visit(ctx.comma_expression)
     expressionLevel -= 1
     expressionType
-  }
 
   // TODO: Comma expression
   // TODO: Assignment expression
   // TODO: Relational expression
 
-  override def visitAdd_expression(ctx: DajaParser.Add_expressionContext): TypeRep.Rep = {
+  override def visitAdd_expression(ctx: DajaParser.Add_expressionContext): TypeRep.Rep =
     val multiplyExpressionType = visit(ctx.multiply_expression)
-    if (ctx.add_expression == null) {
+    if ctx.add_expression == null then
       multiplyExpressionType
-    }
-    else {
+    else
       val addExpressionType = visit(ctx.add_expression)
-      if (addExpressionType == multiplyExpressionType)
+      if addExpressionType == multiplyExpressionType then
         addExpressionType
       else
         // TODO: Deal with implicit type conversions and report errors as necessary!
         TypeRep.NoTypeRep
-    }
-  }
 
 
-  override def visitMultiply_expression(ctx: DajaParser.Multiply_expressionContext): TypeRep.Rep = {
+  override def visitMultiply_expression(ctx: DajaParser.Multiply_expressionContext): TypeRep.Rep =
     val postfixExpressionType = visit(ctx.postfix_expression)
-    if (ctx.multiply_expression == null) {
+    if ctx.multiply_expression == null then
       postfixExpressionType
-    }
-    else {
+    else
       val multiplyExpressionType = visit(ctx.multiply_expression)
-      if (multiplyExpressionType == postfixExpressionType)
+      if multiplyExpressionType == postfixExpressionType then
         multiplyExpressionType
       else
         // TODO: Deal with implicit type conversions and report errors as necessary!
         TypeRep.NoTypeRep
-    }
-  }
 
 
-  override def visitPostfix_expression(ctx: DajaParser.Postfix_expressionContext): TypeRep.Rep = {
+  override def visitPostfix_expression(ctx: DajaParser.Postfix_expressionContext): TypeRep.Rep =
     // If this postfix expression is just a primary expression...
-    if (ctx.primary_expression != null) {
+    if ctx.primary_expression != null then
       visit(ctx.primary_expression)
-    }
     // Otherwise we are trying to access an array...
-    else {
+    else
       // Check that the postfix expression has an array type.
       val postfixExpressionType = visit(ctx.postfix_expression)
       val elementType = postfixExpressionType match {
@@ -126,40 +114,33 @@ class TypeChecker(
           TypeRep.NoTypeRep
       }
       // Now check that the index expression has type int (Daja allows only int).
-      if (visit(ctx.expression) != TypeRep.IntRep) {
+      if visit(ctx.expression) != TypeRep.IntRep then
         reporter.reportError(
           ctx.LBRACKET.getSymbol.getLine,
           ctx.LBRACKET.getSymbol.getCharPositionInLine + 1,
           "Index type must be int")
         TypeRep.NoTypeRep
-      }
-      else {
+      else
         elementType
-      }
-    }
-  }
 
 
-  override def visitPrimary_expression(ctx: DajaParser.Primary_expressionContext): TypeRep.Rep = {
-    if (ctx.LPARENS == null) {
+  override def visitPrimary_expression(ctx: DajaParser.Primary_expressionContext): TypeRep.Rep =
+    if ctx.LPARENS == null then
       // This simple approach works because there is only one child, which is a terminal.
-      // Thus visitTerminal is called on that child and the (single) result is what is
+      // Thus, visitTerminal is called on that child, and the (single) result is what is
       // returned by visitChildren.
       visitChildren(ctx)
-    }
-    else {
+    else
       // This case handles parenthesized subexpressions.
       visitExpression(ctx.expression)
-    }
-  }
 
 
-  override def visitTerminal(node: TerminalNode): TypeRep.Rep = {
-    if (expressionLevel == 0)
+  override def visitTerminal(node: TerminalNode): TypeRep.Rep =
+    if expressionLevel == 0 then
       TypeRep.NoTypeRep
-    else {
+    else
       // We are only concerned about identifiers in expressions.
-      node.getSymbol.getType match {
+      node.getSymbol.getType match
         case DajaLexer.INTEGER_LITERAL =>
           val (_, literalType) = Literals.convertIntegerLiteral(node.getText)
           literalType
@@ -175,23 +156,19 @@ class TypeChecker(
           TypeRep.BoolRep
 
         case DajaLexer.IDENTIFIER =>
-          try {
+          try
             symbolTable.getObjectType(node.getText)
-          }
-          catch {
+          catch
             case  ex: SymbolTable.UnknownObjectNameException =>
               reporter.reportError(
                 node.getSymbol.getLine,
                 node.getSymbol.getCharPositionInLine + 1,
                 "Undefined identifier: " + node.getText)
               TypeRep.NoTypeRep
-          }
 
         // In an expression, things that are not covered above don't have a type.
         case _ =>
           TypeRep.NoTypeRep
-      }
-    }
-  }
+      end match
 
-}
+end TypeChecker

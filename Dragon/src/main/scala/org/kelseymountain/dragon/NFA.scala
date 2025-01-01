@@ -14,7 +14,7 @@ package org.kelseymountain.dragon
 class NFA(
   private val startState : Int,
   private val acceptState: Int,
-  private val transitionFunction: Map[NFATransitionFunctionArgument, Set[Int]]) {
+  private val transitionFunction: Map[NFATransitionFunctionArgument, Set[Int]]):
 
   type TransitionFunctionType = Map[NFATransitionFunctionArgument, Set[Int]]
 
@@ -46,7 +46,7 @@ class NFA(
     target: TransitionFunctionType,
     other : TransitionFunctionType,
     otherStartState: Int,
-    newStartState  : Int): TransitionFunctionType = {
+    newStartState  : Int): TransitionFunctionType =
 
     // Create transformed associations for the 'other' transition function, modifying the state
     // numbers in the process.
@@ -64,14 +64,13 @@ class NFA(
     }
 
     target ++ newAssociations
-  }
-
+  end mergeTransitionFunctions
 
   /**
     * Returns an NFA that is the concatenation of this NFA followed by the other NFA. Neither
     * NFA input to this operation is modified.
     */
-  def concatenate(other: NFA): NFA = {
+  def concatenate(other: NFA): NFA =
     val secondEntry = acceptState + 1
     val newStartState = startState
     val newAcceptState = acceptState + (other.acceptState - other.startState + 1)
@@ -87,59 +86,52 @@ class NFA(
     val extraArgument = NFATransitionFunctionArgument(acceptState, '\u0000')
     val extraResult = Set[Int](secondEntry)
     val augmentedTransitionFunction =
-      if (newTransitionFunction.contains(extraArgument)) {
+      if newTransitionFunction.contains(extraArgument) then
         // Handle the case where there is already an epsilon transition from acceptState.
         val augmentedSet = newTransitionFunction(extraArgument) ++ extraResult
         newTransitionFunction + (extraArgument -> augmentedSet)
-      }
-      else {
+      else
         // Handle the case where there was no epsilon transition from acceptState.
         newTransitionFunction + (extraArgument -> extraResult)
-      }
 
     // Create the new NFA.
     new NFA(newStartState, newAcceptState, augmentedTransitionFunction)
-  }
-
+  end concatenate
 
   /**
     * Returns an NFA that is the union of this NFA followed and the other NFA. Neither NFA
     * input to this operation is modified.
     */
-  def union(other: NFA): NFA = {
+  def union(other: NFA): NFA =
     // TODO: This method body is just a place holder!
     new NFA(startState, acceptState, transitionFunction)
-  }
 
 
   /**
     * Returns an NFA that is the Kleene closure of this NFA. This NFA is not modified.
     */
-  def kleeneClosure: NFA = {
+  def kleeneClosure: NFA =
     // TODO: This method body is just a place holder!
     new NFA(startState, acceptState, transitionFunction)
-  }
 
 
   /**
     * Returns true if this NFA is really a DFA (no use of epsilon transitions and only a single
     * state as the target of each transition.
     */
-  def isDFA: Boolean = {
+  def isDFA: Boolean =
     transitionFunction forall { association => {
       val (key, value) = association
       key.inputCharacter != '\u0000' && value.size == 1
     }}
-  }
 
 
   /**
     * Returns a DFA obtained from Subset Construction on this NFA. Note that the return value
     * will be such that isDFA() is true.
     */
-  def toDFA: DFA = {
+  def toDFA: DFA =
     // TODO: This method body is just a place holder!
     new DFA(startState, acceptState, Map())
-  }
 
-}
+end NFA
